@@ -10,15 +10,20 @@ class Main {
         });
 
         var p = new Point(1, 2);
-        trace([p.x,p.y]);
+        trace(p);
         var p = new Point2D32f(1.23456789, 2.3456789101112);
-        trace([p.x,p.y]);
+        trace(p);
         var p = new Point2D64f(1.234567891, 2.3456789101112);
-        trace([p.x,p.y]);
+        trace(p);
         var p = new Point3D32f(1.23456789, 2.3456789101112, 1e-200);
-        trace([p.x,p.y,p.z]);
+        trace(p);
         var p = new Point3D64f(1.234567891, 2.3456789101112, 1e-200);
-        trace([p.x,p.y,p.z]);
+        trace(p);
+
+        var p = new Size(1, 2);
+        trace(p);
+        var p = new Size2D32f(1.23456789, 2.3456789101112);
+        trace(p);
 
         HighGUI.waitKey();
     }

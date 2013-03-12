@@ -13,6 +13,10 @@ class Point2D64f extends NativeBinding {
     public function new(x:Float=0, y:Float=0) {
         nativeObject = Core.load("Point2D64f", 2)(x, y);
     }
+
+    public inline function toString() {
+        return '{Point2D64f x=$x y=$y}';
+    }
 }
 
 

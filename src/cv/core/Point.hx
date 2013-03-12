@@ -13,4 +13,8 @@ class Point extends NativeBinding {
     public function new(x:Int=0, y:Int=0) {
         nativeObject = Core.load("Point", 2)(x, y);
     }
+
+    public inline function toString() {
+        return '{Point x=$x y=$y}';
+    }
 }

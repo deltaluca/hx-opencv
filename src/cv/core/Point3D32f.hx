@@ -16,5 +16,9 @@ class Point3D32f extends NativeBinding {
     public function new(x:Float=0, y:Float=0, z:Float=0) {
         nativeObject = Core.load("Point3D32f", 3)(x, y, z);
     }
+
+    public inline function toString() {
+        return '{Point3D32f x=$x y=$y z=$z}';
+    }
 }
 

@@ -13,5 +13,9 @@ class Point2D32f extends NativeBinding {
     public function new(x:Float=0, y:Float=0) {
         nativeObject = Core.load("Point2D32f", 2)(x, y);
     }
+
+    public inline function toString() {
+        return '{Point2D32f x=$x y=$y}';
+    }
 }
 

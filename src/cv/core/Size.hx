@@ -13,5 +13,9 @@ class Size extends NativeBinding {
     public function new(width:Int=0, height:Int=0) {
         nativeObject = Core.load("Size", 2)(width, height);
     }
+
+    public inline function toString() {
+        return '{Size width=$width height=$height}';
+    }
 }
 

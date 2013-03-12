@@ -13,6 +13,10 @@ class Size2D32f extends NativeBinding {
     public function new(width:Float=0, height:Float=0) {
         nativeObject = Core.load("Size2D32f", 2)(width, height);
     }
+
+    public inline function toString() {
+        return '{Size2D32f width=$width height=$height}';
+    }
 }
 
 
