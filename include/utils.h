@@ -49,21 +49,24 @@ void finaliser(value v) {
 
 
 
+// Defining general integer consts.
 // Defining CV_# integer consts.
-#define PCONST(P, N) \
-    value hx_cv_##P##_CV_##N() { return alloc_int(CV_##N); } \
-    DEFINE_PRIM(hx_cv_##P##_CV_##N, 0)
+#define GCONST(P, R, N) \
+    value hx_cv_##P##_##R##_##N() { return alloc_int(R##_##N); } \
+    DEFINE_PRIM(hx_cv_##P##_##R##_##N, 0)
+#define PCONST(P, N) GCONST(P, CV, N)
 
 
 
 // Defining properties of a Cv# object.
-#define PGETPROP(P, N, M, I) \
+#define GGETPROP(P, R, N, M, I) \
     value hx_cv_##P##_##N##_get_##M(value v) { \
         val_check_kind(v, k_##N); \
-        Cv##N* ptr = (Cv##N*)val_data(v); \
+        R##N* ptr = (R##N*)val_data(v); \
         return alloc<I>(ptr->M); \
     } \
     DEFINE_PRIM(hx_cv_##P##_##N##_get_##M, 1)
+#define PGETPROP(P, N, M, I) GGETPROP(P, Cv, N, M, I)
 #define PSETPROP(P, N, M, I) \
     value hx_cv_##P##_##N##_set_##M(value v, value M) { \
         val_check_kind(v, k_##N); \

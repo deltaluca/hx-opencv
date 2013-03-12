@@ -62,7 +62,6 @@ INIT_POINT3D(Point3D64f);
 //
 // CvSize
 // CvSize2D32f
-// CvSize2D64f
 //
 #define INIT_SIZE2D(N, F) \
     DECLARE_KIND(k_##N); \
@@ -277,6 +276,54 @@ MATVAL(double, db,  double);
 
 
 
+//
+// IPL_DEPTH_*
+//
+GCONST(core, IPL, DEPTH_8U);
+GCONST(core, IPL, DEPTH_8S);
+GCONST(core, IPL, DEPTH_16U);
+GCONST(core, IPL, DEPTH_16S);
+GCONST(core, IPL, DEPTH_32S);
+GCONST(core, IPL, DEPTH_32F);
+GCONST(core, IPL, DEPTH_64F);
+
+
+
+//
+// IplImage
+//
+DECLARE_KIND(k_Image);
+DEFINE_KIND(k_Image);
+static void finalise_Image(value v) {
+    IplImage* ptr = (IplImage*)val_data(v);
+    cvReleaseImage(&ptr);
+}
+value hx_cv_core_createImage(value size, value depth, value channels) {
+    val_check_kind(size, k_Size);
+    IplImage* ptr = cvCreateImage(*(CvSize*)val_data(size), val_get<int>(depth), val_get<int>(channels));
+    value v = alloc_abstract(k_Image, ptr);
+    val_gc(v, finalise_Image);
+    return v;
+}
+value hx_cv_core_createImageHeader(value size, value depth, value channels) {
+    val_check_kind(size, k_Size);
+    IplImage* ptr = cvCreateImageHeader(*(CvSize*)val_data(size), val_get<int>(depth), val_get<int>(channels));
+    value v = alloc_abstract(k_Image, ptr);
+    val_gc(v, finalise_Image);
+    return v;
+}
+DEFINE_PRIM(hx_cv_core_createImage,       3);
+DEFINE_PRIM(hx_cv_core_createImageHeader, 3);
+GGETPROP(core, Ipl, Image, nChannels, int);
+GGETPROP(core, Ipl, Image, depth,     int);
+GGETPROP(core, Ipl, Image, dataOrder, int);
+GGETPROP(core, Ipl, Image, origin,    int);
+GGETPROP(core, Ipl, Image, width,     int);
+GGETPROP(core, Ipl, Image, height,    int);
+GGETPROP(core, Ipl, Image, imageSize, int);
+GGETPROP(core, Ipl, Image, widthStep, int);
+
+
 extern "C" void allocateKinds()
 {
     k_Point        = alloc_kind();
@@ -290,5 +337,6 @@ extern "C" void allocateKinds()
     k_Scalar       = alloc_kind();
     k_TermCriteria = alloc_kind();
     k_Mat          = alloc_kind();
+    k_Image        = alloc_kind();
 }
 DEFINE_ENTRY_POINT(allocateKinds);

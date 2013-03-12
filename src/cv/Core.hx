@@ -2,6 +2,8 @@ package cv;
 
 import #if cpp cpp #else neko #end.Lib;
 
+typedef Arr = NativeBinding; // Image|Mat|Seq?
+
 class Core {
     @:allow(cv.core)
     static inline function load(n:String, p:Int=0):Dynamic {
@@ -54,4 +56,14 @@ class Core {
     public static inline function CV_32SC(N:Int):Int { return [CV_32SC1, CV_32SC2, CV_32SC3, CV_32SC4][N-1]; }
     public static inline function CV_32FC(N:Int):Int { return [CV_32FC1, CV_32FC2, CV_32FC3, CV_32FC4][N-1]; }
     public static inline function CV_64FC(N:Int):Int { return [CV_64FC1, CV_64FC2, CV_64FC3, CV_64FC4][N-1]; }
+
+
+
+    public static var IPL_DEPTH_8U(get,never):Int; static inline function get_IPL_DEPTH_8U() { return load("IPL_DEPTH_8U", 0)(); }
+    public static var IPL_DEPTH_8S(get,never):Int; static inline function get_IPL_DEPTH_8S() { return load("IPL_DEPTH_8S", 0)(); }
+    public static var IPL_DEPTH_16U(get,never):Int; static inline function get_IPL_DEPTH_16U() { return load("IPL_DEPTH_16U", 0)(); }
+    public static var IPL_DEPTH_16S(get,never):Int; static inline function get_IPL_DEPTH_16S() { return load("IPL_DEPTH_16S", 0)(); }
+    public static var IPL_DEPTH_32S(get,never):Int; static inline function get_IPL_DEPTH_32S() { return load("IPL_DEPTH_32S", 0)(); }
+    public static var IPL_DEPTH_32F(get,never):Int; static inline function get_IPL_DEPTH_32F() { return load("IPL_DEPTH_32F", 0)(); }
+    public static var IPL_DEPTH_64F(get,never):Int; static inline function get_IPL_DEPTH_64F() { return load("IPL_DEPTH_64F", 0)(); }
 }

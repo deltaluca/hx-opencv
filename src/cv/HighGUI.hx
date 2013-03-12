@@ -1,5 +1,7 @@
 package cv;
 
+import cv.Core;
+
 import #if cpp cpp #else neko #end.Lib;
 
 class HighGUI {
@@ -81,5 +83,19 @@ class HighGUI {
 
     public static inline function setMouseCallback(windowName:String, onMouse:Int->Int->Int->Int->Void) {
         load("setMouseCallback", 2)(windowName, onMouse);
+    }
+
+
+
+    public static var CV_CVTIMG_FLIP   (get, never):Int; static inline function get_CV_CVTIMG_FLIP   () return load("CV_CVTIMG_FLIP")   ();
+    public static var CV_CVTIMG_SWAP_RB(get, never):Int; static inline function get_CV_CVTIMG_SWAP_RB() return load("CV_CVTIMG_SWAP_RB")();
+
+
+
+    public static inline function convertImage(src:Arr, dst:Arr, flags:Int=0) {
+        load("convertImage", 3)(src.nativeObject, dst.nativeObject, flags);
+    }
+    public static inline function showImage(windowName:String, image:Arr) {
+        load("showImage", 2)(windowName, image.nativeObject);
     }
 }

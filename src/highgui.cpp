@@ -143,3 +143,26 @@ void hx_cv_highgui_setMouseCallback(value windowName, value onMouse) {
     cvSetMouseCallback(val_get<string>(windowName), bound_onMouse, onMouse);
 }
 DEFINE_PRIM(hx_cv_highgui_setMouseCallback, 2);
+
+
+
+//
+// CV_CVTIMG_*
+//
+CONST(CVTIMG_FLIP);
+CONST(CVTIMG_SWAP_RB);
+
+
+
+//
+// cvConvertImage
+// cvShowImage
+//
+void hx_cv_highgui_convertImage(value src, value dst, value flags) {
+    cvConvertImage(val_data(src), val_data(dst), val_get<int>(flags));
+}
+void hx_cv_highgui_showImage(value windowName, value image) {
+    cvShowImage(val_get<string>(windowName), val_data(image));
+}
+DEFINE_PRIM(hx_cv_highgui_convertImage, 3);
+DEFINE_PRIM(hx_cv_highgui_showImage,    2);
