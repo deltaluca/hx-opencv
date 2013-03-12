@@ -1,4 +1,5 @@
 import cv.HighGUI;
+import cv.Core;
 import cv.core.*;
 
 class Main {
@@ -31,6 +32,12 @@ class Main {
         var p = new Scalar(1, 2, 3, 4);
         trace(p);
         trace(p[3]);
+
+        var p = Mat.create(10, 20, Core.CV_64F);
+        trace(p);
+        trace(p.get(0,0));
+        p.set(1, 2, 3);
+        trace(p.get(1,2));
 
         HighGUI.waitKey();
     }

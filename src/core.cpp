@@ -1,117 +1,78 @@
-#include <hx/CFFI.h>
 #include <core/core_c.h>
 
-template <typename T>
-static value alloc(T x) { neko_error(); }
-template <>
-value alloc(int x)    { return alloc_int  (x); }
-template <>
-value alloc(float x)  { return alloc_float(x); }
-template <>
-value alloc(double x) { return alloc_float(x); }
-
-static value alloc_double(float  x) { return alloc(x); }
-static value alloc_double(double x) { return alloc(x); }
+#include "utils.h"
+#define CONST(N) PCONST(core, N)
+#define GETPROP(N, M, I) PGETPROP(core, N, M, I)
+#define SETPROP(N, M, I) PSETPROP(core, N, M, I)
+#define PROP(N, M, I) PPROP(core, N, M, I)
 
 
 
-template <typename T>
-static T val_get(value x) { neko_error(); }
-template <>
-int val_get(value x)    { return val_get_int   (x); }
-template <>
-double val_get(value x) { return val_get_double(x); }
-template <>
-float val_get (value x) { return val_get_double(x); }
-
-
-
-#define PROP(N, M, I) \
-    value hx_cv_core_##N##_get_##M(value v) { \
-        val_check_kind(v, k_##N); \
-        Cv##N* ptr = (Cv##N*)val_data(v); \
-        return alloc<I>(ptr->M); \
-    } \
-    value hx_cv_core_##N##_set_##M(value v, value M) { \
-        val_check_kind(v, k_##N); \
-        Cv##N* ptr = (Cv##N*)val_data(v); \
-        return alloc<I>(ptr->M = val_get<I>(M)); \
-    } \
-    DEFINE_PRIM(hx_cv_core_##N##_get_##M, 1); \
-    DEFINE_PRIM(hx_cv_core_##N##_set_##M, 2)
-
-
-
-// Name Ffitype
+//
+// CvPoint
+// CvPoint2D32f
+// CvPoint2D64f
+//
 #define INIT_POINT2D(N, F) \
     DECLARE_KIND(k_##N); \
     DEFINE_KIND(k_##N); \
-    \
-    static void finalise_##N(value v) { \
-        Cv##N* ptr = (Cv##N*)val_data(v); \
-        delete ptr; \
-    } \
     value hx_cv_core_##N(value x, value y) { \
         Cv##N* ptr = new Cv##N; \
-        ptr->x = val_get_##F(x); \
-        ptr->y = val_get_##F(y); \
+        ptr->x = val_get<F>(x); \
+        ptr->y = val_get<F>(y); \
         value v = alloc_abstract(k_##N, ptr); \
-        val_gc(v, finalise_##N); \
+        val_gc(v, finaliser<Cv##N>); \
         return v; \
     } \
     DEFINE_PRIM(hx_cv_core_##N, 2); \
     PROP(N, x, F); \
     PROP(N, y, F)
-
 INIT_POINT2D(Point,      int   );
 INIT_POINT2D(Point2D32f, double);
 INIT_POINT2D(Point2D64f, double);
 
 
 
-// Name Ffitype
-#define INIT_POINT3D(N, F) \
+//
+// CvPoint3D32f
+// CvPoint3D64f
+//
+#define INIT_POINT3D(N) \
     DECLARE_KIND(k_##N); \
     DEFINE_KIND(k_##N); \
-    \
-    static void finalise_##N(value v) { \
-        Cv##N* ptr = (Cv##N*)val_data(v); \
-        delete ptr; \
-    } \
     value hx_cv_core_##N(value x, value y, value z) { \
         Cv##N* ptr = new Cv##N; \
-        ptr->x = val_get_##F(x); \
-        ptr->y = val_get_##F(y); \
-        ptr->z = val_get_##F(z); \
+        ptr->x = val_get<double>(x); \
+        ptr->y = val_get<double>(y); \
+        ptr->z = val_get<double>(z); \
         value v = alloc_abstract(k_##N, ptr); \
-        val_gc(v, finalise_##N); \
+        val_gc(v, finaliser<Cv##N>); \
         return v; \
     } \
     DEFINE_PRIM(hx_cv_core_##N, 3); \
-    PROP(N, x, F); \
-    PROP(N, y, F); \
-    PROP(N, z, F)
+    PROP(N, x, double); \
+    PROP(N, y, double); \
+    PROP(N, z, double)
 
-INIT_POINT3D(Point3D32f, double);
-INIT_POINT3D(Point3D64f, double);
+INIT_POINT3D(Point3D32f);
+INIT_POINT3D(Point3D64f);
 
 
 
-// Name Ffitype
+//
+// CvSize
+// CvSize2D32f
+// CvSize2D64f
+//
 #define INIT_SIZE2D(N, F) \
     DECLARE_KIND(k_##N); \
     DEFINE_KIND(k_##N); \
-    \
-    static void finalise_##N(value v) { \
-        Cv##N* ptr = (Cv##N*)val_data(v); \
-        delete ptr; \
-    } \
     value hx_cv_core_##N(value width, value height) { \
         Cv##N* ptr = new Cv##N; \
-        ptr->width  = val_get_##F(width); \
-        ptr->height = val_get_##F(height); \
+        ptr->width  = val_get<F>(width); \
+        ptr->height = val_get<F>(height); \
         value v = alloc_abstract(k_##N, ptr); \
-        val_gc(v, finalise_##N); \
+        val_gc(v, finaliser<Cv##N>); \
         return v; \
     } \
     DEFINE_PRIM(hx_cv_core_##N, 2); \
@@ -123,20 +84,19 @@ INIT_SIZE2D(Size2D32f, double);
 
 
 
+//
+// CvRect
+//
 DECLARE_KIND(k_Rect);
 DEFINE_KIND(k_Rect);
-static void finalise_Rect(value v) {
-    CvRect* ptr = (CvRect*)val_data(v);
-    delete ptr;
-}
 value hx_cv_core_Rect(value x, value y, value width, value height) {
     CvRect* ptr = new CvRect;
-    ptr->x      = val_get_int(x);
-    ptr->y      = val_get_int(y);
-    ptr->width  = val_get_int(width);
-    ptr->height = val_get_int(height);
+    ptr->x      = val_get<int>(x);
+    ptr->y      = val_get<int>(y);
+    ptr->width  = val_get<int>(width);
+    ptr->height = val_get<int>(height);
     value v = alloc_abstract(k_Rect, ptr);
-    val_gc(v, finalise_Rect);
+    val_gc(v, finaliser<CvRect>);
     return v;
 }
 DEFINE_PRIM(hx_cv_core_Rect, 4);
@@ -147,31 +107,30 @@ PROP(Rect, height, int);
 
 
 
+//
+// CvScalar
+//
 DECLARE_KIND(k_Scalar);
 DEFINE_KIND(k_Scalar);
-static void finalise_Scalar(value v) {
-    CvScalar* ptr = (CvScalar*)val_data(v);
-    delete ptr;
-}
 value hx_cv_core_Scalar(value v0, value v1, value v2, value v3) {
     CvScalar* ptr = new CvScalar;
-    ptr->val[0] = val_get_double(v0);
-    ptr->val[1] = val_get_double(v1);
-    ptr->val[2] = val_get_double(v2);
-    ptr->val[3] = val_get_double(v3);
+    ptr->val[0] = val_get<double>(v0);
+    ptr->val[1] = val_get<double>(v1);
+    ptr->val[2] = val_get<double>(v2);
+    ptr->val[3] = val_get<double>(v3);
     value v = alloc_abstract(k_Scalar, ptr);
-    val_gc(v, finalise_Scalar);
+    val_gc(v, finaliser<CvScalar>);
     return v;
 }
 value hx_cv_core_Scalar_get_i(value v, value i) {
     val_check_kind(v, k_Scalar);
     CvScalar* ptr = (CvScalar*)val_data(v);
-    return alloc_float(ptr->val[val_get_int(i)]);
+    return alloc<float>(ptr->val[val_get<int>(i)]);
 }
 value hx_cv_core_Scalar_set_i(value v, value i, value x) {
     val_check_kind(v, k_Scalar);
     CvScalar* ptr = (CvScalar*)val_data(v);
-    return alloc_float(ptr->val[val_get_int(i)] = val_get_double(x));
+    return alloc<float>(ptr->val[val_get<int>(i)] = val_get<double>(x));
 }
 DEFINE_PRIM(hx_cv_core_Scalar,       4);
 DEFINE_PRIM(hx_cv_core_Scalar_get_i, 2);
@@ -179,42 +138,142 @@ DEFINE_PRIM(hx_cv_core_Scalar_set_i, 3);
 
 
 
-value hx_cv_core_CV_TERMCRIT_ITER  () { return alloc_int(CV_TERMCRIT_ITER);   }
-value hx_cv_core_CV_TERMCRIT_NUMBER() { return alloc_int(CV_TERMCRIT_NUMBER); }
-value hx_cv_core_CV_TERMCRIT_EPS   () { return alloc_int(CV_TERMCRIT_EPS);    }
-
-DEFINE_PRIM(hx_cv_core_CV_TERMCRIT_ITER,   0);
-DEFINE_PRIM(hx_cv_core_CV_TERMCRIT_NUMBER, 0);
-DEFINE_PRIM(hx_cv_core_CV_TERMCRIT_EPS,    0);
-
+//
+// CV_TERMCRIT_*
+//
+CONST(TERMCRIT_ITER);
+CONST(TERMCRIT_NUMBER);
+CONST(TERMCRIT_EPS);
 
 
+
+//
+// CvTermCriteria
+//
 DECLARE_KIND(k_TermCriteria);
 DEFINE_KIND(k_TermCriteria);
-static void finalise_TermCriteria(value v) {
-    CvTermCriteria* ptr = (CvTermCriteria*)val_data(v);
-    delete ptr;
-}
 value hx_cv_core_TermCriteria(value type, value max_iter, value epsilon) {
     CvTermCriteria* ptr = new CvTermCriteria;
-    ptr->type     = val_get_int(type);
-    ptr->max_iter = val_get_int(max_iter);
-    ptr->epsilon  = val_get_double(epsilon);
+    ptr->type     = val_get<int>(type);
+    ptr->max_iter = val_get<int>(max_iter);
+    ptr->epsilon  = val_get<double>(epsilon);
     value v = alloc_abstract(k_TermCriteria, ptr);
-    val_gc(v, finalise_TermCriteria);
+    val_gc(v, finaliser<CvTermCriteria>);
     return v;
 }
 value hx_cv_core_TermCriteria_check(value criteria, value default_eps, value default_max_iters) {
     val_check_kind(criteria, k_TermCriteria);
     CvTermCriteria* ptr = (CvTermCriteria*)val_data(criteria);
-    CvTermCriteria nxt = cvCheckTermCriteria(*ptr, val_get_double(default_eps), val_get_int(default_max_iters));
-    return hx_cv_core_TermCriteria(alloc_int(nxt.type), alloc_int(nxt.max_iter), alloc_double(nxt.epsilon));
+    CvTermCriteria nxt = cvCheckTermCriteria(*ptr, val_get<double>(default_eps), val_get<int>(default_max_iters));
+    return hx_cv_core_TermCriteria(alloc<int>(nxt.type), alloc<int>(nxt.max_iter), alloc<double>(nxt.epsilon));
 }
 DEFINE_PRIM(hx_cv_core_TermCriteria,       3);
 DEFINE_PRIM(hx_cv_core_TermCriteria_check, 3);
 PROP(TermCriteria, type, int);
 PROP(TermCriteria, max_iter, int);
 PROP(TermCriteria, epsilon, double);
+
+
+
+//
+// CV_*
+//
+CONST(8U);
+CONST(8S);
+CONST(16U);
+CONST(16S);
+CONST(32S);
+CONST(32F);
+CONST(64F);
+CONST(8UC1);
+CONST(8UC2);
+CONST(8UC3);
+CONST(8UC4);
+CONST(8SC1);
+CONST(8SC2);
+CONST(8SC3);
+CONST(8SC4);
+CONST(16UC1);
+CONST(16UC2);
+CONST(16UC3);
+CONST(16UC4);
+CONST(16SC1);
+CONST(16SC2);
+CONST(16SC3);
+CONST(16SC4);
+CONST(32SC1);
+CONST(32SC2);
+CONST(32SC3);
+CONST(32SC4);
+CONST(32FC1);
+CONST(32FC2);
+CONST(32FC3);
+CONST(32FC4);
+CONST(64FC1);
+CONST(64FC2);
+CONST(64FC3);
+CONST(64FC4);
+
+
+
+//
+// CvMat
+//
+DECLARE_KIND(k_Mat);
+DEFINE_KIND(k_Mat);
+static void finalise_Mat(value v) {
+    CvMat* ptr = (CvMat*)val_data(v);
+    cvReleaseMat(&ptr);
+}
+value hx_cv_core_createMat(value rows, value cols, value type) {
+    CvMat* ptr = cvCreateMat(val_get<int>(rows), val_get<int>(cols), val_get<int>(type));
+    value v = alloc_abstract(k_Mat, ptr);
+    val_gc(v, finalise_Mat);
+    return v;
+}
+value hx_cv_core_createMatHeader(value rows, value cols, value type) {
+    CvMat* ptr = cvCreateMatHeader(val_get<int>(rows), val_get<int>(cols), val_get<int>(type));
+    value v = alloc_abstract(k_Mat, ptr);
+    val_gc(v, finalise_Mat);
+    return v;
+}
+value hx_cv_core_mGet(value mat, value row, value col) {
+    val_check_kind(mat, k_Mat);
+    CvMat* ptr = (CvMat*)val_data(mat);
+    return alloc<double>(cvmGet(ptr, val_get<int>(row), val_get<int>(col)));
+}
+value hx_cv_core_mSet(value mat, value row, value col, value value) {
+    val_check_kind(mat, k_Mat);
+    CvMat* ptr = (CvMat*)val_data(mat);
+    cvmSet(ptr, val_get<int>(row), val_get<int>(col), val_get<double>(value));
+    return value;
+}
+#define MATVAL(N, P, F) \
+    value hx_cv_core_mat_##N##_get(value mat, value i) { \
+        val_check_kind(mat, k_Mat); \
+        CvMat* ptr = (CvMat*)val_data(mat); \
+        return alloc<F>(ptr->data.P[val_get<int>(i)]); \
+    } \
+    value hx_cv_core_mat_##N##_set(value mat, value i, value v) { \
+        val_check_kind(mat, k_Mat); \
+        CvMat* ptr = (CvMat*)val_data(mat); \
+        return alloc<F>(ptr->data.P[val_get<int>(i)] = val_get<F>(v)); \
+    } \
+    DEFINE_PRIM(hx_cv_core_mat_##N##_get, 2); \
+    DEFINE_PRIM(hx_cv_core_mat_##N##_set, 3)
+DEFINE_PRIM(hx_cv_core_createMat,       3);
+DEFINE_PRIM(hx_cv_core_createMatHeader, 3);
+DEFINE_PRIM(hx_cv_core_mGet,            3);
+DEFINE_PRIM(hx_cv_core_mSet,            4);
+GETPROP(Mat, type, int);
+GETPROP(Mat, step, int);
+GETPROP(Mat, rows, int);
+GETPROP(Mat, cols, int);
+MATVAL(uchar,  ptr, int   );
+MATVAL(short,  s,   int   );
+MATVAL(int,    i,   int   );
+MATVAL(float,  fl,  double);
+MATVAL(double, db,  double);
 
 
 
@@ -230,5 +289,6 @@ extern "C" void allocateKinds()
     k_Rect         = alloc_kind();
     k_Scalar       = alloc_kind();
     k_TermCriteria = alloc_kind();
+    k_Mat          = alloc_kind();
 }
 DEFINE_ENTRY_POINT(allocateKinds);

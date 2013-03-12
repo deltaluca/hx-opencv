@@ -28,7 +28,7 @@
         <compilerflag value="-Iinclude"/>
         <compilerflag value="-I/usr/include/opencv2"/>
 
-        <file name="src/test.cpp"/>
+        <file name="src/main.cpp"/>
         <file name="src/highgui.cpp"/>
         <file name="src/core.cpp"/>
     </files>
