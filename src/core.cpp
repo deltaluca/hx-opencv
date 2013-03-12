@@ -13,6 +13,8 @@ value alloc(double x) { return alloc_float(x); }
 static value alloc_double(float  x) { return alloc(x); }
 static value alloc_double(double x) { return alloc(x); }
 
+
+
 template <typename T>
 static T val_get(value x) { neko_error(); }
 template <>
@@ -22,55 +24,22 @@ double val_get(value x) { return val_get_double(x); }
 template <>
 float val_get (value x) { return val_get_double(x); }
 
-template <typename T, typename I>
-static value get_x(value v, vkind k) {
-    val_check_kind(v, k);
-    T* ptr = (T*)val_data(v);
-    return alloc<I>(ptr->x);
-}
-template <typename T, typename I>
-static value get_y(value v, vkind k) {
-    val_check_kind(v, k);
-    T* ptr = (T*)val_data(v);
-    return alloc<I>(ptr->y);
-}
-template <typename T, typename I>
-static value get_width(value v, vkind k) {
-    val_check_kind(v, k);
-    T* ptr = (T*)val_data(v);
-    return alloc<I>(ptr->width);
-}
-template <typename T, typename I>
-static value get_height(value v, vkind k) {
-    val_check_kind(v, k);
-    T* ptr = (T*)val_data(v);
-    return alloc<I>(ptr->height);
-}
 
-template <typename T, typename I>
-static value set_x(value v, vkind k, value x) {
-    val_check_kind(v, k);
-    T* ptr = (T*)val_data(v);
-    return alloc<I>(ptr->x = val_get<I>(x));
-}
-template <typename T, typename I>
-static value set_y(value v, vkind k, value y) {
-    val_check_kind(v, k);
-    T* ptr = (T*)val_data(v);
-    return alloc<I>(ptr->y = val_get<I>(y));
-}
-template <typename T, typename I>
-static value set_width(value v, vkind k, value width) {
-    val_check_kind(v, k);
-    T* ptr = (T*)val_data(v);
-    return alloc<I>(ptr->width = val_get<I>(width));
-}
-template <typename T, typename I>
-static value set_height(value v, vkind k, value height) {
-    val_check_kind(v, k);
-    T* ptr = (T*)val_data(v);
-    return alloc<I>(ptr->height = val_get<I>(height));
-}
+
+#define PROP(N, M, I) \
+    value hx_cv_core_##N##_get_##M(value v) { \
+        val_check_kind(v, k_##N); \
+        Cv##N* ptr = (Cv##N*)val_data(v); \
+        return alloc<I>(ptr->M); \
+    } \
+    value hx_cv_core_##N##_set_##M(value v, value M) { \
+        val_check_kind(v, k_##N); \
+        Cv##N* ptr = (Cv##N*)val_data(v); \
+        return alloc<I>(ptr->M = val_get<I>(M)); \
+    } \
+    DEFINE_PRIM(hx_cv_core_##N##_get_##M, 1); \
+    DEFINE_PRIM(hx_cv_core_##N##_set_##M, 2)
+
 
 
 // Name Ffitype
@@ -90,15 +59,9 @@ static value set_height(value v, vkind k, value height) {
         val_gc(v, finalise_##N); \
         return v; \
     } \
-    value hx_cv_core_##N##_get_x(value v) { return get_x<Cv##N, F>(v, k_##N); } \
-    value hx_cv_core_##N##_get_y(value v) { return get_y<Cv##N, F>(v, k_##N); } \
-    value hx_cv_core_##N##_set_x(value v, value x) { return set_x<Cv##N, F>(v, k_##N, x); } \
-    value hx_cv_core_##N##_set_y(value v, value y) { return set_y<Cv##N, F>(v, k_##N, y); } \
     DEFINE_PRIM(hx_cv_core_##N, 2); \
-    DEFINE_PRIM(hx_cv_core_##N##_get_x, 1); \
-    DEFINE_PRIM(hx_cv_core_##N##_get_y, 1); \
-    DEFINE_PRIM(hx_cv_core_##N##_set_x, 2); \
-    DEFINE_PRIM(hx_cv_core_##N##_set_y, 2)
+    PROP(N, x, F); \
+    PROP(N, y, F)
 
 INIT_POINT2D(Point,      int   );
 INIT_POINT2D(Point2D32f, double);
@@ -124,27 +87,10 @@ INIT_POINT2D(Point2D64f, double);
         val_gc(v, finalise_##N); \
         return v; \
     } \
-    value hx_cv_core_##N##_get_x(value v) { return get_x<Cv##N, F>(v, k_##N); } \
-    value hx_cv_core_##N##_get_y(value v) { return get_y<Cv##N, F>(v, k_##N); } \
-    value hx_cv_core_##N##_get_z(value v) { \
-        val_check_kind(v, k_##N); \
-        Cv##N* ptr = (Cv##N*)val_data(v); \
-        return alloc_##F(ptr->z); \
-    } \
-    value hx_cv_core_##N##_set_x(value v, value x) { return set_x<Cv##N, F>(v, k_##N, x); } \
-    value hx_cv_core_##N##_set_y(value v, value y) { return set_y<Cv##N, F>(v, k_##N, y); } \
-    value hx_cv_core_##N##_set_z(value v, value z) { \
-        val_check_kind(v, k_##N); \
-        Cv##N* ptr = (Cv##N*)val_data(v); \
-        return alloc_##F(ptr->z = val_get_##F(z)); \
-    } \
     DEFINE_PRIM(hx_cv_core_##N, 3); \
-    DEFINE_PRIM(hx_cv_core_##N##_get_x, 1); \
-    DEFINE_PRIM(hx_cv_core_##N##_get_y, 1); \
-    DEFINE_PRIM(hx_cv_core_##N##_get_z, 1); \
-    DEFINE_PRIM(hx_cv_core_##N##_set_x, 2); \
-    DEFINE_PRIM(hx_cv_core_##N##_set_y, 2); \
-    DEFINE_PRIM(hx_cv_core_##N##_set_z, 2)
+    PROP(N, x, F); \
+    PROP(N, y, F); \
+    PROP(N, z, F)
 
 INIT_POINT3D(Point3D32f, double);
 INIT_POINT3D(Point3D64f, double);
@@ -168,15 +114,9 @@ INIT_POINT3D(Point3D64f, double);
         val_gc(v, finalise_##N); \
         return v; \
     } \
-    value hx_cv_core_##N##_get_width (value v) { return get_width <Cv##N, F>(v, k_##N); } \
-    value hx_cv_core_##N##_get_height(value v) { return get_height<Cv##N, F>(v, k_##N); } \
-    value hx_cv_core_##N##_set_width (value v, value width)  { return set_width <Cv##N, F>(v, k_##N, width ); } \
-    value hx_cv_core_##N##_set_height(value v, value height) { return set_height<Cv##N, F>(v, k_##N, height); } \
-    DEFINE_PRIM(hx_cv_core_##N,              2); \
-    DEFINE_PRIM(hx_cv_core_##N##_get_width,  1); \
-    DEFINE_PRIM(hx_cv_core_##N##_get_height, 1); \
-    DEFINE_PRIM(hx_cv_core_##N##_set_width,  2); \
-    DEFINE_PRIM(hx_cv_core_##N##_set_height, 2)
+    DEFINE_PRIM(hx_cv_core_##N, 2); \
+    PROP(N, width,  F); \
+    PROP(N, height, F)
 
 INIT_SIZE2D(Size,      int   );
 INIT_SIZE2D(Size2D32f, double);
@@ -199,23 +139,11 @@ value hx_cv_core_Rect(value x, value y, value width, value height) {
     val_gc(v, finalise_Rect);
     return v;
 }
-value hx_cv_core_Rect_get_x     (value v) { return get_x     <CvRect, int>(v, k_Rect); }
-value hx_cv_core_Rect_get_y     (value v) { return get_y     <CvRect, int>(v, k_Rect); }
-value hx_cv_core_Rect_get_width (value v) { return get_width <CvRect, int>(v, k_Rect); }
-value hx_cv_core_Rect_get_height(value v) { return get_height<CvRect, int>(v, k_Rect); }
-value hx_cv_core_Rect_set_x     (value v, value x)      { return set_x     <CvRect, int>(v, k_Rect, x); }
-value hx_cv_core_Rect_set_y     (value v, value y)      { return set_y     <CvRect, int>(v, k_Rect, y); }
-value hx_cv_core_Rect_set_width (value v, value width)  { return set_width <CvRect, int>(v, k_Rect, width ); }
-value hx_cv_core_Rect_set_height(value v, value height) { return set_height<CvRect, int>(v, k_Rect, height); }
-DEFINE_PRIM(hx_cv_core_Rect,            4);
-DEFINE_PRIM(hx_cv_core_Rect_get_x,      1);
-DEFINE_PRIM(hx_cv_core_Rect_get_y,      1);
-DEFINE_PRIM(hx_cv_core_Rect_set_x,      2);
-DEFINE_PRIM(hx_cv_core_Rect_set_y,      2);
-DEFINE_PRIM(hx_cv_core_Rect_get_width,  1);
-DEFINE_PRIM(hx_cv_core_Rect_get_height, 1);
-DEFINE_PRIM(hx_cv_core_Rect_set_width,  2);
-DEFINE_PRIM(hx_cv_core_Rect_set_height, 2);
+DEFINE_PRIM(hx_cv_core_Rect, 4);
+PROP(Rect, x,      int);
+PROP(Rect, y,      int);
+PROP(Rect, width,  int);
+PROP(Rect, height, int);
 
 
 
@@ -251,20 +179,56 @@ DEFINE_PRIM(hx_cv_core_Scalar_set_i, 3);
 
 
 
+value hx_cv_core_CV_TERMCRIT_ITER  () { return alloc_int(CV_TERMCRIT_ITER);   }
+value hx_cv_core_CV_TERMCRIT_NUMBER() { return alloc_int(CV_TERMCRIT_NUMBER); }
+value hx_cv_core_CV_TERMCRIT_EPS   () { return alloc_int(CV_TERMCRIT_EPS);    }
+
+DEFINE_PRIM(hx_cv_core_CV_TERMCRIT_ITER,   0);
+DEFINE_PRIM(hx_cv_core_CV_TERMCRIT_NUMBER, 0);
+DEFINE_PRIM(hx_cv_core_CV_TERMCRIT_EPS,    0);
+
+
+
+DECLARE_KIND(k_TermCriteria);
+DEFINE_KIND(k_TermCriteria);
+static void finalise_TermCriteria(value v) {
+    CvTermCriteria* ptr = (CvTermCriteria*)val_data(v);
+    delete ptr;
+}
+value hx_cv_core_TermCriteria(value type, value max_iter, value epsilon) {
+    CvTermCriteria* ptr = new CvTermCriteria;
+    ptr->type     = val_get_int(type);
+    ptr->max_iter = val_get_int(max_iter);
+    ptr->epsilon  = val_get_double(epsilon);
+    value v = alloc_abstract(k_TermCriteria, ptr);
+    val_gc(v, finalise_TermCriteria);
+    return v;
+}
+value hx_cv_core_TermCriteria_check(value criteria, value default_eps, value default_max_iters) {
+    val_check_kind(criteria, k_TermCriteria);
+    CvTermCriteria* ptr = (CvTermCriteria*)val_data(criteria);
+    CvTermCriteria nxt = cvCheckTermCriteria(*ptr, val_get_double(default_eps), val_get_int(default_max_iters));
+    return hx_cv_core_TermCriteria(alloc_int(nxt.type), alloc_int(nxt.max_iter), alloc_double(nxt.epsilon));
+}
+DEFINE_PRIM(hx_cv_core_TermCriteria,       3);
+DEFINE_PRIM(hx_cv_core_TermCriteria_check, 3);
+PROP(TermCriteria, type, int);
+PROP(TermCriteria, max_iter, int);
+PROP(TermCriteria, epsilon, double);
+
+
+
 extern "C" void allocateKinds()
 {
-    k_Point      = alloc_kind();
-    k_Point2D32f = alloc_kind();
-    k_Point2D64f = alloc_kind();
-
-    k_Point3D32f = alloc_kind();
-    k_Point3D64f = alloc_kind();
-
-    k_Size       = alloc_kind();
-    k_Size2D32f  = alloc_kind();
-
-    k_Rect       = alloc_kind();
-
-    k_Scalar     = alloc_kind();
+    k_Point        = alloc_kind();
+    k_Point2D32f   = alloc_kind();
+    k_Point2D64f   = alloc_kind();
+    k_Point3D32f   = alloc_kind();
+    k_Point3D64f   = alloc_kind();
+    k_Size         = alloc_kind();
+    k_Size2D32f    = alloc_kind();
+    k_Rect         = alloc_kind();
+    k_Scalar       = alloc_kind();
+    k_TermCriteria = alloc_kind();
 }
 DEFINE_ENTRY_POINT(allocateKinds);
