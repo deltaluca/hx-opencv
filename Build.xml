@@ -61,9 +61,6 @@
         <lib name="-lopencv_legacy"/>
         <lib name="-lopencv_flann"/>
 
-        <!-- libffi needed for c closure generation -->
-        <lib name="-lffi"/>
-
     </target>
 
     <target id="default">

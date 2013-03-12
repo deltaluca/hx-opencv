@@ -1,6 +1,6 @@
 package cv;
 
-import cpp.Lib;
+import #if cpp cpp #else neko #end.Lib;
 
 class Core {
     @:allow(cv.core)

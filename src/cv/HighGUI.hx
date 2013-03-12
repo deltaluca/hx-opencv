@@ -1,6 +1,6 @@
 package cv;
 
-import cpp.Lib;
+import #if cpp cpp #else neko #end.Lib;
 
 class HighGUI {
     static inline function load(n:String, p:Int=0):Dynamic {

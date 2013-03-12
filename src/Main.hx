@@ -25,6 +25,9 @@ class Main {
         var p = new Size2D32f(1.23456789, 2.3456789101112);
         trace(p);
 
+        var p = new Rect(1, 2, 3, 4);
+        trace(p);
+
         HighGUI.waitKey();
     }
 }
