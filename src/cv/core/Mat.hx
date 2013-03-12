@@ -19,6 +19,9 @@ class Mat extends NativeBinding {
     public static inline function createHeader(rows:Int, cols:Int, type:Int):Mat {
         return new Mat(Core.load("createMatHeader", 3)(rows, cols, type));
     }
+    public inline function clone():Mat {
+        return new Mat(Core.load("cloneMat", 1)(this.nativeObject));
+    }
 
 
 

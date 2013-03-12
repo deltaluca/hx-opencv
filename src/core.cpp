@@ -111,15 +111,14 @@ PROP(Rect, height, int);
 //
 DECLARE_KIND(k_Scalar);
 DEFINE_KIND(k_Scalar);
+PDEFINE_CONVERT_GENERIC(core, Scalar);
 value hx_cv_core_Scalar(value v0, value v1, value v2, value v3) {
     CvScalar* ptr = new CvScalar;
     ptr->val[0] = val_get<double>(v0);
     ptr->val[1] = val_get<double>(v1);
     ptr->val[2] = val_get<double>(v2);
     ptr->val[3] = val_get<double>(v3);
-    value v = alloc_abstract(k_Scalar, ptr);
-    val_gc(v, finaliser<CvScalar>);
-    return v;
+    return CONVERT(core, Scalar, ptr);
 }
 value hx_cv_core_Scalar_get_i(value v, value i) {
     val_check_kind(v, k_Scalar);
@@ -217,6 +216,10 @@ CONST(64FC4);
 
 //
 // CvMat
+// cvCreateMat
+// cvCreateMatHeader
+// cvmGet
+// cvmSet
 //
 DECLARE_KIND(k_Mat);
 DEFINE_KIND(k_Mat);
@@ -224,17 +227,16 @@ static void finalise_Mat(value v) {
     CvMat* ptr = (CvMat*)val_data(v);
     cvReleaseMat(&ptr);
 }
+PDEFINE_CONVERT(core, Mat, finalise_Mat);
 value hx_cv_core_createMat(value rows, value cols, value type) {
-    CvMat* ptr = cvCreateMat(val_get<int>(rows), val_get<int>(cols), val_get<int>(type));
-    value v = alloc_abstract(k_Mat, ptr);
-    val_gc(v, finalise_Mat);
-    return v;
+    return CONVERT(core, Mat, cvCreateMat(val_get<int>(rows), val_get<int>(cols), val_get<int>(type)));
 }
 value hx_cv_core_createMatHeader(value rows, value cols, value type) {
-    CvMat* ptr = cvCreateMatHeader(val_get<int>(rows), val_get<int>(cols), val_get<int>(type));
-    value v = alloc_abstract(k_Mat, ptr);
-    val_gc(v, finalise_Mat);
-    return v;
+    return CONVERT(core, Mat, cvCreateMatHeader(val_get<int>(rows), val_get<int>(cols), val_get<int>(type)));
+}
+value hx_cv_core_cloneMat(value mat) {
+    val_check_kind(mat, k_Mat);
+    return CONVERT(core, Mat, cvCloneMat((CvMat*)val_data(mat)));
 }
 value hx_cv_core_mGet(value mat, value row, value col) {
     val_check_kind(mat, k_Mat);
@@ -260,9 +262,9 @@ value hx_cv_core_mSet(value mat, value row, value col, value value) {
     } \
     DEFINE_PRIM(hx_cv_core_mat_##N##_get, 2); \
     DEFINE_PRIM(hx_cv_core_mat_##N##_set, 3)
-PDEFINE_CONVERT_GENERIC(core, Mat);
 DEFINE_PRIM(hx_cv_core_createMat,       3);
 DEFINE_PRIM(hx_cv_core_createMatHeader, 3);
+DEFINE_PRIM(hx_cv_core_cloneMat,        1);
 DEFINE_PRIM(hx_cv_core_mGet,            3);
 DEFINE_PRIM(hx_cv_core_mSet,            4);
 GETPROP(Mat, type, int);
@@ -292,6 +294,9 @@ GCONST(core, IPL, DEPTH_64F);
 
 //
 // IplImage
+// cvCreateImage
+// cvCreateImageHeader
+// cvCloneImage
 //
 DECLARE_KIND(k_Image);
 DEFINE_KIND(k_Image);
@@ -299,23 +304,22 @@ static void finalise_Image(value v) {
     IplImage* ptr = (IplImage*)val_data(v);
     cvReleaseImage(&ptr);
 }
+GDEFINE_CONVERT(Ipl, core, Image, finalise_Image);
 value hx_cv_core_createImage(value size, value depth, value channels) {
     val_check_kind(size, k_Size);
-    IplImage* ptr = cvCreateImage(*(CvSize*)val_data(size), val_get<int>(depth), val_get<int>(channels));
-    value v = alloc_abstract(k_Image, ptr);
-    val_gc(v, finalise_Image);
-    return v;
+    return CONVERT(core, Image, cvCreateImage(*(CvSize*)val_data(size), val_get<int>(depth), val_get<int>(channels)));
 }
 value hx_cv_core_createImageHeader(value size, value depth, value channels) {
     val_check_kind(size, k_Size);
-    IplImage* ptr = cvCreateImageHeader(*(CvSize*)val_data(size), val_get<int>(depth), val_get<int>(channels));
-    value v = alloc_abstract(k_Image, ptr);
-    val_gc(v, finalise_Image);
-    return v;
+    return CONVERT(core, Image, cvCreateImageHeader(*(CvSize*)val_data(size), val_get<int>(depth), val_get<int>(channels)));
 }
-GDEFINE_CONVERT(Ipl, core, Image, finalise_Image);
+value hx_cv_core_cloneImage(value image) {
+    val_check_kind(image, k_Image);
+    return CONVERT(core, Image, cvCloneImage((IplImage*)val_data(image)));
+}
 DEFINE_PRIM(hx_cv_core_createImage,       3);
 DEFINE_PRIM(hx_cv_core_createImageHeader, 3);
+DEFINE_PRIM(hx_cv_core_cloneImage,        1);
 GGETPROP(core, Ipl, Image, nChannels, int);
 GGETPROP(core, Ipl, Image, depth,     int);
 GGETPROP(core, Ipl, Image, dataOrder, int);
@@ -324,6 +328,88 @@ GGETPROP(core, Ipl, Image, width,     int);
 GGETPROP(core, Ipl, Image, height,    int);
 GGETPROP(core, Ipl, Image, imageSize, int);
 GGETPROP(core, Ipl, Image, widthStep, int);
+
+
+
+//
+// CV_CMP_*
+//
+CONST(CMP_EQ);
+CONST(CMP_GT);
+CONST(CMP_GE);
+CONST(CMP_LT);
+CONST(CMP_LE);
+CONST(CMP_NE);
+
+
+
+//
+// cvAbsDiff
+// cvAbsDiffS
+// cvAdd
+// cvAddS
+// cvAddWeighted
+// cvAnd
+// cvAndS
+// cvAvg
+// cvAvgSdv
+// cvCmp
+//
+void hx_cv_core_absDiff(value src1, value src2, value dst) {
+    cvAbsDiff(val_data(src1), val_data(src2), val_data(dst));
+}
+void hx_cv_core_absDiffS(value src, value dst, value _value) {
+    val_check_kind(_value, k_Scalar);
+    cvAbsDiffS(val_data(src), val_data(dst), *(CvScalar*)val_data(_value));
+}
+void hx_cv_core_add(value src1, value src2, value dst, value mask) {
+    cvAdd(val_data(src1), val_data(src1), val_data(dst), val_data(mask));
+}
+void hx_cv_core_addS(value src, value _value, value dst, value mask) {
+    val_check_kind(_value, k_Scalar);
+    cvAddS(val_data(src), *(CvScalar*)val_data(_value), val_data(dst), val_data(mask));
+}
+void hx_cv_core_addWeighted(value* args, int nargs) {
+    if (nargs != 6) neko_error();
+    value src1  = args[0];
+    value alpha = args[1];
+    value src2  = args[2];
+    value beta  = args[3];
+    value gamma = args[4];
+    value dst   = args[5];
+
+    cvAddWeighted(val_data(src1), val_get<double>(alpha), val_data(src2), val_get<double>(beta), val_get<double>(gamma), val_data(dst));
+}
+void hx_cv_core_and(value src1, value src2, value dst, value mask) {
+    cvAnd(val_data(src1), val_data(src1), val_data(dst), val_data(mask));
+}
+void hx_cv_core_andS(value src, value _value, value dst, value mask) {
+    val_check_kind(_value, k_Scalar);
+    cvAndS(val_data(src), *(CvScalar*)val_data(_value), val_data(dst), val_data(mask));
+}
+value hx_cv_core_avg(value arr, value mask) {
+    CvScalar ret = cvAvg(val_data(arr), val_data(mask));
+    return hx_cv_core_Scalar(alloc<int>(ret.val[0]), alloc<int>(ret.val[1]), alloc<int>(ret.val[2]), alloc<int>(ret.val[3]));
+}
+void hx_cv_core_avgSdv(value arr, value mean, value stdDev, value mask) {
+    val_check_kind(mean, k_Scalar);
+    val_check_kind(stdDev, k_Scalar);
+    cvAvgSdv(val_data(arr), (CvScalar*)val_data(mean), (CvScalar*)val_data(stdDev), val_data(mask));
+}
+void hx_cv_core_cmp(value src1, value src2, value dst, value cmpOp) {
+    cvCmp(val_data(src1), val_data(src2), val_data(dst), val_get<int>(cmpOp));
+}
+DEFINE_PRIM(hx_cv_core_absDiff,     3);
+DEFINE_PRIM(hx_cv_core_absDiffS,    3);
+DEFINE_PRIM(hx_cv_core_add,         4);
+DEFINE_PRIM(hx_cv_core_addS,        4);
+DEFINE_PRIM_MULT(hx_cv_core_addWeighted);
+DEFINE_PRIM(hx_cv_core_and,         4);
+DEFINE_PRIM(hx_cv_core_andS,        4);
+DEFINE_PRIM(hx_cv_core_avg,         2);
+DEFINE_PRIM(hx_cv_core_avgSdv,      4);
+DEFINE_PRIM(hx_cv_core_cmp,         4);
+
 
 
 extern "C" void allocateKinds()

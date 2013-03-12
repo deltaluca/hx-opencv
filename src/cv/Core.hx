@@ -2,6 +2,8 @@ package cv;
 
 import #if cpp cpp #else neko #end.Lib;
 
+import cv.core.Scalar;
+
 typedef Arr = NativeBinding; // Image|Mat|Seq?
 
 class Core {
@@ -66,4 +68,99 @@ class Core {
     public static var IPL_DEPTH_32S(get,never):Int; static inline function get_IPL_DEPTH_32S() { return load("IPL_DEPTH_32S", 0)(); }
     public static var IPL_DEPTH_32F(get,never):Int; static inline function get_IPL_DEPTH_32F() { return load("IPL_DEPTH_32F", 0)(); }
     public static var IPL_DEPTH_64F(get,never):Int; static inline function get_IPL_DEPTH_64F() { return load("IPL_DEPTH_64F", 0)(); }
+
+
+
+    public static var CV_CMP_EQ(get,never):Int; static inline function get_CV_CMP_EQ() { return load("CV_CMP_EQ", 0)(); }
+    public static var CV_CMP_GT(get,never):Int; static inline function get_CV_CMP_GT() { return load("CV_CMP_GT", 0)(); }
+    public static var CV_CMP_GE(get,never):Int; static inline function get_CV_CMP_GE() { return load("CV_CMP_GE", 0)(); }
+    public static var CV_CMP_LT(get,never):Int; static inline function get_CV_CMP_LT() { return load("CV_CMP_LT", 0)(); }
+    public static var CV_CMP_LE(get,never):Int; static inline function get_CV_CMP_LE() { return load("CV_CMP_LE", 0)(); }
+    public static var CV_CMP_NE(get,never):Int; static inline function get_CV_CMP_NE() { return load("CV_CMP_NE", 0)(); }
+
+
+
+    public static inline function absDiff(src1:Arr, src2:Arr, dst:Arr) {
+        #if debug
+            if (src1 == null) throw "absDiff :: src1 cannot be null";
+            if (src2 == null) throw "absDiff :: src2 cannot be null";
+            if (dst  == null) throw "absDiff :: dst cannot be null";
+        #end
+        load("absDiff", 3)(src1.nativeObject, src2.nativeObject, dst.nativeObject);
+    }
+    public static inline function absDiffS(src:Arr, value:Scalar, dst:Arr) {
+        #if debug
+            if (src   == null) throw "absDiffS :: src cannot be null";
+            if (value == null) throw "absDiffS :: value cannot be null";
+            if (dst   == null) throw "absDiffS :: dst cannot be null";
+        #end
+        var _value:Scalar_ = value;
+        load("absDiffS", 3)(src.nativeObject, _value.nativeObject, dst.nativeObject);
+    }
+    public static inline function add(src1:Arr, src2:Arr, dst:Arr, ?mask:Null<Arr>) {
+        #if debug
+            if (src1 == null) throw "add :: src1 cannot be null";
+            if (src2 == null) throw "add :: src2 cannot be null";
+            if (dst  == null) throw "add :: dst cannot be null";
+        #end
+        load("add", 4)(src1.nativeObject, src2.nativeObject, dst.nativeObject, NativeBinding.native(mask));
+    }
+    public static inline function addS(src:Arr, value:Scalar, dst:Arr, ?mask:Null<Arr>) {
+        #if debug
+            if (src   == null) throw "addS :: src cannot be null";
+            if (value == null) throw "addS :: value cannot be null";
+            if (dst   == null) throw "addS :: dst cannot be null";
+        #end
+        var _value:Scalar_ = value;
+        load("addS", 4)(src.nativeObject, _value.nativeObject, dst.nativeObject, NativeBinding.native(mask));
+    }
+    public static inline function addWeighted(src1:Arr, alpha:Float, src2:Arr, beta:Float, gamma:Float, dst:Arr) {
+        #if debug
+            if (src1 == null) throw "addWeighted :: src1 cannot be null";
+            if (src2 == null) throw "addWeighted :: src2 cannot be null";
+            if (dst  == null) throw "addWeighted :: dst cannot be null";
+        #end
+        load("addWeighted", 6)(src1.nativeObject, alpha, src2.nativeObject, beta, gamma, dst.nativeObject);
+    }
+    public static inline function and(src1:Arr, src2:Arr, dst:Arr, ?mask:Null<Arr>) {
+        #if debug
+            if (src1 == null) throw "and :: src1 cannot be null";
+            if (src2 == null) throw "and :: src2 cannot be null";
+            if (dst  == null) throw "and :: dst cannot be null";
+        #end
+        load("and", 4)(src1.nativeObject, src2.nativeObject, dst.nativeObject, NativeBinding.native(mask));
+    }
+    public static inline function andS(src:Arr, value:Scalar, dst:Arr, ?mask:Null<Arr>) {
+        #if debug
+            if (src   == null) throw "andS :: src cannot be null";
+            if (value == null) throw "andS :: value cannot be null";
+            if (dst   == null) throw "andS :: dst cannot be null";
+        #end
+        var _value:Scalar_ = value;
+        load("andS", 4)(src.nativeObject, _value.nativeObject, dst.nativeObject, NativeBinding.native(mask));
+    }
+    public static inline function avg(arr:Arr, ?mask:Null<Arr>):Scalar {
+        #if debug
+            if (arr == null) throw "avg :: arr cannot be null";
+        #end
+        return Scalar.cvt(load("avg", 2)(arr.nativeObject, NativeBinding.native(mask)));
+    }
+    public static inline function avgSdv(arr:Arr, mean:Scalar, stdDev:Scalar, ?mask:Null<Arr>) {
+        #if debug
+            if (arr    == null) throw "avgSdv :: arr cannot be null";
+            if (mean   == null) throw "avgSdv :: mean cannot be null";
+            if (stdDev == null) throw "avgSdv :: stdDev cannot be null";
+        #end
+        var _mean  :Scalar_ = mean;
+        var _stdDev:Scalar_ = stdDev;
+        load("avgSdv", 4)(arr.nativeObject, _mean.nativeObject, _stdDev.nativeObject, NativeBinding.native(mask));
+    }
+    public static inline function cmp(src1:Arr, src2:Arr, dst:Arr, cmpOp:Int) {
+        #if debug
+            if (src1 == null) throw "cmp :: src1 cannot be null";
+            if (src2 == null) throw "cmp :: src2 cannot be null";
+            if (dst  == null) throw "cmp :: dst cannot be null";
+        #end
+        load("cmp", 4)(src1.nativeObject, src2.nativeObject, dst.nativeObject, cmpOp);
+    }
 }

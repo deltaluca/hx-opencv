@@ -5,9 +5,16 @@ import cv.core.*;
 class Main {
     static function main() {
         HighGUI.namedWindow("hello1");
-        var p = HighGUI.loadImage("mario_dual.jp");
+        var p = HighGUI.loadImage("mario_dual.jpg");
+        var q = p.clone();
+        var s = q.clone();
         trace(p);
-        HighGUI.showImage("hello1", p);
+        trace(q);
+        trace(s);
+        Core.addWeighted(p, 1.0, q, 2.0, -180.0, s);
+
+
+        HighGUI.showImage("hello1", s);
         HighGUI.waitKey();
     }
 }

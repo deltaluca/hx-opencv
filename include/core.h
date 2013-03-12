@@ -3,3 +3,4 @@
 
 GDECLARE_CONVERT(Ipl, core, Image);
 PDECLARE_CONVERT(core, Mat);
+PDECLARE_CONVERT(core, Scalar);
