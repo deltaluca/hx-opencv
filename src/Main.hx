@@ -28,6 +28,10 @@ class Main {
         var p = new Rect(1, 2, 3, 4);
         trace(p);
 
+        var p = new Scalar(1, 2, 3, 4);
+        trace(p);
+        trace(p[3]);
+
         HighGUI.waitKey();
     }
 }

@@ -218,6 +218,39 @@ DEFINE_PRIM(hx_cv_core_Rect_set_width,  2);
 DEFINE_PRIM(hx_cv_core_Rect_set_height, 2);
 
 
+
+DECLARE_KIND(k_Scalar);
+DEFINE_KIND(k_Scalar);
+static void finalise_Scalar(value v) {
+    CvScalar* ptr = (CvScalar*)val_data(v);
+    delete ptr;
+}
+value hx_cv_core_Scalar(value v0, value v1, value v2, value v3) {
+    CvScalar* ptr = new CvScalar;
+    ptr->val[0] = val_get_double(v0);
+    ptr->val[1] = val_get_double(v1);
+    ptr->val[2] = val_get_double(v2);
+    ptr->val[3] = val_get_double(v3);
+    value v = alloc_abstract(k_Scalar, ptr);
+    val_gc(v, finalise_Scalar);
+    return v;
+}
+value hx_cv_core_Scalar_get_i(value v, value i) {
+    val_check_kind(v, k_Scalar);
+    CvScalar* ptr = (CvScalar*)val_data(v);
+    return alloc_float(ptr->val[val_get_int(i)]);
+}
+value hx_cv_core_Scalar_set_i(value v, value i, value x) {
+    val_check_kind(v, k_Scalar);
+    CvScalar* ptr = (CvScalar*)val_data(v);
+    return alloc_float(ptr->val[val_get_int(i)] = val_get_double(x));
+}
+DEFINE_PRIM(hx_cv_core_Scalar,       4);
+DEFINE_PRIM(hx_cv_core_Scalar_get_i, 2);
+DEFINE_PRIM(hx_cv_core_Scalar_set_i, 3);
+
+
+
 extern "C" void allocateKinds()
 {
     k_Point      = alloc_kind();
@@ -231,5 +264,7 @@ extern "C" void allocateKinds()
     k_Size2D32f  = alloc_kind();
 
     k_Rect       = alloc_kind();
+
+    k_Scalar     = alloc_kind();
 }
 DEFINE_ENTRY_POINT(allocateKinds);
