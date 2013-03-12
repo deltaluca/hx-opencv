@@ -344,6 +344,15 @@ CONST(CMP_NE);
 
 
 //
+// CV_DXT_*
+//
+CONST(DXT_FORWARD);
+CONST(DXT_INVERSE);
+CONST(DXT_SCALE);
+CONST(DXT_ROWS);
+CONST(DXT_INVERSE_SCALE);
+
+//
 // cvAbsDiff
 // cvAbsDiffS
 // cvAdd
@@ -354,6 +363,14 @@ CONST(CMP_NE);
 // cvAvg
 // cvAvgSdv
 // cvCmp
+// cvCmpS
+// cvConvertScale
+// cvConvertScaleAbs
+// cvCopy
+// cvCountNonZero
+// cvCreateData
+// cvDCT
+// cvDFT
 //
 void hx_cv_core_absDiff(value src1, value src2, value dst) {
     cvAbsDiff(val_data(src1), val_data(src2), val_data(dst));
@@ -399,16 +416,48 @@ void hx_cv_core_avgSdv(value arr, value mean, value stdDev, value mask) {
 void hx_cv_core_cmp(value src1, value src2, value dst, value cmpOp) {
     cvCmp(val_data(src1), val_data(src2), val_data(dst), val_get<int>(cmpOp));
 }
-DEFINE_PRIM(hx_cv_core_absDiff,     3);
-DEFINE_PRIM(hx_cv_core_absDiffS,    3);
-DEFINE_PRIM(hx_cv_core_add,         4);
-DEFINE_PRIM(hx_cv_core_addS,        4);
+void hx_cv_core_cmpS(value src, value _value, value dst, value cmpOp) {
+    cvCmpS(val_data(src), val_get<double>(_value), val_data(dst), val_get<int>(cmpOp));
+}
+void hx_cv_core_convertScale(value src, value dst, value scale, value shift) {
+    cvConvertScale(val_data(src), val_data(dst), val_get<double>(scale), val_get<double>(shift));
+}
+void hx_cv_core_convertScaleAbs(value src, value dst, value scale, value shift) {
+    cvConvertScaleAbs(val_data(src), val_data(dst), val_get<double>(scale), val_get<double>(shift));
+}
+void hx_cv_core_copy(value src, value dst, value mask) {
+    cvCopy(val_data(src), val_data(dst), val_data(mask));
+}
+value hx_cv_core_countNonZero(value arr) {
+    return alloc<int>(cvCountNonZero(val_data(arr)));
+}
+void hx_cv_core_createData(value arr)  {
+    cvCreateData(val_data(arr));
+}
+void hx_cv_core_DCT(value src, value dst, value flags) {
+    cvDCT(val_data(src), val_data(dst), val_get<int>(flags));
+}
+void hx_cv_core_DFT(value src, value dst, value flags, value nonzeroRows) {
+    cvDFT(val_data(src), val_data(dst), val_get<int>(flags), val_get<int>(nonzeroRows));
+}
+DEFINE_PRIM(hx_cv_core_absDiff,         3);
+DEFINE_PRIM(hx_cv_core_absDiffS,        3);
+DEFINE_PRIM(hx_cv_core_add,             4);
+DEFINE_PRIM(hx_cv_core_addS,            4);
 DEFINE_PRIM_MULT(hx_cv_core_addWeighted);
-DEFINE_PRIM(hx_cv_core_and,         4);
-DEFINE_PRIM(hx_cv_core_andS,        4);
-DEFINE_PRIM(hx_cv_core_avg,         2);
-DEFINE_PRIM(hx_cv_core_avgSdv,      4);
-DEFINE_PRIM(hx_cv_core_cmp,         4);
+DEFINE_PRIM(hx_cv_core_and,             4);
+DEFINE_PRIM(hx_cv_core_andS,            4);
+DEFINE_PRIM(hx_cv_core_avg,             2);
+DEFINE_PRIM(hx_cv_core_avgSdv,          4);
+DEFINE_PRIM(hx_cv_core_cmp,             4);
+DEFINE_PRIM(hx_cv_core_cmpS,            4);
+DEFINE_PRIM(hx_cv_core_convertScale,    4);
+DEFINE_PRIM(hx_cv_core_convertScaleAbs, 4);
+DEFINE_PRIM(hx_cv_core_copy,            3);
+DEFINE_PRIM(hx_cv_core_countNonZero,    1);
+DEFINE_PRIM(hx_cv_core_createData,      1);
+DEFINE_PRIM(hx_cv_core_DCT,             3);
+DEFINE_PRIM(hx_cv_core_DFT,             4);
 
 
 

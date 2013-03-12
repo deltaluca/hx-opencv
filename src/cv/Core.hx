@@ -163,4 +163,61 @@ class Core {
         #end
         load("cmp", 4)(src1.nativeObject, src2.nativeObject, dst.nativeObject, cmpOp);
     }
+    public static inline function cmpS(src:Arr, value:Float, dst:Arr, cmpOp:Int) {
+        #if debug
+            if (src == null) throw "cmpS :: src cannot be null";
+            if (dst == null) throw "cmpS :: dst cannot be null";
+        #end
+        load("cmpS", 4)(src.nativeObject, value, dst.nativeObject, cmpOp);
+    }
+    public static inline function convertScale(src:Arr, dst:Arr, scale:Float=1, shift:Float=0) {
+        #if debug
+            if (src == null) throw "convertScale :: src cannot be null";
+            if (dst == null) throw "convertScale :: dst cannot be null";
+        #end
+        load("convertScale", 4)(src.nativeObject, dst.nativeObject, scale, shift);
+    }
+    public static inline function convert(src:Arr, dst:Arr) {
+        convertScale(src, dst);
+    }
+    public static inline function convertScaleAbs(src:Arr, dst:Arr, scale:Float=1, shift:Float=0) {
+        #if debug
+            if (src == null) throw "convertScaleAbs :: src cannot be null";
+            if (dst == null) throw "convertScaleAbs :: dst cannot be null";
+        #end
+        load("convertScaleAbs", 4)(src.nativeObject, dst.nativeObject, scale, shift);
+    }
+    public static inline function copy(src:Arr, dst:Arr) {
+        #if debug
+            if (src == null) throw "copy :: src cannot be null";
+            if (dst == null) throw "copy :: dst cannot be null";
+        #end
+        load("copy", 2)(src.nativeObject, dst.nativeObject);
+    }
+    public static inline function countNonZero(arr:Arr) {
+        #if debug
+            if (arr == null) throw "countNonZero :: arr cannot be null";
+        #end
+        load("countNonZero", 1)(arr.nativeObject);
+    }
+    public static inline function createData(arr:Arr) {
+        #if debug
+            if (arr == null) throw "createData :: arr cannot be null";
+        #end
+        load("createData", 1)(arr.nativeObject);
+    }
+    public static inline function DCT(src:Arr, dst:Arr, flags:Int) {
+        #if debug
+            if (src == null) throw "DCT :: src cannot be null";
+            if (dst == null) throw "DCT :: dst cannot be null";
+        #end
+        load("DCT", 3)(src.nativeObject, dst.nativeObject, flags);
+    }
+    public static inline function DFT(src:Arr, dst:Arr, flags:Int, nonzeroRows:Int=0) {
+        #if debug
+            if (src == null) throw "DFT :: src cannot be null";
+            if (dst == null) throw "DFT :: dst cannot be null";
+        #end
+        load("DFT", 4)(src.nativeObject, dst.nativeObject, flags, nonzeroRows);
+    }
 }
