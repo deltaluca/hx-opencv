@@ -26,10 +26,11 @@
 
     <files id="common">
         <compilerflag value="-Iinclude"/>
-        <compilerflag value="-I/usr/include/opencv"/>
+        <compilerflag value="-I/usr/include/opencv2"/>
 
         <file name="src/test.cpp"/>
         <file name="src/highgui.cpp"/>
+        <file name="src/core.cpp"/>
     </files>
 
     <!-- Generate the NDLL. -->
