@@ -1,5 +1,6 @@
 #include <highgui/highgui_c.h>
 
+#include "core.h"
 #include "utils.h"
 #define CONST(N) PCONST(highgui, N)
 
@@ -103,6 +104,7 @@ DEFINE_PRIM(hx_cv_highgui_resizeWindow,      3);
 // cvSetTrackbarPos
 //
 void bound_onChanged(int pos, void* onChange) {
+    if (onChange == NULL) return;
     val_call1((value)onChange, alloc<int>(pos));
 }
 static int hx_cv_highgui_trackbar_value;
@@ -135,6 +137,7 @@ DEFINE_PRIM(hx_cv_highgui_setTrackbarPos, 3);
 // cvSetMouseCallback
 //
 void bound_onMouse(int event, int x, int y, int flags, void* onMouse) {
+    if (onMouse == NULL) return;
     value args[4] = {alloc<int>(event), alloc<int>(x), alloc<int>(y), alloc<int>(flags)};
     val_callN((value)onMouse, args, 4);
 }
@@ -166,3 +169,32 @@ void hx_cv_highgui_showImage(value windowName, value image) {
 }
 DEFINE_PRIM(hx_cv_highgui_convertImage, 3);
 DEFINE_PRIM(hx_cv_highgui_showImage,    2);
+
+
+
+//
+// CV_LOAD_IMAGE_*
+//
+CONST(LOAD_IMAGE_COLOR);
+CONST(LOAD_IMAGE_GRAYSCALE);
+CONST(LOAD_IMAGE_UNCHANGED);
+
+
+
+//
+// cvLoadImage
+// cvLoadImageM
+// cvSaveImage
+//
+value hx_cv_highgui_loadImage(value filename, value iscolor) {
+    return CONVERT(core, Image, cvLoadImage(val_get<string>(filename), val_get<int>(iscolor)));
+}
+value hx_cv_highgui_loadImageM(value filename, value iscolor) {
+    return CONVERT(core, Mat, cvLoadImageM(val_get<string>(filename), val_get<int>(iscolor)));
+}
+value hx_cv_highgui_saveImage(value filename, value image) {
+    return alloc<int>(cvSaveImage(val_get<string>(filename), val_data(image)));
+}
+DEFINE_PRIM(hx_cv_highgui_loadImage,  2);
+DEFINE_PRIM(hx_cv_highgui_loadImageM, 2);
+DEFINE_PRIM(hx_cv_highgui_saveImage,  2);

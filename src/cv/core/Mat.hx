@@ -1,20 +1,23 @@
 package cv.core;
 
 class Mat extends NativeBinding {
-    function new() {}
+    @:allow(cv)
+    function new(nativeObject:Dynamic) {
+        this.nativeObject = nativeObject;
+    }
 
+
+    @:allow(cv)
+    static inline function cvt(x:Dynamic):Null<Mat> {
+        return if (x == null) null else new Mat(x);
+    }
 
 
     public static inline function create(rows:Int, cols:Int, type:Int):Mat {
-        var m = new Mat();
-        trace(type);
-        m.nativeObject = Core.load("createMat", 3)(rows, cols, type);
-        return m;
+        return new Mat(Core.load("createMat", 3)(rows, cols, type));
     }
     public static inline function createHeader(rows:Int, cols:Int, type:Int):Mat {
-        var m = new Mat();
-        m.nativeObject = Core.load("createMatHeader", 3)(rows, cols, type);
-        return m;
+        return new Mat(Core.load("createMatHeader", 3)(rows, cols, type));
     }
 
 

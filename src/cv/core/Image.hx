@@ -3,19 +3,23 @@ package cv.core;
 import cv.core.Size;
 
 class Image extends NativeBinding {
-    function new() {}
+    @:allow(cv)
+    function new(nativeObject:Dynamic) {
+        this.nativeObject = nativeObject;
+    }
+
+    @:allow(cv)
+    static inline function cvt(x:Dynamic):Null<Image> {
+        return if (x == null) null else new Image(x);
+    }
 
 
 
     public static inline function create(size:Size, depth:Int, channels:Int):Image {
-        var m = new Image();
-        m.nativeObject = Core.load("createImage", 3)(size.nativeObject, depth, channels);
-        return m;
+        return new Image(Core.load("createImage", 3)(size.nativeObject, depth, channels));
     }
     public static inline function createHeader(size:Size, depth:Int, channels:Int):Image {
-        var m = new Image();
-        m.nativeObject = Core.load("createMatHeader", 3)(size.nativeObject, depth, channels);
-        return m;
+        return new Image(Core.load("createMatHeader", 3)(size.nativeObject, depth, channels));
     }
 
 

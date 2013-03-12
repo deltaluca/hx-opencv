@@ -260,6 +260,7 @@ value hx_cv_core_mSet(value mat, value row, value col, value value) {
     } \
     DEFINE_PRIM(hx_cv_core_mat_##N##_get, 2); \
     DEFINE_PRIM(hx_cv_core_mat_##N##_set, 3)
+PDEFINE_CONVERT_GENERIC(core, Mat);
 DEFINE_PRIM(hx_cv_core_createMat,       3);
 DEFINE_PRIM(hx_cv_core_createMatHeader, 3);
 DEFINE_PRIM(hx_cv_core_mGet,            3);
@@ -312,6 +313,7 @@ value hx_cv_core_createImageHeader(value size, value depth, value channels) {
     val_gc(v, finalise_Image);
     return v;
 }
+GDEFINE_CONVERT(Ipl, core, Image, finalise_Image);
 DEFINE_PRIM(hx_cv_core_createImage,       3);
 DEFINE_PRIM(hx_cv_core_createImageHeader, 3);
 GGETPROP(core, Ipl, Image, nChannels, int);
