@@ -2,7 +2,10 @@ package cv;
 
 import #if cpp cpp #else neko #end.Lib;
 
+import cv.core.Mat;
 import cv.core.Scalar;
+import cv.core.Size;
+import cv.core.Rect;
 
 typedef Arr = NativeBinding; // Image|Mat|Seq?
 
@@ -77,6 +80,14 @@ class Core {
     public static var CV_CMP_LT(get,never):Int; static inline function get_CV_CMP_LT() { return load("CV_CMP_LT", 0)(); }
     public static var CV_CMP_LE(get,never):Int; static inline function get_CV_CMP_LE() { return load("CV_CMP_LE", 0)(); }
     public static var CV_CMP_NE(get,never):Int; static inline function get_CV_CMP_NE() { return load("CV_CMP_NE", 0)(); }
+
+
+
+    public static var CV_DXT_FORWARD(get,never):Int; static inline function get_CV_DXT_FORWARD() { return load("CV_DXT_FORWARD", 0)(); }
+    public static var CV_DXT_INVERSE(get,never):Int; static inline function get_CV_DXT_INVERSE() { return load("CV_DXT_INVERSE", 0)(); }
+    public static var CV_DXT_SCALE(get,never):Int; static inline function get_CV_DXT_SCALE() { return load("CV_DXT_SCALE", 0)(); }
+    public static var CV_DXT_ROWS(get,never):Int; static inline function get_CV_DXT_ROWS() { return load("CV_DXT_ROWS", 0)(); }
+    public static var CV_DXT_INVERSE_SCALE(get,never):Int; static inline function get_CV_DXT_INVERSE_SCALE() { return load("CV_DXT_INVERSE_SCALE", 0)(); }
 
 
 
@@ -219,5 +230,121 @@ class Core {
             if (dst == null) throw "DFT :: dst cannot be null";
         #end
         load("DFT", 4)(src.nativeObject, dst.nativeObject, flags, nonzeroRows);
+    }
+    public static inline function det(mat:Arr):Float {
+        #if debug
+            if (mat == null) throw "det :: mat cannot be null";
+        #end
+        return load("det", 1)(mat.nativeObject);
+    }
+    public static inline function div(src1:Arr, src2:Arr, dst:Arr, scale:Float=1.0) {
+        #if debug
+            if (src1 == null) throw "div :: src1 cannot be null";
+            if (src2 == null) throw "div :: src2 cannot be null";
+            if (dst  == null) throw "div :: dst cannot be null";
+        #end
+        load("div", 4)(src1.nativeObject, src2.nativeObject, dst.nativeObject, scale);
+    }
+    public static inline function dotProduct(src1:Arr, src2:Arr):Float {
+        #if debug
+            if (src1 == null) throw "dotProduct :: src1 cannot be null";
+            if (src2 == null) throw "dotProduct :: src2 cannot be null";
+        #end
+        return load("dotProduct", 2)(src1.nativeObject, src2.nativeObject);
+    }
+    public static inline function get1D(arr:Arr, idx0:Int):Scalar {
+        #if debug
+            if (arr == null) throw "get1D :: arr cannot be null";
+        #end
+        return load("get1D", 2)(arr.nativeObject, idx0);
+    }
+    public static inline function get2D(arr:Arr, idx0:Int, idx1:Int):Scalar {
+        #if debug
+            if (arr == null) throw "get2D :: arr cannot be null";
+        #end
+        return load("get2D", 3)(arr.nativeObject, idx0, idx1);
+    }
+    public static inline function get3D(arr:Arr, idx0:Int, idx1:Int, idx2:Int):Scalar {
+        #if debug
+            if (arr == null) throw "get3D :: arr cannot be null";
+        #end
+        return load("get3D", 4)(arr.nativeObject, idx0, idx1, idx2);
+    }
+    public static inline function getND(arr:Arr, idx:Array<Int>):Scalar {
+        #if debug
+            if (arr == null) throw "getND :: arr cannot be null";
+        #end
+        return load("getND", 2)(arr.nativeObject, idx);
+    }
+    public static inline function getCols(arr:Arr, submat:Mat, startCol:Int, endCol:Int):Mat {
+        #if debug
+            if (arr == null) throw "getCols :: arr cannot be null";
+            // submat (TODO??)
+        #end
+        return load("getCols", 4)(arr.nativeObject, NativeBinding.native(submat), startCol, endCol);
+    }
+    public static inline function getCol(arr:Arr, submat:Mat, col:Int):Mat {
+        return getCols(arr, submat, col, col+1);
+    }
+    public static inline function getDiag(arr:Arr, submat:Mat, diag:Int):Mat {
+        #if debug
+            if (arr == null) throw "getDiag :: arr cannot be null";
+            // submat (TODO??)
+        #end
+        return load("getDiag", 3)(arr.nativeObject, NativeBinding.native(submat), diag);
+    }
+    public static inline function getElemType(arr:Arr):Int {
+        #if debug
+            if (arr == null) throw "getElemType :: arr cannot be null";
+        #end
+        return load("getElemType", 1)(arr.nativeObject);
+    }
+    public static inline function getReal1D(arr:Arr, idx0:Int):Scalar {
+        #if debug
+            if (arr == null) throw "getReal1D :: arr cannot be null";
+        #end
+        return load("getReal1D", 2)(arr.nativeObject, idx0);
+    }
+    public static inline function getReal2D(arr:Arr, idx0:Int, idx1:Int):Scalar {
+        #if debug
+            if (arr == null) throw "getReal2D :: arr cannot be null";
+        #end
+        return load("getReal2D", 3)(arr.nativeObject, idx0, idx1);
+    }
+    public static inline function getReal3D(arr:Arr, idx0:Int, idx1:Int, idx2:Int):Scalar {
+        #if debug
+            if (arr == null) throw "getReal3D :: arr cannot be null";
+        #end
+        return load("getReal3D", 4)(arr.nativeObject, idx0, idx1, idx2);
+    }
+    public static inline function getRealND(arr:Arr, idx:Array<Int>):Scalar {
+        #if debug
+            if (arr == null) throw "getRealND :: arr cannot be null";
+        #end
+        return load("getRealND", 2)(arr.nativeObject, idx);
+    }
+    public static inline function getRows(arr:Arr, submat:Mat, startRow:Int, endRow:Int, deltaRow:Int=1):Mat {
+        #if debug
+            if (arr == null) throw "getRows :: arr cannot be null";
+            // submat (TODO??)
+        #end
+        return load("getRows", 5)(arr.nativeObject, NativeBinding.native(submat), startRow, endRow, deltaRow);
+    }
+    public static inline function getRow(arr:Arr, submat:Mat, col:Int):Mat {
+        return getRows(arr, submat, col, col+1, 1);
+    }
+    public static inline function getSize(arr:Arr):Size {
+        #if debug
+            if (arr == null) throw "getSize :: arr cannot be null";
+        #end
+        return load("getSize", 1)(arr.nativeObject);
+    }
+    public static inline function getSubRect(arr:Arr, submat:Mat, rect:Rect):Mat {
+        #if debug
+            if (arr  == null) throw "getSubRect :: arr cannot be null";
+            // submat (TODO??)
+            if (rect == null) throw "getSubRect :: rect cannot be null";
+        #end
+        return load("getSubRect", 3)(arr.nativeObject, NativeBinding.native(submat), rect.nativeObject);
     }
 }

@@ -81,6 +81,14 @@ INIT_POINT3D(Point3D64f);
 INIT_SIZE2D(Size,      int   );
 INIT_SIZE2D(Size2D32f, double);
 
+PDEFINE_CONVERT_GENERIC(core, Size);
+value cv_Size(const CvSize& s) {
+    CvSize* ptr = new CvSize;
+    ptr->width = s.width;
+    ptr->height = s.height;
+    return CONVERT(core, Size, ptr);
+}
+
 
 
 //
@@ -118,6 +126,14 @@ value hx_cv_core_Scalar(value v0, value v1, value v2, value v3) {
     ptr->val[1] = val_get<double>(v1);
     ptr->val[2] = val_get<double>(v2);
     ptr->val[3] = val_get<double>(v3);
+    return CONVERT(core, Scalar, ptr);
+}
+value cv_Scalar(const CvScalar& s) {
+    CvScalar* ptr = new CvScalar;
+    ptr->val[0] = s.val[0];
+    ptr->val[1] = s.val[1];
+    ptr->val[2] = s.val[2];
+    ptr->val[3] = s.val[3];
     return CONVERT(core, Scalar, ptr);
 }
 value hx_cv_core_Scalar_get_i(value v, value i) {
@@ -371,6 +387,23 @@ CONST(DXT_INVERSE_SCALE);
 // cvCreateData
 // cvDCT
 // cvDFT
+// cvDet
+// cvDiv
+// cvDotProduct
+// cvGet1D
+// cvGet2D
+// cvGet3D
+// cvGetND
+// cvGetCols
+// cvGetDiag
+// cvGetElemType
+// cvGetReal1D
+// cvGetReal2D
+// cvGetReal3D
+// cvGetRealND
+// cvGetRows
+// cvGetSize
+// cvGetSubRect
 //
 void hx_cv_core_absDiff(value src1, value src2, value dst) {
     cvAbsDiff(val_data(src1), val_data(src2), val_data(dst));
@@ -405,8 +438,7 @@ void hx_cv_core_andS(value src, value _value, value dst, value mask) {
     cvAndS(val_data(src), *(CvScalar*)val_data(_value), val_data(dst), val_data(mask));
 }
 value hx_cv_core_avg(value arr, value mask) {
-    CvScalar ret = cvAvg(val_data(arr), val_data(mask));
-    return hx_cv_core_Scalar(alloc<int>(ret.val[0]), alloc<int>(ret.val[1]), alloc<int>(ret.val[2]), alloc<int>(ret.val[3]));
+    return cv_Scalar(cvAvg(val_data(arr), val_data(mask)));
 }
 void hx_cv_core_avgSdv(value arr, value mean, value stdDev, value mask) {
     val_check_kind(mean, k_Scalar);
@@ -440,6 +472,80 @@ void hx_cv_core_DCT(value src, value dst, value flags) {
 void hx_cv_core_DFT(value src, value dst, value flags, value nonzeroRows) {
     cvDFT(val_data(src), val_data(dst), val_get<int>(flags), val_get<int>(nonzeroRows));
 }
+value hx_cv_core_det(value mat) {
+    return alloc<double>(cvDet(val_data(mat)));
+}
+void hx_cv_core_div(value src1, value src2, value dst, value scale) {
+    cvDiv(val_data(src1), val_data(src1), val_data(dst), val_get<double>(scale));
+}
+value hx_cv_core_dotProduct(value src1, value src2) {
+    return alloc<double>(cvDotProduct(val_data(src1), val_data(src2)));
+}
+value hx_cv_core_get1D(value arr, value idx0) {
+    return cv_Scalar(cvGet1D(val_data(arr), val_get<int>(idx0)));
+}
+value hx_cv_core_get2D(value arr, value idx0, value idx1) {
+    return cv_Scalar(cvGet2D(val_data(arr), val_get<int>(idx0), val_get<int>(idx1)));
+}
+value hx_cv_core_get3D(value arr, value idx0, value idx1, value idx2) {
+    return cv_Scalar(cvGet3D(val_data(arr), val_get<int>(idx0), val_get<int>(idx1), val_get<int>(idx2)));
+}
+value hx_cv_core_getND(value arr, value idx) {
+    val_check(idx, array);
+    int size = val_array_size(idx);
+    int* _idx = new int[size];
+    for (int i = 0; i < size; i++) _idx[i] = val_get<int>(val_array_i(idx, i));
+    value ret = cv_Scalar(cvGetND(val_data(arr), _idx));
+    delete[] _idx;
+    return ret;
+}
+value hx_cv_core_getCols(value arr, value submat, value startCol, value endCol) {
+    val_check_kind(submat, k_Mat);
+    return CONVERT(core, Mat, cvGetCols(val_data(arr), (CvMat*)val_data(submat), val_get<int>(startCol), val_get<int>(endCol)));
+}
+value hx_cv_core_getDiag(value arr, value submat, value diag) {
+    val_check_kind(submat, k_Mat);
+    return CONVERT(core, Mat, cvGetDiag(val_data(arr), (CvMat*)val_data(submat), val_get<int>(diag)));
+}
+value hx_cv_core_getElemType(value arr) {
+    return alloc<int>(cvGetElemType(val_data(arr)));
+}
+value hx_cv_core_getReal1D(value arr, value idx0) {
+    return alloc<double>(cvGetReal1D(val_data(arr), val_get<int>(idx0)));
+}
+value hx_cv_core_getReal2D(value arr, value idx0, value idx1) {
+    return alloc<double>(cvGetReal2D(val_data(arr), val_get<int>(idx0), val_get<int>(idx1)));
+}
+value hx_cv_core_getReal3D(value arr, value idx0, value idx1, value idx2) {
+    return alloc<double>(cvGetReal3D(val_data(arr), val_get<int>(idx0), val_get<int>(idx1), val_get<int>(idx2)));
+}
+value hx_cv_core_getRealND(value arr, value idx) {
+    val_check(idx, array);
+    int size = val_array_size(idx);
+    int* _idx = new int[size];
+    for (int i = 0; i < size; i++) _idx[i] = val_get<int>(val_array_i(idx, i));
+    value ret = alloc<double>(cvGetRealND(val_data(arr), _idx));
+    delete[] _idx;
+    return ret;
+}
+value hx_cv_core_getRows(value* args, int nargs) {
+    if (nargs != 5) neko_error();
+    value arr      = args[0];
+    value submat   = args[1];
+    value startRow = args[2];
+    value endRow   = args[3];
+    value deltaRow = args[4];
+    val_check_kind(submat, k_Mat);
+    return CONVERT(core, Mat, cvGetRows(val_data(arr), (CvMat*)val_data(submat), val_get<int>(startRow), val_get<int>(endRow)));
+}
+value hx_cv_core_getSize(value arr) {
+    return cv_Size(cvGetSize(val_data(arr)));
+}
+value hx_cv_core_getSubRect(value arr, value submat, value rect) {
+    val_check_kind(submat, k_Mat);
+    val_check_kind(rect, k_Rect);
+    return CONVERT(core, Mat, cvGetSubRect(val_data(arr), (CvMat*)val_data(submat), *(CvRect*)val_data(rect)));
+}
 DEFINE_PRIM(hx_cv_core_absDiff,         3);
 DEFINE_PRIM(hx_cv_core_absDiffS,        3);
 DEFINE_PRIM(hx_cv_core_add,             4);
@@ -458,7 +564,23 @@ DEFINE_PRIM(hx_cv_core_countNonZero,    1);
 DEFINE_PRIM(hx_cv_core_createData,      1);
 DEFINE_PRIM(hx_cv_core_DCT,             3);
 DEFINE_PRIM(hx_cv_core_DFT,             4);
-
+DEFINE_PRIM(hx_cv_core_det,             1);
+DEFINE_PRIM(hx_cv_core_div,             4);
+DEFINE_PRIM(hx_cv_core_dotProduct,      2);
+DEFINE_PRIM(hx_cv_core_get1D,           2);
+DEFINE_PRIM(hx_cv_core_get2D,           3);
+DEFINE_PRIM(hx_cv_core_get3D,           4);
+DEFINE_PRIM(hx_cv_core_getND,           2);
+DEFINE_PRIM(hx_cv_core_getCols,         4);
+DEFINE_PRIM(hx_cv_core_getDiag,         3);
+DEFINE_PRIM(hx_cv_core_getElemType,     1);
+DEFINE_PRIM(hx_cv_core_getReal1D,       2);
+DEFINE_PRIM(hx_cv_core_getReal2D,       3);
+DEFINE_PRIM(hx_cv_core_getReal3D,       4);
+DEFINE_PRIM(hx_cv_core_getRealND,       2);
+DEFINE_PRIM_MULT(hx_cv_core_getRows);
+DEFINE_PRIM(hx_cv_core_getSize,         1);
+DEFINE_PRIM(hx_cv_core_getSubRect,      3);
 
 
 extern "C" void allocateKinds()
