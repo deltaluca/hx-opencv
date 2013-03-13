@@ -5,31 +5,9 @@ class Mat extends NativeBinding {
     function new(nativeObject:Dynamic) {
         super(nativeObject);
     }
-
-
     @:allow(cv)
     static inline function cvt(x:Dynamic):Null<Mat> {
         return if (x == null) null else new Mat(x);
-    }
-
-
-    public static inline function create(rows:Int, cols:Int, type:Int):Mat {
-        return new Mat(Core.load("createMat", 3)(rows, cols, type));
-    }
-    public static inline function createHeader(rows:Int, cols:Int, type:Int):Mat {
-        return new Mat(Core.load("createMatHeader", 3)(rows, cols, type));
-    }
-    public inline function clone():Mat {
-        return new Mat(Core.load("cloneMat", 1)(this.nativeObject));
-    }
-
-
-
-    public inline function get(i:Int, j:Int):Float {
-        return Core.load("mGet", 3)(this.nativeObject, i, j);
-    }
-    public inline function set(i:Int, j:Int, value:Float):Float {
-        return Core.load("mSet", 4)(this.nativeObject, i, j, value);
     }
 
 

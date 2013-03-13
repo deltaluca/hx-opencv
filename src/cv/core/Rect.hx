@@ -1,6 +1,17 @@
 package cv.core;
 
 class Rect extends NativeBinding {
+    @:allow(cv)
+    function new(nativeObject:Dynamic) {
+        super(nativeObject);
+    }
+    @:allow(cv)
+    static inline function cvt(x:Dynamic):Null<Rect> {
+        return if (x == null) null else new Rect(x);
+    }
+
+
+
     public var x     (get,set):Int;
     public var y     (get,set):Int;
     public var width (get,set):Int;
@@ -16,9 +27,7 @@ class Rect extends NativeBinding {
     inline function set_width (width :Int) { return Core.load("Rect_set_width",  2)(nativeObject, width ); }
     inline function set_height(height:Int) { return Core.load("Rect_set_height", 2)(nativeObject, height); }
 
-    public function new(x:Int=0, y:Int=0, width:Int=0, height:Int=0) {
-        super(Core.load("Rect", 4)(x, y, width, height));
-    }
+
 
     public inline function toString() {
         return '{Rect x=$x y=$y width=$width height=$height}';

@@ -1,6 +1,17 @@
 package cv.core;
 
 class Point3D32f extends NativeBinding {
+    @:allow(cv)
+    function new(nativeObject:Dynamic) {
+        super(nativeObject);
+    }
+    @:allow(cv)
+    static inline function cvt(x:Dynamic):Null<Point3D32f> {
+        return if (x == null) null else new Point3D32f(x);
+    }
+
+
+
     public var x(get,set):Float;
     public var y(get,set):Float;
     public var z(get,set):Float;
@@ -13,9 +24,7 @@ class Point3D32f extends NativeBinding {
     inline function set_y(y:Float) { return Core.load("Point3D32f_set_y", 2)(nativeObject, y); }
     inline function set_z(z:Float) { return Core.load("Point3D32f_set_z", 2)(nativeObject, z); }
 
-    public function new(x:Float=0, y:Float=0, z:Float=0) {
-        nativeObject = Core.load("Point3D32f", 3)(x, y, z);
-    }
+
 
     public inline function toString() {
         return '{Point3D32f x=$x y=$y z=$z}';

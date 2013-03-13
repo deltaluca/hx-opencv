@@ -163,6 +163,7 @@ CONST(TERMCRIT_EPS);
 
 //
 // CvTermCriteria
+// cvCheckTermCriteria
 //
 DECLARE_KIND(k_TermCriteria);
 DEFINE_KIND(k_TermCriteria);
@@ -175,14 +176,14 @@ value hx_cv_core_TermCriteria(value type, value max_iter, value epsilon) {
     val_gc(v, finaliser<CvTermCriteria>);
     return v;
 }
-value hx_cv_core_TermCriteria_check(value criteria, value default_eps, value default_max_iters) {
+value hx_cv_core_checkTermCriteria(value criteria, value default_eps, value default_max_iters) {
     val_check_kind(criteria, k_TermCriteria);
     CvTermCriteria* ptr = (CvTermCriteria*)val_data(criteria);
     CvTermCriteria nxt = cvCheckTermCriteria(*ptr, val_get<double>(default_eps), val_get<int>(default_max_iters));
     return hx_cv_core_TermCriteria(alloc<int>(nxt.type), alloc<int>(nxt.max_iter), alloc<double>(nxt.epsilon));
 }
-DEFINE_PRIM(hx_cv_core_TermCriteria,       3);
-DEFINE_PRIM(hx_cv_core_TermCriteria_check, 3);
+DEFINE_PRIM(hx_cv_core_TermCriteria,      3);
+DEFINE_PRIM(hx_cv_core_checkTermCriteria, 3);
 PROP(TermCriteria, type, int);
 PROP(TermCriteria, max_iter, int);
 PROP(TermCriteria, epsilon, double);

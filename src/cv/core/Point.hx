@@ -1,6 +1,17 @@
 package cv.core;
 
 class Point extends NativeBinding {
+    @:allow(cv)
+    function new(nativeObject:Dynamic) {
+        super(nativeObject);
+    }
+    @:allow(cv)
+    static inline function cvt(x:Dynamic):Null<Point> {
+        return if (x == null) null else new Point(x);
+    }
+
+
+
     public var x(get,set):Int;
     public var y(get,set):Int;
 
@@ -10,9 +21,7 @@ class Point extends NativeBinding {
     inline function set_x(x:Int) { return Core.load("Point_set_x", 2)(nativeObject, x); }
     inline function set_y(y:Int) { return Core.load("Point_set_y", 2)(nativeObject, y); }
 
-    public function new(x:Int=0, y:Int=0) {
-        nativeObject = Core.load("Point", 2)(x, y);
-    }
+
 
     public inline function toString() {
         return '{Point x=$x y=$y}';

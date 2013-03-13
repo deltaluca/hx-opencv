@@ -1,11 +1,8 @@
 package cv;
 
 import #if cpp cpp #else neko #end.Lib;
-
-import cv.core.Mat;
-import cv.core.Scalar;
-import cv.core.Size;
-import cv.core.Rect;
+import cv.core.*;
+import cv.core.Scalar.Scalar_;
 
 typedef Arr = NativeBinding; // Image|Mat|Seq?
 
@@ -90,7 +87,6 @@ class Core {
     public static var CV_DXT_INVERSE_SCALE(get,never):Int; static inline function get_CV_DXT_INVERSE_SCALE() { return load("CV_DXT_INVERSE_SCALE", 0)(); }
 
 
-
     public static inline function absDiff(src1:Arr, src2:Arr, dst:Arr) {
         #if debug
             if (src1 == null) throw "absDiff :: src1 cannot be null";
@@ -166,6 +162,18 @@ class Core {
         var _stdDev:Scalar_ = stdDev;
         load("avgSdv", 4)(arr.nativeObject, _mean.nativeObject, _stdDev.nativeObject, NativeBinding.native(mask));
     }
+    public inline function cloneImage(image:Image):Image {
+        #if debug
+            if (image == null) throw "cloneImage :: image cannot be null";
+        #end
+        return new Image(Core.load("cloneImage", 1)(image.nativeObject));
+    }
+    public inline function cloneMat(mat:Mat):Mat {
+        #if debug
+            if (mat == null) throw "cloneMat :: mat cannot be null";
+        #end
+        return new Mat(Core.load("cloneMat", 1)(mat.nativeObject));
+    }
     public static inline function cmp(src1:Arr, src2:Arr, dst:Arr, cmpOp:Int) {
         #if debug
             if (src1 == null) throw "cmp :: src1 cannot be null";
@@ -216,6 +224,24 @@ class Core {
             if (arr == null) throw "createData :: arr cannot be null";
         #end
         load("createData", 1)(arr.nativeObject);
+    }
+    public static inline function createImage(size:Size, depth:Int, channels:Int):Image {
+        #if debug
+            if (size == null) throw "Image.create :: size cannot be null";
+        #end
+        return new Image(Core.load("createImage", 3)(size.nativeObject, depth, channels));
+    }
+    public static inline function createImageHeader(size:Size, depth:Int, channels:Int):Image {
+        #if debug
+            if (size == null) throw "Image.createHeader :: size cannot be null";
+        #end
+        return new Image(Core.load("createImageHeader", 3)(size.nativeObject, depth, channels));
+    }
+    public static inline function createMat(rows:Int, cols:Int, type:Int):Mat {
+        return new Mat(Core.load("createMat", 3)(rows, cols, type));
+    }
+    public static inline function createMatHeader(rows:Int, cols:Int, type:Int):Mat {
+        return new Mat(Core.load("createMatHeader", 3)(rows, cols, type));
     }
     public static inline function DCT(src:Arr, dst:Arr, flags:Int) {
         #if debug
@@ -333,6 +359,48 @@ class Core {
     public static inline function getRow(arr:Arr, submat:Mat, col:Int):Mat {
         return getRows(arr, submat, col, col+1, 1);
     }
+    public static inline function point(x:Int=0, y:Int=0):Point {
+        return new Point(Core.load("Point", 2)(x, y));
+    }
+    public static inline function point2D32f(x:Float=0, y:Float=0):Point2D32f {
+        return new Point2D32f(Core.load("Point2D32f", 2)(x, y));
+    }
+    public static inline function point2D64f(x:Float=0, y:Float=0):Point2D64f {
+        return new Point2D64f(Core.load("Point2D64f", 2)(x, y));
+    }
+    public static inline function point3D32f(x:Float=0, y:Float=0, z:Float=0):Point3D32f {
+        return new Point3D32f(Core.load("Point3D32f", 3)(x, y, z));
+    }
+    public static inline function point3D64f(x:Float=0, y:Float=0, z:Float=0):Point3D64f {
+        return new Point3D64f(Core.load("Point3D64f", 3)(x, y, z));
+    }
+    public static inline function rect(x:Int=0, y:Int=0, width:Int=0, height:Int=0):Rect {
+        return new Rect(Core.load("Rect", 4)(x, y, width, height));
+    }
+    public static inline function scalar(v0:Float=0, v1:Float=0, v2:Float=0, v3:Float=0):Scalar {
+        return new Scalar(Core.load("Scalar", 4)(v0, v1, v2, v3));
+    }
+    public static inline function scaleAll(v0123:Float):Scalar {
+        return scalar(v0123, v0123, v0123, v0123);
+    }
+    public static inline function size(width:Int=0, height:Int=0):Size {
+        return new Size(Core.load("Size", 2)(width, height));
+    }
+    public static inline function size2D32f(width:Float=0, height:Float=0):Size2D32f {
+        return new Size2D32f(Core.load("Size2D32f", 2)(width, height));
+    }
+    public static inline function termCriteria(type:Int, max_iter:Int, epsilon:Float):TermCriteria {
+        return new TermCriteria(Core.load("TermCriteria", 3)(type, max_iter, epsilon));
+    }
+    public static inline function checkTermCriteria(criteria:TermCriteria, default_eps:Float, default_max_iters:Int):TermCriteria {
+        #if debug
+            if (criteria == null) throw "checkTermCriteria : criteria cannot be null";
+        #end
+        return new TermCriteria(Core.load("checkTermCriteria")(criteria.nativeObject, default_eps, default_max_iters));
+    }
+    public static inline function realScalar(v:Float):Scalar {
+        return scalar(v, 0, 0, 0);
+    }
     public static inline function getSize(arr:Arr):Size {
         #if debug
             if (arr == null) throw "getSize :: arr cannot be null";
@@ -346,5 +414,17 @@ class Core {
             if (rect == null) throw "getSubRect :: rect cannot be null";
         #end
         return Mat.cvt(load("getSubRect", 3)(arr.nativeObject, NativeBinding.native(submat), rect.nativeObject));
+    }
+    public inline function mGet(mat:Mat, i:Int, j:Int):Float {
+        #if debug
+            if (mat == null) throw "mGet :: mat cannot be null";
+        #end
+        return Core.load("mGet", 3)(mat.nativeObject, i, j);
+    }
+    public inline function mSet(mat:Mat, i:Int, j:Int, value:Float):Float {
+        #if debug
+            if (mat == null) throw "mGet :: mat cannot be null";
+        #end
+        return Core.load("mSet", 4)(mat.nativeObject, i, j, value);
     }
 }

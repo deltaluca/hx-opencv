@@ -19,15 +19,15 @@ class Main {
         HighGUI.moveWindow("hello1", 0, 0);
         HighGUI.moveWindow("hello2", Std.int(width/2), 0);
 
-        var out1 = Mat.create(Std.int(width/2), Std.int(height/2), Core.CV_8UC3);
-        var out2 = Mat.create(Std.int(width/2), Std.int(height/2), Core.CV_8UC3);
-        var out3 = Mat.create(Std.int(width/2), Std.int(height/2), Core.CV_8UC3);
-        var out4 = Mat.create(Std.int(width/2), Std.int(height/2), Core.CV_8UC3);
+        var out1 = Core.createMat(Std.int(width/2), Std.int(height/2), Core.CV_8UC3);
+        var out2 = Core.createMat(Std.int(width/2), Std.int(height/2), Core.CV_8UC3);
+        var out3 = Core.createMat(Std.int(width/2), Std.int(height/2), Core.CV_8UC3);
+        var out4 = Core.createMat(Std.int(width/2), Std.int(height/2), Core.CV_8UC3);
 
-        var rect1 = new Rect(0, 0, Std.int(width/2), Std.int(height/2));
-        var rect2 = new Rect(Std.int(width/2), 0, Std.int(width/2), Std.int(height/2));
-        var rect3 = new Rect(0, Std.int(height/2), Std.int(width/2), Std.int(height/2));
-        var rect4 = new Rect(Std.int(width/2), Std.int(height/2), Std.int(width/2), Std.int(height/2));
+        var rect1 = Core.rect(0, 0, Std.int(width/2), Std.int(height/2));
+        var rect2 = Core.rect(Std.int(width/2), 0, Std.int(width/2), Std.int(height/2));
+        var rect3 = Core.rect(0, Std.int(height/2), Std.int(width/2), Std.int(height/2));
+        var rect4 = Core.rect(Std.int(width/2), Std.int(height/2), Std.int(width/2), Std.int(height/2));
 
         var f;
         var tt = 0;

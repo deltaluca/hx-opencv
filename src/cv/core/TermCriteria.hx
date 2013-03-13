@@ -1,20 +1,32 @@
 package cv.core;
 
-class Point extends NativeBinding {
-    public var x(get,set):Int;
-    public var y(get,set):Int;
-
-    inline function get_x() { return Core.load("Point_get_x", 1)(nativeObject); }
-    inline function get_y() { return Core.load("Point_get_y", 1)(nativeObject); }
-
-    inline function set_x(x:Int) { return Core.load("Point_set_x", 2)(nativeObject, x); }
-    inline function set_y(y:Int) { return Core.load("Point_set_y", 2)(nativeObject, y); }
-
-    public function new(x:Int=0, y:Int=0) {
-        nativeObject = Core.load("Point", 2)(x, y);
+class TermCriteria extends NativeBinding {
+    @:allow(cv)
+    function new(nativeObject:Dynamic) {
+        super(nativeObject);
+    }
+    @:allow(cv)
+    static inline function cvt(type:Dynamic):Null<TermCriteria> {
+        return if (type == null) null else new TermCriteria(type);
     }
 
+
+
+    public var type    (get,set):Int;
+    public var max_iter(get,set):Int;
+    public var epsilon (get,set):Float;
+
+    inline function get_type    () { return Core.load("TermCriteria_get_type",     1)(nativeObject); }
+    inline function get_max_iter() { return Core.load("TermCriteria_get_max_iter", 1)(nativeObject); }
+    inline function get_epsilon () { return Core.load("TermCriteria_get_epsilon",  1)(nativeObject); }
+
+    inline function set_type    (type:Int)      { return Core.load("TermCriteria_set_type",     2)(nativeObject, type); }
+    inline function set_max_iter(max_iter:Int)  { return Core.load("TermCriteria_set_max_iter", 2)(nativeObject, max_iter); }
+    inline function set_epsilon (epsilon:Float) { return Core.load("TermCriteria_set_epsilon",  2)(nativeObject, epsilon); }
+
+
+
     public inline function toString() {
-        return '{Point x=$x y=$y}';
+        return '{TermCriteria type=$type max_iter=$max_iter}';
     }
 }

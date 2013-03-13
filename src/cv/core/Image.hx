@@ -7,28 +7,9 @@ class Image extends NativeBinding {
     function new(nativeObject:Dynamic) {
         super(nativeObject);
     }
-
     @:allow(cv)
     static inline function cvt(x:Dynamic):Null<Image> {
         return if (x == null) null else new Image(x);
-    }
-
-
-
-    public static inline function create(size:Size, depth:Int, channels:Int):Image {
-        #if debug
-            if (size == null) throw "Image.create :: size cannot be null";
-        #end
-        return new Image(Core.load("createImage", 3)(size.nativeObject, depth, channels));
-    }
-    public static inline function createHeader(size:Size, depth:Int, channels:Int):Image {
-        #if debug
-            if (size == null) throw "Image.createHeader :: size cannot be null";
-        #end
-        return new Image(Core.load("createMatHeader", 3)(size.nativeObject, depth, channels));
-    }
-    public inline function clone():Image {
-        return new Image(Core.load("cloneImage", 1)(this.nativeObject));
     }
 
 
