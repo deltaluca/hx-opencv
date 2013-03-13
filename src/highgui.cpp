@@ -1,5 +1,6 @@
 #include <highgui/highgui_c.h>
 
+#include "highgui.h"
 #include "core.h"
 #include "utils.h"
 #define CONST(N) PCONST(highgui, N)
@@ -198,3 +199,69 @@ value hx_cv_highgui_saveImage(value filename, value image) {
 DEFINE_PRIM(hx_cv_highgui_loadImage,  2);
 DEFINE_PRIM(hx_cv_highgui_loadImageM, 2);
 DEFINE_PRIM(hx_cv_highgui_saveImage,  2);
+
+
+
+//
+// CV_CAP_PROP_*
+//
+CONST(CAP_PROP_POS_MSEC);
+CONST(CAP_PROP_POS_FRAMES);
+CONST(CAP_PROP_POS_AVI_RATIO);
+CONST(CAP_PROP_FRAME_WIDTH);
+CONST(CAP_PROP_FRAME_HEIGHT);
+CONST(CAP_PROP_FPS);
+CONST(CAP_PROP_FRAME_COUNT);
+
+
+
+//
+// Capture
+// cvCaptureFromFile
+// cvGetCaptureProperty
+// cvGrabFrame
+// cvRetrieveFrame
+// cvQueryFrame
+//
+DECLARE_KIND(k_Capture);
+DEFINE_KIND(k_Capture);
+static void finalise_Capture(value v) {
+    CvCapture* ptr = (CvCapture*)val_data(v);
+    cvReleaseCapture(&ptr);
+}
+value hx_cv_highgui_captureFromFile(value filename) {
+    CvCapture* ptr = cvCaptureFromFile(val_get<string>(filename));
+    if (ptr == NULL) return val_null;
+    else {
+        value v = alloc_abstract(k_Capture, ptr);
+        val_gc(v, finalise_Capture);
+        return v;
+    }
+}
+value hx_cv_highgui_getCaptureProperty(value capture, value property_id) {
+    val_check_kind(capture, k_Capture);
+    return alloc<double>(cvGetCaptureProperty((CvCapture*)val_data(capture), val_get<int>(property_id)));
+}
+value hx_cv_highgui_grabFrame(value capture) {
+    val_check_kind(capture, k_Capture);
+    return alloc<int>(cvGrabFrame((CvCapture*)val_data(capture)));
+}
+value hx_cv_highgui_retrieveFrame(value capture) {
+    val_check_kind(capture, k_Capture);
+    return CONVERT_NOGC(core, Image, cvRetrieveFrame((CvCapture*)val_data(capture)));
+}
+value hx_cv_highgui_queryFrame(value capture) {
+    val_check_kind(capture, k_Capture);
+    return CONVERT_NOGC(core, Image, cvQueryFrame((CvCapture*)val_data(capture)));
+}
+DEFINE_PRIM(hx_cv_highgui_captureFromFile,    1);
+DEFINE_PRIM(hx_cv_highgui_getCaptureProperty, 2);
+DEFINE_PRIM(hx_cv_highgui_grabFrame,          1);
+DEFINE_PRIM(hx_cv_highgui_retrieveFrame,      1);
+DEFINE_PRIM(hx_cv_highgui_queryFrame,         1);
+
+
+extern "C" void highgui_allocateKinds()
+{
+    k_Capture = alloc_kind();
+}

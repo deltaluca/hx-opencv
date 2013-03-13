@@ -25,7 +25,7 @@ abstract Scalar(Scalar_) from Scalar_ to Scalar_ {
 
 class Scalar_ extends NativeBinding {
     public function new(x:Dynamic) {
-        nativeObject = x;
+        super(x);
     }
     public inline function toString() {
         var s:Scalar = this;

@@ -17,7 +17,7 @@ class Rect extends NativeBinding {
     inline function set_height(height:Int) { return Core.load("Rect_set_height", 2)(nativeObject, height); }
 
     public function new(x:Int=0, y:Int=0, width:Int=0, height:Int=0) {
-        nativeObject = Core.load("Rect", 4)(x, y, width, height);
+        super(Core.load("Rect", 4)(x, y, width, height));
     }
 
     public inline function toString() {

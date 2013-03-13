@@ -5,7 +5,7 @@ import cv.core.Size;
 class Image extends NativeBinding {
     @:allow(cv)
     function new(nativeObject:Dynamic) {
-        this.nativeObject = nativeObject;
+        super(nativeObject);
     }
 
     @:allow(cv)

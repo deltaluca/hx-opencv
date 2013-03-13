@@ -583,7 +583,7 @@ DEFINE_PRIM(hx_cv_core_getSize,         1);
 DEFINE_PRIM(hx_cv_core_getSubRect,      3);
 
 
-extern "C" void allocateKinds()
+extern "C" void core_allocateKinds()
 {
     k_Point        = alloc_kind();
     k_Point2D32f   = alloc_kind();
@@ -598,4 +598,3 @@ extern "C" void allocateKinds()
     k_Mat          = alloc_kind();
     k_Image        = alloc_kind();
 }
-DEFINE_ENTRY_POINT(allocateKinds);

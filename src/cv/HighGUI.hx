@@ -6,6 +6,8 @@ import cv.core.Mat;
 
 import #if cpp cpp #else neko #end.Lib;
 
+typedef Capture = NativeBinding;
+
 class HighGUI {
     static inline function load(n:String, p:Int=0):Dynamic {
         return Lib.load("opencv", "hx_cv_highgui_"+n, p);
@@ -66,22 +68,22 @@ class HighGUI {
         #if debug
             if (name == null) throw "destroyWindow :: name cannot be null";
         #end
-        return load("destroyWindow", 1)(name);
+        load("destroyWindow", 1)(name);
     }
     public static inline function destroyAllWindows() {
-        return load("destroyAllWindows", 0)();
+        load("destroyAllWindows", 0)();
     }
     public static inline function moveWindow(name:String, x:Int, y:Int) {
         #if debug
             if (name == null) throw "moveWindow :: name cannot be null";
         #end
-        return load("moveWindow", 3)(name, x, y);
+        load("moveWindow", 3)(name, x, y);
     }
     public static inline function resizeWindow(name:String, width:Int, height:Int) {
         #if debug
             if (name == null) throw "resizeWindow :: name cannot be null";
         #end
-        return load("resizeWindow", 3)(name, width, height);
+        load("resizeWindow", 3)(name, width, height);
     }
 
 
@@ -164,5 +166,48 @@ class HighGUI {
             if (image    == null) throw "saveImage :: image cannot be null";
         #end
         return load("saveImage", 2)(filename, image.nativeObject);
+    }
+
+
+
+    public static var CV_CAP_PROP_POS_MSEC     (get, never):Int; static inline function get_CV_CAP_PROP_POS_MSEC     () return load("CV_CAP_PROP_POS_MSEC")     ();
+    public static var CV_CAP_PROP_POS_FRAMES   (get, never):Int; static inline function get_CV_CAP_PROP_POS_FRAMES   () return load("CV_CAP_PROP_POS_FRAMES")   ();
+    public static var CV_CAP_PROP_POS_AVI_RATIO(get, never):Int; static inline function get_CV_CAP_PROP_POS_AVI_RATIO() return load("CV_CAP_PROP_POS_AVI_RATIO")();
+    public static var CV_CAP_PROP_FRAME_WIDTH  (get, never):Int; static inline function get_CV_CAP_PROP_FRAME_WIDTH  () return load("CV_CAP_PROP_FRAME_WIDTH")  ();
+    public static var CV_CAP_PROP_FRAME_HEIGHT (get, never):Int; static inline function get_CV_CAP_PROP_FRAME_HEIGHT () return load("CV_CAP_PROP_FRAME_HEIGHT") ();
+    public static var CV_CAP_PROP_FPS          (get, never):Int; static inline function get_CV_CAP_PROP_FPS          () return load("CV_CAP_PROP_FPS")          ();
+    public static var CV_CAP_PROP_FRAME_COUNT  (get, never):Int; static inline function get_CV_CAP_PROP_FRAME_COUNT  () return load("CV_CAP_PROP_FRAME_COUNT")  ();
+
+
+
+    public static inline function captureFromFile(filename:String):Null<Capture> {
+        #if debug
+            if (filename == null) throw "captureFromFile :: filename cannot be null";
+        #end
+        return Capture.generic(load("captureFromFile", 1)(filename));
+    }
+    public static inline function getCaptureProperty(capture:Capture, property_id:Int):Float {
+        #if debug
+            if (capture == null) throw "getCaptureProperty :: capture cannot be null";
+        #end
+        return load("getCaptureProperty", 2)(capture.nativeObject, property_id);
+    }
+    public static inline function grabFrame(capture:Capture):Int {
+        #if debug
+            if (capture == null) throw "grabFrame :: capture cannot be null";
+        #end
+        return load("grabFrame", 1)(capture.nativeObject);
+    }
+    public static inline function retrieveFrame(capture:Capture):Null<Image> {
+        #if debug
+            if (capture == null) throw "retrieveFrame :: capture cannot be null";
+        #end
+        return Image.cvt(load("retrieveFrame", 1)(capture.nativeObject));
+    }
+    public static inline function queryFrame(capture:Capture):Null<Image> {
+        #if debug
+            if (capture == null) throw "queryFrame :: capture cannot be null";
+        #end
+        return Image.cvt(load("queryFrame", 1)(capture.nativeObject));
     }
 }

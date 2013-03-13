@@ -51,7 +51,8 @@ void finaliser(value v) {
 
 // Conversions between moduels
 #define GDECLARE_CONVERT(R, P, N) \
-    value hx_cv_##P##_to##N(R##N* x)
+    value hx_cv_##P##_to##N(R##N* x); \
+    value hx_cv_##P##_to##N##_nogc(R##N* x)
 #define PDECLARE_CONVERT(P, N) GDECLARE_CONVERT(Cv, P, N)
 #define GDEFINE_CONVERT(R, P, N, F) \
     value hx_cv_##P##_to##N(R##N* ptr) { \
@@ -59,11 +60,17 @@ void finaliser(value v) {
         value v = alloc_abstract(k_##N, ptr); \
         val_gc(v, F); \
         return v; \
+    } \
+    value hx_cv_##P##_to##N##_nogc(R##N* ptr) { \
+        if (ptr == NULL) return val_null; \
+        value v = alloc_abstract(k_##N, ptr); \
+        return v; \
     }
 #define PDEFINE_CONVERT(P, N, F) GDEFINE_CONVERT(Cv, P, N, F)
 #define PDEFINE_CONVERT_GENERIC(P, N) GDEFINE_CONVERT(Cv, P, N, finaliser<Cv##N>)
 
 #define CONVERT(P, N, x) hx_cv_##P##_to##N(x)
+#define CONVERT_NOGC(P, N, x) hx_cv_##P##_to##N##_nogc(x)
 
 
 // Defining general integer consts.

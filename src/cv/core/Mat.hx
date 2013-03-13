@@ -3,7 +3,7 @@ package cv.core;
 class Mat extends NativeBinding {
     @:allow(cv)
     function new(nativeObject:Dynamic) {
-        this.nativeObject = nativeObject;
+        super(nativeObject);
     }
 
 

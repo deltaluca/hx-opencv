@@ -256,42 +256,42 @@ class Core {
         #if debug
             if (arr == null) throw "get1D :: arr cannot be null";
         #end
-        return load("get1D", 2)(arr.nativeObject, idx0);
+        return Scalar.cvt(load("get1D", 2)(arr.nativeObject, idx0));
     }
     public static inline function get2D(arr:Arr, idx0:Int, idx1:Int):Scalar {
         #if debug
             if (arr == null) throw "get2D :: arr cannot be null";
         #end
-        return load("get2D", 3)(arr.nativeObject, idx0, idx1);
+        return Scalar.cvt(load("get2D", 3)(arr.nativeObject, idx0, idx1));
     }
     public static inline function get3D(arr:Arr, idx0:Int, idx1:Int, idx2:Int):Scalar {
         #if debug
             if (arr == null) throw "get3D :: arr cannot be null";
         #end
-        return load("get3D", 4)(arr.nativeObject, idx0, idx1, idx2);
+        return Scalar.cvt(load("get3D", 4)(arr.nativeObject, idx0, idx1, idx2));
     }
     public static inline function getND(arr:Arr, idx:Array<Int>):Scalar {
         #if debug
             if (arr == null) throw "getND :: arr cannot be null";
         #end
-        return load("getND", 2)(arr.nativeObject, idx);
+        return Scalar.cvt(load("getND", 2)(arr.nativeObject, idx));
     }
     public static inline function getCols(arr:Arr, submat:Mat, startCol:Int, endCol:Int):Mat {
         #if debug
             if (arr == null) throw "getCols :: arr cannot be null";
             // submat (TODO??)
         #end
-        return load("getCols", 4)(arr.nativeObject, NativeBinding.native(submat), startCol, endCol);
+        return Mat.cvt(load("getCols", 4)(arr.nativeObject, NativeBinding.native(submat), startCol, endCol));
     }
     public static inline function getCol(arr:Arr, submat:Mat, col:Int):Mat {
-        return getCols(arr, submat, col, col+1);
+        return Mat.cvt(getCols(arr, submat, col, col+1));
     }
     public static inline function getDiag(arr:Arr, submat:Mat, diag:Int):Mat {
         #if debug
             if (arr == null) throw "getDiag :: arr cannot be null";
             // submat (TODO??)
         #end
-        return load("getDiag", 3)(arr.nativeObject, NativeBinding.native(submat), diag);
+        return Mat.cvt(load("getDiag", 3)(arr.nativeObject, NativeBinding.native(submat), diag));
     }
     public static inline function getElemType(arr:Arr):Int {
         #if debug
@@ -299,25 +299,25 @@ class Core {
         #end
         return load("getElemType", 1)(arr.nativeObject);
     }
-    public static inline function getReal1D(arr:Arr, idx0:Int):Scalar {
+    public static inline function getReal1D(arr:Arr, idx0:Int):Float {
         #if debug
             if (arr == null) throw "getReal1D :: arr cannot be null";
         #end
         return load("getReal1D", 2)(arr.nativeObject, idx0);
     }
-    public static inline function getReal2D(arr:Arr, idx0:Int, idx1:Int):Scalar {
+    public static inline function getReal2D(arr:Arr, idx0:Int, idx1:Int):Float {
         #if debug
             if (arr == null) throw "getReal2D :: arr cannot be null";
         #end
         return load("getReal2D", 3)(arr.nativeObject, idx0, idx1);
     }
-    public static inline function getReal3D(arr:Arr, idx0:Int, idx1:Int, idx2:Int):Scalar {
+    public static inline function getReal3D(arr:Arr, idx0:Int, idx1:Int, idx2:Int):Float {
         #if debug
             if (arr == null) throw "getReal3D :: arr cannot be null";
         #end
         return load("getReal3D", 4)(arr.nativeObject, idx0, idx1, idx2);
     }
-    public static inline function getRealND(arr:Arr, idx:Array<Int>):Scalar {
+    public static inline function getRealND(arr:Arr, idx:Array<Int>):Float {
         #if debug
             if (arr == null) throw "getRealND :: arr cannot be null";
         #end
@@ -328,7 +328,7 @@ class Core {
             if (arr == null) throw "getRows :: arr cannot be null";
             // submat (TODO??)
         #end
-        return load("getRows", 5)(arr.nativeObject, NativeBinding.native(submat), startRow, endRow, deltaRow);
+        return Mat.cvt(load("getRows", 5)(arr.nativeObject, NativeBinding.native(submat), startRow, endRow, deltaRow));
     }
     public static inline function getRow(arr:Arr, submat:Mat, col:Int):Mat {
         return getRows(arr, submat, col, col+1, 1);
@@ -337,7 +337,7 @@ class Core {
         #if debug
             if (arr == null) throw "getSize :: arr cannot be null";
         #end
-        return load("getSize", 1)(arr.nativeObject);
+        return Size.cvt(load("getSize", 1)(arr.nativeObject));
     }
     public static inline function getSubRect(arr:Arr, submat:Mat, rect:Rect):Mat {
         #if debug
@@ -345,6 +345,6 @@ class Core {
             // submat (TODO??)
             if (rect == null) throw "getSubRect :: rect cannot be null";
         #end
-        return load("getSubRect", 3)(arr.nativeObject, NativeBinding.native(submat), rect.nativeObject);
+        return Mat.cvt(load("getSubRect", 3)(arr.nativeObject, NativeBinding.native(submat), rect.nativeObject));
     }
 }

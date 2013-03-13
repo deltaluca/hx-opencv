@@ -4,7 +4,7 @@ all: lib main
 
 .DUMMY: lib
 lib:
-	haxelib run hxcpp Build.xml -DHXCPP_M64
+	haxelib run hxcpp Build.xml -DHXCPP_M64 -debug
 
 main: src/Main.hx
 	haxe -main Main -cp src -cpp bin -D HXCPP_M64 -debug
