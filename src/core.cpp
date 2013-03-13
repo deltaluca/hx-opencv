@@ -584,6 +584,28 @@ DEFINE_PRIM(hx_cv_core_getSize,         1);
 DEFINE_PRIM(hx_cv_core_getSubRect,      3);
 
 
+
+//
+// CV_AA
+// cvCircle
+//
+CONST(AA);
+void hx_cv_core_circle(value* args, int nargs) {
+    if (nargs != 7) neko_error();
+    value img       = args[0];
+    value center    = args[1];
+    value radius    = args[2];
+    value color     = args[3];
+    value thickness = args[4];
+    value lineType  = args[5];
+    value shift     = args[6];
+    val_check_kind(center, k_Point);
+    val_check_kind(color, k_Scalar);
+    cvCircle(val_data(img), *(CvPoint*)val_data(center), val_get<int>(radius), *(CvScalar*)val_data(color), val_get<int>(thickness), val_get<int>(lineType), val_get<int>(shift));
+}
+DEFINE_PRIM_MULT(hx_cv_core_circle);
+
+
 extern "C" void core_allocateKinds()
 {
     k_Point        = alloc_kind();

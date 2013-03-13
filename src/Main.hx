@@ -32,14 +32,21 @@ class Main {
         var f;
         var tt = 0;
         while ((f = HighGUI.queryFrame(c)) != null) {
-            switch(Std.int(((tt++)%40)/10)) {
-            case 0: HighGUI.showImage("hello3", Core.getSubRect(f, out3, rect3));
-            case 1: HighGUI.showImage("hello4", Core.getSubRect(f, out4, rect4));
-            case 2: HighGUI.showImage("hello1", Core.getSubRect(f, out1, rect1));
-            case 3: HighGUI.showImage("hello2", Core.getSubRect(f, out2, rect2));
-            }
-        //    HighGUI.waitKey(Math.round(1000/fps));
-            HighGUI.waitKey(1);
+//            switch(Std.int(((tt++)%40)/10)) {
+//            case 0: HighGUI.showImage("hello3", Core.getSubRect(f, out3, rect3));
+//            case 1: HighGUI.showImage("hello4", Core.getSubRect(f, out4, rect4));
+//            case 2: HighGUI.showImage("hello1", Core.getSubRect(f, out1, rect1));
+//            case 3: HighGUI.showImage("hello2", Core.getSubRect(f, out2, rect2));
+//            }
+            Core.circle(out1, Core.point(Std.int(Math.random()*width/2), Std.int(Math.random()*height/2)), 5, Core.scalar(0xff,0xff,0xff), 1, Core.CV_AA);
+            Core.circle(out2, Core.point(Std.int(Math.random()*width/2), Std.int(Math.random()*height/2)), 5, Core.scalar(0xff,0xff,0xff), 1, Core.CV_AA);
+            Core.circle(out3, Core.point(Std.int(Math.random()*width/2), Std.int(Math.random()*height/2)), 5, Core.scalar(0xff,0xff,0xff), 1, Core.CV_AA);
+            Core.circle(out4, Core.point(Std.int(Math.random()*width/2), Std.int(Math.random()*height/2)), 5, Core.scalar(0xff,0xff,0xff), 1, Core.CV_AA);
+            HighGUI.showImage("hello1", out1);
+            HighGUI.showImage("hello2", out2);
+            HighGUI.showImage("hello3", out3);
+            HighGUI.showImage("hello4", out4);
+            HighGUI.waitKey(Math.round(1000/fps));
         }
     }
 }

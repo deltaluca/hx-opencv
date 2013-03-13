@@ -87,6 +87,11 @@ class Core {
     public static var CV_DXT_INVERSE_SCALE(get,never):Int; static inline function get_CV_DXT_INVERSE_SCALE() { return load("CV_DXT_INVERSE_SCALE", 0)(); }
 
 
+
+    public static var CV_AA(get,never):Int; static inline function get_CV_AA() { return load("CV_AA", 0)(); }
+
+
+
     public static inline function absDiff(src1:Arr, src2:Arr, dst:Arr) {
         #if debug
             if (src1 == null) throw "absDiff :: src1 cannot be null";
@@ -415,16 +420,27 @@ class Core {
         #end
         return Mat.cvt(load("getSubRect", 3)(arr.nativeObject, NativeBinding.native(submat), rect.nativeObject));
     }
-    public inline function mGet(mat:Mat, i:Int, j:Int):Float {
+    public static inline function mGet(mat:Mat, i:Int, j:Int):Float {
         #if debug
             if (mat == null) throw "mGet :: mat cannot be null";
         #end
         return Core.load("mGet", 3)(mat.nativeObject, i, j);
     }
-    public inline function mSet(mat:Mat, i:Int, j:Int, value:Float):Float {
+    public static inline function mSet(mat:Mat, i:Int, j:Int, value:Float):Float {
         #if debug
             if (mat == null) throw "mGet :: mat cannot be null";
         #end
         return Core.load("mSet", 4)(mat.nativeObject, i, j, value);
+    }
+
+
+    public static inline function circle(img:Arr, center:Point, radius:Int, color:Scalar, thickness:Int=1, lineType:Int=8, shift:Int=0) {
+        #if debug
+            if (img    == null) throw "circle :: img cannot be null";
+            if (center == null) throw "circle :: center cannot be null";
+            if (color  == null) throw "circle :: color cannot be null";
+        #end
+        var _color:Scalar_ = color;
+        Core.load("circle", 7)(img.nativeObject, center.nativeObject, radius, _color.nativeObject, thickness, lineType, shift);
     }
 }
