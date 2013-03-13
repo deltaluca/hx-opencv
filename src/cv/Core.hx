@@ -3,8 +3,11 @@ package cv;
 import #if cpp cpp #else neko #end.Lib;
 import cv.core.*;
 import cv.core.Scalar.Scalar_;
+import cv.core.Scalar.RGB;
 
 typedef Arr = NativeBinding; // Image|Mat|Seq?
+
+typedef Font = NativeBinding;
 
 class Core {
     @:allow(cv.core)
@@ -88,7 +91,20 @@ class Core {
 
 
 
-    public static var CV_AA(get,never):Int; static inline function get_CV_AA() { return load("CV_AA", 0)(); }
+    public static var CV_AA    (get,never):Int; static inline function get_CV_AA    () { return load("CV_AA",     0)(); }
+    public static var CV_FILLED(get,never):Int; static inline function get_CV_FILLED() { return load("CV_FILLED", 0)(); }
+
+
+
+    public static var CV_FONT_HERSHEY_SIMPLEX       (get,never):Int; static inline function get_CV_FONT_HERSHEY_SIMPLEX       () { return load("CV_FONT_HERSHEY_SIMPLEX",        0)(); }
+    public static var CV_FONT_HERSHEY_PLAIN         (get,never):Int; static inline function get_CV_FONT_HERSHEY_PLAIN         () { return load("CV_FONT_HERSHEY_PLAIN",          0)(); }
+    public static var CV_FONT_HERSHEY_DUPLEX        (get,never):Int; static inline function get_CV_FONT_HERSHEY_DUPLEX        () { return load("CV_FONT_HERSHEY_DUPLEX" ,        0)(); }
+    public static var CV_FONT_HERSHEY_COMPLEX       (get,never):Int; static inline function get_CV_FONT_HERSHEY_COMPLEX       () { return load("CV_FONT_HERSHEY_COMPLEX",        0)(); }
+    public static var CV_FONT_HERSHEY_TRIPLEX       (get,never):Int; static inline function get_CV_FONT_HERSHEY_TRIPLEX       () { return load("CV_FONT_HERSHEY_TRIPLEX",        0)(); }
+    public static var CV_FONT_HERSHEY_COMPLEX_SMALL (get,never):Int; static inline function get_CV_FONT_HERSHEY_COMPLEX_SMALL () { return load("CV_FONT_HERSHEY_COMPLEX_SMALL",  0)(); }
+    public static var CV_FONT_HERSHEY_SCRIPT_SIMPLEX(get,never):Int; static inline function get_CV_FONT_HERSHEY_SCRIPT_SIMPLEX() { return load("CV_FONT_HERSHEY_SCRIPT_SIMPLEX", 0)(); }
+    public static var CV_FONT_HERSHEY_SCRIPT_COMPLEX(get,never):Int; static inline function get_CV_FONT_HERSHEY_SCRIPT_COMPLEX() { return load("CV_FONT_HERSHEY_SCRIPT_COMPLEX", 0)(); }
+    public static var CV_FONT_ITALIC                (get,never):Int; static inline function get_CV_FONT_ITALIC                () { return load("CV_FONT_ITALIC",                 0)(); }
 
 
 
@@ -434,7 +450,8 @@ class Core {
     }
 
 
-    public static inline function circle(img:Arr, center:Point, radius:Int, color:Scalar, thickness:Int=1, lineType:Int=8, shift:Int=0) {
+
+    public static inline function circle(img:Arr, center:Point, radius:Int, color:RGB, thickness:Int=1, lineType:Int=8, shift:Int=0) {
         #if debug
             if (img    == null) throw "circle :: img cannot be null";
             if (center == null) throw "circle :: center cannot be null";
@@ -442,5 +459,41 @@ class Core {
         #end
         var _color:Scalar_ = color;
         Core.load("circle", 7)(img.nativeObject, center.nativeObject, radius, _color.nativeObject, thickness, lineType, shift);
+    }
+    public static inline function line(img:Arr, pt1:Point, pt2:Point, color:RGB, thickness:Int=1, lineType:Int=8, shift:Int=0) {
+        #if debug
+            if (img   == null) throw "line :: img cannot be null";
+            if (pt1   == null) throw "line :: pt1 cannot be null";
+            if (pt2   == null) throw "line :: pt1 cannot be null";
+            if (color == null) throw "line :: color cannot be null";
+        #end
+        var _color:Scalar_ = color;
+        Core.load("line", 7)(img.nativeObject, pt1.nativeObject, pt2.nativeObject, _color.nativeObject, thickness, lineType, shift);
+    }
+    public static inline function rectangle(img:Arr, pt1:Point, pt2:Point, color:RGB, thickness:Int=1, lineType:Int=8, shift:Int=0) {
+        #if debug
+            if (img   == null) throw "rectangle :: img cannot be null";
+            if (pt1   == null) throw "rectangle :: pt1 cannot be null";
+            if (pt2   == null) throw "rectangle :: pt1 cannot be null";
+            if (color == null) throw "rectangle :: color cannot be null";
+        #end
+        var _color:Scalar_ = color;
+        Core.load("rectangle", 7)(img.nativeObject, pt1.nativeObject, pt2.nativeObject, _color.nativeObject, thickness, lineType, shift);
+    }
+    public static inline function rgb(r:Int=0, g:Int=0, b:Int=0):RGB {
+        return scalar(b, g, r);
+    }
+    public static inline function createFont(fontFace:Int, hscale:Float=1, vscale:Float=1, shear:Float=0, thickness:Int=1, lineType:Int=8):Font {
+        return NativeBinding.generic(Core.load("createFont", 6)(fontFace, hscale, vscale, shear, thickness, lineType));
+    }
+    public static inline function putText(img:Arr, text:String, org:Point, font:Font, color:RGB) {
+        #if debug
+            if (img   == null) throw "putText :: img cannot be null";
+            if (org   == null) throw "putText :: org cannot be null";
+            if (font  == null) throw "putText :: font cannot be null";
+            if (color == null) throw "putText :: color cannot be null";
+        #end
+        var _color:Scalar_ = color;
+        Core.load("putText", 5)(img.nativeObject, text, org.nativeObject, font.nativeObject, _color.nativeObject);
     }
 }

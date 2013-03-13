@@ -587,9 +587,35 @@ DEFINE_PRIM(hx_cv_core_getSubRect,      3);
 
 //
 // CV_AA
-// cvCircle
+// CV_FILLED
 //
 CONST(AA);
+CONST(FILLED);
+
+
+
+//
+// CV_FONT_*
+//
+CONST(FONT_HERSHEY_SIMPLEX);
+CONST(FONT_HERSHEY_PLAIN);
+CONST(FONT_HERSHEY_DUPLEX);
+CONST(FONT_HERSHEY_COMPLEX);
+CONST(FONT_HERSHEY_TRIPLEX);
+CONST(FONT_HERSHEY_COMPLEX_SMALL);
+CONST(FONT_HERSHEY_SCRIPT_SIMPLEX);
+CONST(FONT_HERSHEY_SCRIPT_COMPLEX);
+CONST(FONT_ITALIC);
+
+
+
+// cvCircle
+// cvLine
+// cvCreateFont /* derived from cvInitFont */
+// cvPutText
+//
+DECLARE_KIND(k_Font);
+DEFINE_KIND(k_Font);
 void hx_cv_core_circle(value* args, int nargs) {
     if (nargs != 7) neko_error();
     value img       = args[0];
@@ -603,7 +629,59 @@ void hx_cv_core_circle(value* args, int nargs) {
     val_check_kind(color, k_Scalar);
     cvCircle(val_data(img), *(CvPoint*)val_data(center), val_get<int>(radius), *(CvScalar*)val_data(color), val_get<int>(thickness), val_get<int>(lineType), val_get<int>(shift));
 }
+void hx_cv_core_line(value* args, int nargs) {
+    if (nargs != 7) neko_error();
+    value img       = args[0];
+    value pt1       = args[1];
+    value pt2       = args[2];
+    value color     = args[3];
+    value thickness = args[4];
+    value lineType  = args[5];
+    value shift     = args[6];
+    val_check_kind(pt1, k_Point);
+    val_check_kind(pt2, k_Point);
+    val_check_kind(color, k_Scalar);
+    cvLine(val_data(img), *(CvPoint*)val_data(pt1), *(CvPoint*)val_data(pt2), *(CvScalar*)val_data(color), val_get<int>(thickness), val_get<int>(lineType), val_get<int>(shift));
+}
+void hx_cv_core_rectangle(value* args, int nargs) {
+    if (nargs != 7) neko_error();
+    value img       = args[0];
+    value pt1       = args[1];
+    value pt2       = args[2];
+    value color     = args[3];
+    value thickness = args[4];
+    value lineType  = args[5];
+    value shift     = args[6];
+    val_check_kind(pt1, k_Point);
+    val_check_kind(pt2, k_Point);
+    val_check_kind(color, k_Scalar);
+    cvRectangle(val_data(img), *(CvPoint*)val_data(pt1), *(CvPoint*)val_data(pt2), *(CvScalar*)val_data(color), val_get<int>(thickness), val_get<int>(lineType), val_get<int>(shift));
+}
+value hx_cv_core_createFont(value* args, int nargs) {
+    if (nargs != 6) neko_error();
+    value fontFace  = args[0];
+    value hscale    = args[1];
+    value vscale    = args[2];
+    value shear     = args[3];
+    value thickness = args[4];
+    value lineType  = args[5];
+    CvFont* ptr = new CvFont;
+    cvInitFont(ptr, val_get<int>(fontFace), val_get<double>(hscale), val_get<double>(vscale), val_get<double>(shear), val_get<double>(thickness), val_get<int>(lineType));
+    value v = alloc_abstract(k_Font, ptr);
+    val_gc(v, finaliser<CvFont>);
+    return v;
+}
+value hx_cv_core_putText(value img, value text, value org, value font, value color) {
+    val_check_kind(org, k_Point);
+    val_check_kind(font, k_Font);
+    val_check_kind(color, k_Scalar);
+    cvPutText(val_data(img), val_get<string>(text), *(CvPoint*)val_data(org), (CvFont*)val_data(font), *(CvScalar*)val_data(color));
+}
 DEFINE_PRIM_MULT(hx_cv_core_circle);
+DEFINE_PRIM_MULT(hx_cv_core_line);
+DEFINE_PRIM_MULT(hx_cv_core_rectangle);
+DEFINE_PRIM_MULT(hx_cv_core_createFont);
+DEFINE_PRIM(hx_cv_core_putText, 5);
 
 
 extern "C" void core_allocateKinds()
@@ -620,4 +698,5 @@ extern "C" void core_allocateKinds()
     k_TermCriteria = alloc_kind();
     k_Mat          = alloc_kind();
     k_Image        = alloc_kind();
+    k_Font         = alloc_kind();
 }

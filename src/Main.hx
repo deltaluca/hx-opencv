@@ -6,8 +6,8 @@ class Main {
     static function main() {
         HighGUI.namedWindow("hello3");
         HighGUI.namedWindow("hello4");
-        HighGUI.namedWindow("hello1");
-        HighGUI.namedWindow("hello2");
+//        HighGUI.namedWindow("hello1");
+//        HighGUI.namedWindow("hello2");
 
         var c = HighGUI.captureFromFile("video.avi");
         var width  = Std.int(HighGUI.getCaptureProperty(c, HighGUI.CV_CAP_PROP_FRAME_WIDTH));
@@ -29,6 +29,8 @@ class Main {
         var rect3 = Core.rect(0, Std.int(height/2), Std.int(width/2), Std.int(height/2));
         var rect4 = Core.rect(Std.int(width/2), Std.int(height/2), Std.int(width/2), Std.int(height/2));
 
+        var font = Core.createFont(Core.CV_FONT_HERSHEY_TRIPLEX);
+
         var f;
         var tt = 0;
         while ((f = HighGUI.queryFrame(c)) != null) {
@@ -39,14 +41,17 @@ class Main {
 //            case 3: HighGUI.showImage("hello2", Core.getSubRect(f, out2, rect2));
 //            }
             Core.circle(out1, Core.point(Std.int(Math.random()*width/2), Std.int(Math.random()*height/2)), 5, Core.scalar(0xff,0xff,0xff), 1, Core.CV_AA);
-            Core.circle(out2, Core.point(Std.int(Math.random()*width/2), Std.int(Math.random()*height/2)), 5, Core.scalar(0xff,0xff,0xff), 1, Core.CV_AA);
-            Core.circle(out3, Core.point(Std.int(Math.random()*width/2), Std.int(Math.random()*height/2)), 5, Core.scalar(0xff,0xff,0xff), 1, Core.CV_AA);
-            Core.circle(out4, Core.point(Std.int(Math.random()*width/2), Std.int(Math.random()*height/2)), 5, Core.scalar(0xff,0xff,0xff), 1, Core.CV_AA);
-            HighGUI.showImage("hello1", out1);
-            HighGUI.showImage("hello2", out2);
+            Core.circle(out2, Core.point(Std.int(Math.random()*width/1), Std.int(Math.random()*height/1)), 10, Core.scalar(0xff,0xff,0xff), 1, Core.CV_AA, 1);
+            Core.line(out3, Core.point(Std.int(Math.random()*width/2), Std.int(Math.random()*height/2)), Core.point(10,10), Core.rgb(0xff,0,0), 1, Core.CV_AA);
+            Core.line(out4, Core.point(Std.int(Math.random()*width/2), Std.int(Math.random()*height/2)), Core.point(10,10), Core.rgb(0xff,0xff,0), 1, Core.CV_AA);
+
+            Core.putText(out4, "hello world!", Core.point(10,30), font, Core.rgb(0, 0xff, 0xff));
+//            HighGUI.showImage("hello1", out1);
+//            HighGUI.showImage("hello2", out2);
             HighGUI.showImage("hello3", out3);
             HighGUI.showImage("hello4", out4);
-            HighGUI.waitKey(Math.round(1000/fps));
+//            HighGUI.waitKey(Math.round(1000/fps));
+            HighGUI.waitKey(1);
         }
     }
 }

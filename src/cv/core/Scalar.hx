@@ -24,6 +24,8 @@ abstract Scalar(Scalar_) from Scalar_ to Scalar_ {
     }
 }
 
+typedef RGB = Scalar;
+
 class Scalar_ extends NativeBinding {
     public function new(x:Dynamic) {
         super(x);
