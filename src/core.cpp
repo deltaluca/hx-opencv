@@ -544,7 +544,7 @@ value hx_cv_core_getSize(value arr) {
 value hx_cv_core_getSubRect(value arr, value submat, value rect) {
     val_check_kind(submat, k_Mat);
     val_check_kind(rect, k_Rect);
-    return CONVERT(core, Mat, cvGetSubRect(val_data(arr), (CvMat*)val_data(submat), *(CvRect*)val_data(rect)));
+    return CONVERT_NOGC(core, Mat, cvGetSubRect(val_data(arr), (CvMat*)val_data(submat), *(CvRect*)val_data(rect)));
 }
 DEFINE_PRIM(hx_cv_core_absDiff,         3);
 DEFINE_PRIM(hx_cv_core_absDiffS,        3);
