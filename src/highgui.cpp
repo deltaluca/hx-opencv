@@ -261,7 +261,6 @@ DEFINE_PRIM(hx_cv_highgui_retrieveFrame,      1);
 DEFINE_PRIM(hx_cv_highgui_queryFrame,         1);
 
 
-extern "C" void highgui_allocateKinds()
-{
+extern "C" void highgui_allocateKinds() {
     k_Capture = alloc_kind();
 }

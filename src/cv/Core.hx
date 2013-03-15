@@ -15,9 +15,13 @@ class Core {
         return Lib.load("opencv", "hx_cv_core_"+n, p);
     }
 
+
+
     public static var CV_TERMCRIT_ITER  (get,never):Int; static inline function get_CV_TERMCRIT_ITER  () { return load("CV_TERMCRIT_ITER",   0)(); }
     public static var CV_TERMCRIT_NUMBER(get,never):Int; static inline function get_CV_TERMCRIT_NUMBER() { return load("CV_TERMCRIT_NUMBER", 0)(); }
     public static var CV_TERMCRIT_EPS   (get,never):Int; static inline function get_CV_TERMCRIT_EPS   () { return load("CV_TERMCRIT_EPS",    0)(); }
+
+
 
     public static var CV_8U   (get,never):Int; static inline function get_CV_8U   () { return load("CV_8U",    0)(); }
     public static var CV_8S   (get,never):Int; static inline function get_CV_8S   () { return load("CV_8S",    0)(); }
@@ -53,6 +57,8 @@ class Core {
     public static var CV_64FC2(get,never):Int; static inline function get_CV_64FC2() { return load("CV_64FC2", 0)(); }
     public static var CV_64FC3(get,never):Int; static inline function get_CV_64FC3() { return load("CV_64FC3", 0)(); }
     public static var CV_64FC4(get,never):Int; static inline function get_CV_64FC4() { return load("CV_64FC4", 0)(); }
+
+
 
     public static inline function CV_8UC (N:Int):Int { return [CV_8UC1,  CV_8UC2,  CV_8UC3,  CV_8UC4 ][N-1]; }
     public static inline function CV_8SC (N:Int):Int { return [CV_8SC1,  CV_8SC2,  CV_8SC3,  CV_8SC4 ][N-1]; }

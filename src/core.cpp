@@ -14,7 +14,6 @@
 // CvPoint2D64f
 //
 #define INIT_POINT2D(N, F) \
-    DECLARE_KIND(k_##N); \
     DEFINE_KIND(k_##N); \
     value hx_cv_core_##N(value x, value y) { \
         Cv##N* ptr = new Cv##N; \
@@ -38,7 +37,6 @@ INIT_POINT2D(Point2D64f, double);
 // CvPoint3D64f
 //
 #define INIT_POINT3D(N) \
-    DECLARE_KIND(k_##N); \
     DEFINE_KIND(k_##N); \
     value hx_cv_core_##N(value x, value y, value z) { \
         Cv##N* ptr = new Cv##N; \
@@ -64,7 +62,6 @@ INIT_POINT3D(Point3D64f);
 // CvSize2D32f
 //
 #define INIT_SIZE2D(N, F) \
-    DECLARE_KIND(k_##N); \
     DEFINE_KIND(k_##N); \
     value hx_cv_core_##N(value width, value height) { \
         Cv##N* ptr = new Cv##N; \
@@ -94,7 +91,6 @@ value cv_Size(const CvSize& s) {
 //
 // CvRect
 //
-DECLARE_KIND(k_Rect);
 DEFINE_KIND(k_Rect);
 value hx_cv_core_Rect(value x, value y, value width, value height) {
     CvRect* ptr = new CvRect;
@@ -117,7 +113,6 @@ PROP(Rect, height, int);
 //
 // CvScalar
 //
-DECLARE_KIND(k_Scalar);
 DEFINE_KIND(k_Scalar);
 PDEFINE_CONVERT_GENERIC(core, Scalar);
 value hx_cv_core_Scalar(value v0, value v1, value v2, value v3) {
@@ -165,7 +160,6 @@ CONST(TERMCRIT_EPS);
 // CvTermCriteria
 // cvCheckTermCriteria
 //
-DECLARE_KIND(k_TermCriteria);
 DEFINE_KIND(k_TermCriteria);
 value hx_cv_core_TermCriteria(value type, value max_iter, value epsilon) {
     CvTermCriteria* ptr = new CvTermCriteria;
@@ -238,7 +232,6 @@ CONST(64FC4);
 // cvmGet
 // cvmSet
 //
-DECLARE_KIND(k_Mat);
 DEFINE_KIND(k_Mat);
 static void finalise_Mat(value v) {
     CvMat* ptr = (CvMat*)val_data(v);
@@ -315,7 +308,6 @@ GCONST(core, IPL, DEPTH_64F);
 // cvCreateImageHeader
 // cvCloneImage
 //
-DECLARE_KIND(k_Image);
 DEFINE_KIND(k_Image);
 static void finalise_Image(value v) {
     IplImage* ptr = (IplImage*)val_data(v);
@@ -684,8 +676,7 @@ DEFINE_PRIM_MULT(hx_cv_core_createFont);
 DEFINE_PRIM(hx_cv_core_putText, 5);
 
 
-extern "C" void core_allocateKinds()
-{
+extern "C" void core_allocateKinds() {
     k_Point        = alloc_kind();
     k_Point2D32f   = alloc_kind();
     k_Point2D64f   = alloc_kind();
