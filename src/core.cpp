@@ -684,8 +684,7 @@ DEFINE_PRIM_MULT(hx_cv_core_createFont);
 DEFINE_PRIM(hx_cv_core_putText, 5);
 
 
-extern "C" void core_allocateKinds()
-{
+extern "C" void core_allocateKinds() {
     k_Point        = alloc_kind();
     k_Point2D32f   = alloc_kind();
     k_Point2D64f   = alloc_kind();

@@ -31,6 +31,7 @@
         <file name="src/main.cpp"/>
         <file name="src/highgui.cpp"/>
         <file name="src/core.cpp"/>
+        <file name="src/imgproc.cpp"/>
     </files>
 
     <!-- Generate the NDLL. -->
