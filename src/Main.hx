@@ -49,12 +49,9 @@ class Main {
             Core.putText(out4, "hello world!", Core.point(10,30), font, Core.rgb(0, 0xff, 0xff));
 //            HighGUI.showImage("hello1", out1);
 //            HighGUI.showImage("hello2", out2);
-            ImgProc.dilate(out3, out3, null, 2);
-            ImgProc.erode(out3, out3, null, 2);
-            ImgProc.dilate(out4, out4, null, 2);
-            ImgProc.erode(out4, out4, null, 2);
             HighGUI.showImage("hello3", out3);
             HighGUI.showImage("hello4", out4);
+            ImgProc.sobel(out3, out4, 1, 1);
 //            HighGUI.waitKey(Math.round(1000/fps));
             HighGUI.waitKey(1);
         }
