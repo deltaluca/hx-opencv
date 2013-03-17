@@ -16,11 +16,9 @@ class Core implements CvConsts implements CvProcs {
     static inline function load(n:String, p:Int=0):Dynamic
         return Lib.load("opencv", "hx_cv_core_"+n, p);
 
-
     @:CvConst var CV_TERMCRIT_ITER;
     @:CvConst var CV_TERMCRIT_NUMBER;
     @:CvConst var CV_TERMCRIT_EPS;
-
 
     @:CvConst var CV_8U;
     @:CvConst var CV_8UC1;

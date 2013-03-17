@@ -9,7 +9,6 @@
 #include "core.h"
 
 
-
 //
 // CV_SHAPE_*
 //
