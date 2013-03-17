@@ -51,7 +51,6 @@ class Main {
 //            HighGUI.showImage("hello2", out2);
             HighGUI.showImage("hello3", out3);
             HighGUI.showImage("hello4", out4);
-            ImgProc.sobel(out3, out4, 1, 1);
 //            HighGUI.waitKey(Math.round(1000/fps));
             HighGUI.waitKey(1);
         }

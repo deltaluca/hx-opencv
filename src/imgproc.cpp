@@ -144,6 +144,164 @@ DEFINE_PRIM(hx_cv_imgproc_sobel,    5);
 
 
 
+//
+// CV_*2*
+//
+CONST(BGR2BGRA);
+CONST(RGB2RGBA);
+CONST(BGRA2BGR);
+CONST(RGBA2RGB);
+CONST(BGR2RGBA);
+CONST(RGB2BGRA);
+CONST(RGBA2BGR);
+CONST(BGRA2RGB);
+CONST(BGR2RGB);
+CONST(RGB2BGR);
+CONST(BGRA2RGBA);
+CONST(RGBA2BGRA);
+CONST(BGR2GRAY);
+CONST(RGB2GRAY);
+CONST(GRAY2BGR);
+CONST(GRAY2RGB);
+CONST(GRAY2BGRA);
+CONST(GRAY2RGBA);
+CONST(BGRA2GRAY);
+CONST(RGBA2GRAY);
+CONST(BGR2BGR565);
+CONST(RGB2BGR565);
+CONST(BGR5652BGR);
+CONST(BGR5652RGB);
+CONST(BGRA2BGR565);
+CONST(RGBA2BGR565);
+CONST(BGR5652BGRA);
+CONST(BGR5652RGBA);
+CONST(GRAY2BGR565);
+CONST(BGR5652GRAY);
+CONST(BGR2BGR555);
+CONST(RGB2BGR555);
+CONST(BGR5552BGR);
+CONST(BGR5552RGB);
+CONST(BGRA2BGR555);
+CONST(RGBA2BGR555);
+CONST(BGR5552BGRA);
+CONST(BGR5552RGBA);
+CONST(GRAY2BGR555);
+CONST(BGR5552GRAY);
+CONST(BGR2XYZ);
+CONST(RGB2XYZ);
+CONST(XYZ2BGR);
+CONST(XYZ2RGB);
+CONST(BGR2YCrCb);
+CONST(RGB2YCrCb);
+CONST(YCrCb2BGR);
+CONST(YCrCb2RGB);
+CONST(BGR2HSV);
+CONST(RGB2HSV);
+CONST(BGR2Lab);
+CONST(RGB2Lab);
+CONST(BayerBG2BGR);
+CONST(BayerGB2BGR);
+CONST(BayerRG2BGR);
+CONST(BayerGR2BGR);
+CONST(BayerBG2RGB);
+CONST(BayerGB2RGB);
+CONST(BayerRG2RGB);
+CONST(BayerGR2RGB);
+CONST(BGR2Luv);
+CONST(RGB2Luv);
+CONST(BGR2HLS);
+CONST(RGB2HLS);
+CONST(HSV2BGR);
+CONST(HSV2RGB);
+CONST(Lab2BGR);
+CONST(Lab2RGB);
+CONST(Luv2BGR);
+CONST(Luv2RGB);
+CONST(HLS2BGR);
+CONST(HLS2RGB);
+CONST(BayerBG2BGR_VNG);
+CONST(BayerGB2BGR_VNG);
+CONST(BayerRG2BGR_VNG);
+CONST(BayerGR2BGR_VNG);
+CONST(BayerBG2RGB_VNG);
+CONST(BayerGB2RGB_VNG);
+CONST(BayerRG2RGB_VNG);
+CONST(BayerGR2RGB_VNG);
+CONST(BGR2HSV_FULL);
+CONST(RGB2HSV_FULL);
+CONST(BGR2HLS_FULL);
+CONST(RGB2HLS_FULL);
+CONST(HSV2BGR_FULL);
+CONST(HSV2RGB_FULL);
+CONST(HLS2BGR_FULL);
+CONST(HLS2RGB_FULL);
+CONST(LBGR2Lab);
+CONST(LRGB2Lab);
+CONST(LBGR2Luv);
+CONST(LRGB2Luv);
+CONST(Lab2LBGR);
+CONST(Lab2LRGB);
+CONST(Luv2LBGR);
+CONST(Luv2LRGB);
+CONST(BGR2YUV);
+CONST(RGB2YUV);
+CONST(YUV2BGR);
+CONST(YUV2RGB);
+CONST(BayerBG2GRAY);
+CONST(BayerGB2GRAY);
+CONST(BayerRG2GRAY);
+CONST(BayerGR2GRAY);
+CONST(YUV420i2RGB);
+CONST(YUV420i2BGR);
+CONST(YUV420sp2RGB);
+CONST(YUV420sp2BGR);
+
+
+
+//
+// CV_DIST_*
+//
+CONST(DIST_C);
+CONST(DIST_L1);
+CONST(DIST_L2);
+
+
+
+//
+// cvCvtColor
+// cvDistTransform
+// cvIntegral
+//
+void hx_cv_imgproc_cvtColor(value src, value dst, value code) {
+    cvCvtColor(val_data(src), val_data(dst), val_get<int>(code));
+}
+void hx_cv_imgproc_distTransform(value* args, int nargs) {
+    if (nargs != 6) neko_error();
+    value src         = args[0];
+    value dst         = args[1];
+    int distance_type = val_get<int>(args[2]);
+    int mask_size     = val_get<int>(args[3]);
+    value mask        = args[4];
+    value labels      = args[5];
+    float* _mask = NULL;
+    if (!val_is_null(mask)) {
+        val_check(mask, array);
+        int size = val_array_size(mask);
+        _mask = new float[size];
+        for (int i = 0; i < size; i++) _mask[i] = val_get<double>(val_array_i(mask, i));
+    }
+    cvDistTransform(val_data(src), val_data(dst), distance_type, mask_size, _mask, val_data(labels));
+    if (_mask != NULL) delete[] _mask;
+}
+void hx_cv_imgproc_integral(value image, value sum, value sqsum, value tiltedSum) {
+    cvIntegral(val_data(image), val_data(sum), val_data(sqsum), val_data(tiltedSum));
+}
+DEFINE_PRIM(hx_cv_imgproc_cvtColor, 3);
+DEFINE_PRIM_MULT(hx_cv_imgproc_distTransform);
+DEFINE_PRIM(hx_cv_imgproc_integral, 4);
+
+
+
 extern "C" void imgproc_allocateKinds() {
     k_ConvKernel = alloc_kind();
 }

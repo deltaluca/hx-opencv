@@ -61,4 +61,129 @@ class ImgProc implements CvConsts implements CvProcs {
     }
     @:CvProc function sobel(src:Arr, dst:Arr, xorder:Int, yorder:Int, apertureSize:Int=3)
         load("sobel", 5)(src.nativeObject, dst.nativeObject, xorder, yorder, apertureSize);
+
+
+    @:CvConst var CV_BGR2BGRA;
+    @:CvConst var CV_RGB2RGBA;
+    @:CvConst var CV_BGRA2BGR;
+    @:CvConst var CV_RGBA2RGB;
+    @:CvConst var CV_BGR2RGBA;
+    @:CvConst var CV_RGB2BGRA;
+    @:CvConst var CV_RGBA2BGR;
+    @:CvConst var CV_BGRA2RGB;
+    @:CvConst var CV_BGR2RGB;
+    @:CvConst var CV_RGB2BGR;
+    @:CvConst var CV_BGRA2RGBA;
+    @:CvConst var CV_RGBA2BGRA;
+    @:CvConst var CV_BGR2GRAY;
+    @:CvConst var CV_RGB2GRAY;
+    @:CvConst var CV_GRAY2BGR;
+    @:CvConst var CV_GRAY2RGB;
+    @:CvConst var CV_GRAY2BGRA;
+    @:CvConst var CV_GRAY2RGBA;
+    @:CvConst var CV_BGRA2GRAY;
+    @:CvConst var CV_RGBA2GRAY;
+    @:CvConst var CV_BGR2BGR565;
+    @:CvConst var CV_RGB2BGR565;
+    @:CvConst var CV_BGR5652BGR;
+    @:CvConst var CV_BGR5652RGB;
+    @:CvConst var CV_BGRA2BGR565;
+    @:CvConst var CV_RGBA2BGR565;
+    @:CvConst var CV_BGR5652BGRA;
+    @:CvConst var CV_BGR5652RGBA;
+    @:CvConst var CV_GRAY2BGR565;
+    @:CvConst var CV_BGR5652GRAY;
+    @:CvConst var CV_BGR2BGR555;
+    @:CvConst var CV_RGB2BGR555;
+    @:CvConst var CV_BGR5552BGR;
+    @:CvConst var CV_BGR5552RGB;
+    @:CvConst var CV_BGRA2BGR555;
+    @:CvConst var CV_RGBA2BGR555;
+    @:CvConst var CV_BGR5552BGRA;
+    @:CvConst var CV_BGR5552RGBA;
+    @:CvConst var CV_GRAY2BGR555;
+    @:CvConst var CV_BGR5552GRAY;
+    @:CvConst var CV_BGR2XYZ;
+    @:CvConst var CV_RGB2XYZ;
+    @:CvConst var CV_XYZ2BGR;
+    @:CvConst var CV_XYZ2RGB;
+    @:CvConst var CV_BGR2YCrCb;
+    @:CvConst var CV_RGB2YCrCb;
+    @:CvConst var CV_YCrCb2BGR;
+    @:CvConst var CV_YCrCb2RGB;
+    @:CvConst var CV_BGR2HSV;
+    @:CvConst var CV_RGB2HSV;
+    @:CvConst var CV_BGR2Lab;
+    @:CvConst var CV_RGB2Lab;
+    @:CvConst var CV_BayerBG2BGR;
+    @:CvConst var CV_BayerGB2BGR;
+    @:CvConst var CV_BayerRG2BGR;
+    @:CvConst var CV_BayerGR2BGR;
+    @:CvConst var CV_BayerBG2RGB;
+    @:CvConst var CV_BayerGB2RGB;
+    @:CvConst var CV_BayerRG2RGB;
+    @:CvConst var CV_BayerGR2RGB;
+    @:CvConst var CV_BGR2Luv;
+    @:CvConst var CV_RGB2Luv;
+    @:CvConst var CV_BGR2HLS;
+    @:CvConst var CV_RGB2HLS;
+    @:CvConst var CV_HSV2BGR;
+    @:CvConst var CV_HSV2RGB;
+    @:CvConst var CV_Lab2BGR;
+    @:CvConst var CV_Lab2RGB;
+    @:CvConst var CV_Luv2BGR;
+    @:CvConst var CV_Luv2RGB;
+    @:CvConst var CV_HLS2BGR;
+    @:CvConst var CV_HLS2RGB;
+    @:CvConst var CV_BayerBG2BGR_VNG;
+    @:CvConst var CV_BayerGB2BGR_VNG;
+    @:CvConst var CV_BayerRG2BGR_VNG;
+    @:CvConst var CV_BayerGR2BGR_VNG;
+    @:CvConst var CV_BayerBG2RGB_VNG;
+    @:CvConst var CV_BayerGB2RGB_VNG;
+    @:CvConst var CV_BayerRG2RGB_VNG;
+    @:CvConst var CV_BayerGR2RGB_VNG;
+    @:CvConst var CV_BGR2HSV_FULL;
+    @:CvConst var CV_RGB2HSV_FULL;
+    @:CvConst var CV_BGR2HLS_FULL;
+    @:CvConst var CV_RGB2HLS_FULL;
+    @:CvConst var CV_HSV2BGR_FULL;
+    @:CvConst var CV_HSV2RGB_FULL;
+    @:CvConst var CV_HLS2BGR_FULL;
+    @:CvConst var CV_HLS2RGB_FULL;
+    @:CvConst var CV_LBGR2Lab;
+    @:CvConst var CV_LRGB2Lab;
+    @:CvConst var CV_LBGR2Luv;
+    @:CvConst var CV_LRGB2Luv;
+    @:CvConst var CV_Lab2LBGR;
+    @:CvConst var CV_Lab2LRGB;
+    @:CvConst var CV_Luv2LBGR;
+    @:CvConst var CV_Luv2LRGB;
+    @:CvConst var CV_BGR2YUV;
+    @:CvConst var CV_RGB2YUV;
+    @:CvConst var CV_YUV2BGR;
+    @:CvConst var CV_YUV2RGB;
+    @:CvConst var CV_BayerBG2GRAY;
+    @:CvConst var CV_BayerGB2GRAY;
+    @:CvConst var CV_BayerRG2GRAY;
+    @:CvConst var CV_BayerGR2GRAY;
+    @:CvConst var CV_YUV420i2RGB;
+    @:CvConst var CV_YUV420i2BGR;
+    @:CvConst var CV_YUV420sp2RGB;
+    @:CvConst var CV_YUV420sp2BGR;
+
+
+    @:CvConst var CV_DIST_C;
+    @:CvConst var CV_DIST_L1;
+    @:CvConst var CV_DIST_L2;
+
+
+    @:CvProc function cvtColor(src:Arr, dst:Arr, code:Int)
+        load("cvtColor", 3)(src.nativeObject, dst.nativeObject, code);
+    @:CvProc function distTransform(src:Arr, dst:Arr, ?distance_type:Null<Int>, mask_size:Int=3, ?mask:Null<Array<Float>>, ?labels:Null<Arr>) {
+        if (distance_type == null) distance_type = CV_DIST_L2;
+        load("distTransform", 6)(src.nativeObject, dst.nativeObject, distance_type, mask_size, mask, NativeBinding.native(labels));
+    }
+    @:CvProc function integral(image:Arr, sum:Arr, ?sqsum:Null<Arr>, ?tiltedSum:Null<Arr>)
+        load("integral", 4)(image.nativeObject, sum.nativeObject, NativeBinding.native(sqsum), NativeBinding.native(tiltedSum));
 }
