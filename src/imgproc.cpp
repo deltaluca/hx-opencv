@@ -302,6 +302,31 @@ DEFINE_PRIM(hx_cv_imgproc_integral, 4);
 
 
 
+//
+// cvAcc
+// cvMultiplyAcc
+// cvRunningAvg
+// cvSquareAcc
+//
+void hx_cv_imgproc_acc(value image, value sum, value mask) {
+    cvAcc(val_data(image), val_data(sum), val_data(mask));
+}
+void hx_cv_imgproc_multiplyAcc(value image1, value image2, value acc, value mask) {
+    cvMultiplyAcc(val_data(image1), val_data(image2), val_data(acc), val_data(mask));
+}
+void hx_cv_imgproc_runningAvg(value image, value acc, value alpha, value mask) {
+    cvRunningAvg(val_data(image), val_data(acc), val_get<double>(alpha), val_data(mask));
+}
+void hx_cv_imgproc_squareAcc(value image, value sqsum, value mask) {
+    cvSquareAcc(val_data(image), val_data(sqsum), val_data(mask));
+}
+DEFINE_PRIM(hx_cv_imgproc_acc,         3);
+DEFINE_PRIM(hx_cv_imgproc_multiplyAcc, 4);
+DEFINE_PRIM(hx_cv_imgproc_runningAvg,  4);
+DEFINE_PRIM(hx_cv_imgproc_squareAcc,   3);
+
+
+
 extern "C" void imgproc_allocateKinds() {
     k_ConvKernel = alloc_kind();
 }

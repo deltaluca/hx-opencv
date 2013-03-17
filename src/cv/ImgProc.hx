@@ -186,4 +186,14 @@ class ImgProc implements CvConsts implements CvProcs {
     }
     @:CvProc function integral(image:Arr, sum:Arr, ?sqsum:Null<Arr>, ?tiltedSum:Null<Arr>)
         load("integral", 4)(image.nativeObject, sum.nativeObject, NativeBinding.native(sqsum), NativeBinding.native(tiltedSum));
+
+
+    @:CvProc function acc(image:Arr, sum:Arr, ?mask:Null<Arr>)
+        load("acc", 3)(image.nativeObject, sum.nativeObject, NativeBinding.native(mask));
+    @:CvProc function multiplyAcc(image1:Arr, image2:Arr, acc:Arr, ?mask:Null<Arr>)
+        load("multiplyAcc", 4)(image1.nativeObject, image2.nativeObject, acc.nativeObject, NativeBinding.native(mask));
+    @:CvProc function runningAvg(image:Arr, acc:Arr, alpha:Float, ?mask:Null<Arr>)
+        load("runningAvg", 4)(image.nativeObject, acc.nativeObject, alpha, NativeBinding.native(mask));
+    @:CvProc function squareAcc(image:Arr, sqsum:Arr, ?mask:Null<Arr>)
+        load("squareAcc", 3)(image.nativeObject, sqsum.nativeObject, NativeBinding.native(mask));
 }
