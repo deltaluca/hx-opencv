@@ -444,7 +444,7 @@ void hx_cv_core_avgSdv(value arr, value mean, value stdDev, value mask) {
     cvAvgSdv(val_data(arr), (CvScalar*)val_data(mean), (CvScalar*)val_data(stdDev), val_data(mask));
 }
 void hx_cv_core_cartToPolar(value x, value y, value magnitude, value angle, value angleInDegrees) {
-    cvCartToPolar(val_data(x), val_data(y), val_data(magnitude), val_data(angle), val_get<int>(angleInDegrees));
+    cvCartToPolar(val_data(x), val_data(y), val_data(magnitude), val_data(angle), val_get<bool>(angleInDegrees));
 }
 void hx_cv_core_cmp(value src1, value src2, value dst, value cmpOp) {
     cvCmp(val_data(src1), val_data(src2), val_data(dst), val_get<int>(cmpOp));

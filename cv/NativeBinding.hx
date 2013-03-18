@@ -20,9 +20,12 @@ class NativeBinding {
     }
 
     @:allow(cv)
-    static inline function mapNative<T:NativeBinding>(objects:Array<Null<T>>):Array<Null<Dynamic>> {
-        var ret = [];
-        for (o in objects) ret.push(native(o));
-        return ret;
+    static inline function mapNative<T:NativeBinding>(objects:Null<Array<Null<T>>>):Null<Array<Null<Dynamic>>> {
+        if (objects == null) return null;
+        else {
+            var ret = [];
+            for (o in objects) ret.push(native(o));
+            return ret;
+        }
     }
 }

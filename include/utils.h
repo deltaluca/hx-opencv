@@ -37,6 +37,8 @@ template <>
 inline double val_get(value x) { return val_get_double(x); }
 template <>
 inline string val_get(value x) { return val_get_string(x); }
+template <>
+inline bool val_get(value x) { return val_get_bool(x); }
 
 inline string safe_val_string(value x) {
     return val_is_null(x) ? NULL : val_get<string>(x);

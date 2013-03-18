@@ -3,17 +3,19 @@ package cv;
 import cv.Core;
 import cv.core.Image;
 import cv.core.Mat;
+import cv.highgui.*;
 
 import #if cpp cpp #else neko #end.Lib;
 
 import cv.Macros;
 
-typedef Capture = NativeBinding;
-
 class HighGUI implements CvConsts implements CvProcs {
     static inline function load(n:String, p:Int=0):Dynamic
         return Lib.load("opencv", "hx_cv_highgui_"+n, p);
 
+    // -------------------------
+    // Flags for window creation.
+    // -------------------------
     @:CvConst var CV_WINDOW_NORMAL;
     @:CvConst var CV_WINDOW_AUTOSIZE;
     @:CvConst var CV_WINDOW_FREERATIO;
@@ -21,7 +23,9 @@ class HighGUI implements CvConsts implements CvProcs {
     @:CvConst var CV_GUI_NORMAL;
     @:CvConst var CV_GUI_EXPANDED;
 
-
+    // -------------------------
+    // Event flags for mouse callbacks.
+    // -------------------------
     @:CvConst var CV_EVENT_MOUSEMOVE;
     @:CvConst var CV_EVENT_LBUTTONDOWN;
     @:CvConst var CV_EVENT_RBUTTONDOWN;
@@ -33,7 +37,9 @@ class HighGUI implements CvConsts implements CvProcs {
     @:CvConst var CV_EVENT_RBUTTONDBLCLK;
     @:CvConst var CV_EVENT_MBUTTONDBLCLK;
 
-
+    // -------------------------
+    // Modifier flags for mouse callbacks.
+    // -------------------------
     @:CvConst var CV_EVENT_FLAG_LBUTTON;
     @:CvConst var CV_EVENT_FLAG_RBUTTON;
     @:CvConst var CV_EVENT_FLAG_MBUTTON;
@@ -41,67 +47,22 @@ class HighGUI implements CvConsts implements CvProcs {
     @:CvConst var CV_EVENT_FLAG_SHIFTKEY;
     @:CvConst var CV_EVENT_FLAG_ALTKEY;
 
-
-    @:CvProc function initSystem(args:Array<String>):Int
-        return load("initSystem", 2)(args.length, args);
-    @:CvProc function waitKey(?delay:Int)
-        load("waitKey", 1)(delay == null ? 0 : delay);
-
-
-    @:CvProc function namedWindow(winname:String, ?flags:Null<Int>):Int {
-        if (flags == null) flags = CV_WINDOW_AUTOSIZE | CV_WINDOW_KEEPRATIO | CV_GUI_EXPANDED;
-        return load("namedWindow", 2)(winname, flags);
-    }
-    @:CvProc function destroyWindow(name:String)
-        load("destroyWindow", 1)(name);
-    @:CvProc function destroyAllWindows()
-        load("destroyAllWindows", 0)();
-    @:CvProc function moveWindow(name:String, x:Int, y:Int)
-        load("moveWindow", 3)(name, x, y);
-    @:CvProc function resizeWindow(name:String, width:Int, height:Int)
-         load("resizeWindow", 3)(name, width, height);
-
-
-
-    @:CvProc function createTrackbar(trackbarName:String, ?windowName:Null<String>, value:Int, count:Int, ?onChange:Null<Int->Void>):Int
-        return load("createTrackbar", 5)(trackbarName, windowName, value, count, onChange);
-    @:CvProc function getTrackbarPos(trackbarName:String, ?windowName:Null<String>):Int
-        return load("getTrackbarPos", 2)(trackbarName, windowName);
-    @:CvProc function setTrackbarPos(trackbarName:String, ?windowName:Null<String>, pos:Int)
-        load("setTrackbarPos", 3)(trackbarName, windowName, pos);
-
-
-    @:CvProc function setMouseCallback(windowName:String, onMouse:Int->Int->Int->Int->Void)
-        load("setMouseCallback", 2)(windowName, onMouse);
-
-
+    // ------------------------
+    // Flags for image conversions.
+    // ------------------------
     @:CvConst var CV_CVTIMG_FLIP;
     @:CvConst var CV_CVTIMG_SWAP_RB;
 
-
-    @:CvProc function convertImage(src:Arr, dst:Arr, flags:Int=0)
-        load("convertImage", 3)(src.nativeObject, dst.nativeObject, flags);
-    @:CvProc function showImage(windowName:String, image:Arr)
-        load("showImage", 2)(windowName, image.nativeObject);
-
-
+    // ------------------------
+    // Image IO flags.
+    // ------------------------
     @:CvConst var CV_LOAD_IMAGE_COLOR;
     @:CvConst var CV_LOAD_IMAGE_GRAYSCALE;
     @:CvConst var CV_LOAD_IMAGE_UNCHANGED;
 
-
-    @:CvProc function loadImage(filename:String, ?iscolor:Null<Int>):Null<Image> {
-        if (iscolor == null) iscolor = CV_LOAD_IMAGE_COLOR;
-        return Image.cvt(load("loadImage", 2)(filename, iscolor));
-    }
-    @:CvProc function loadImageM(filename:String, ?iscolor:Null<Int>):Null<Mat> {
-        if (iscolor == null) iscolor = CV_LOAD_IMAGE_COLOR;
-        return Mat.cvt(load("loadImageM", 2)(filename, iscolor));
-    }
-    @:CvProc function saveImage(filename:String, image:Arr):Int
-        return load("saveImage", 2)(filename, image.nativeObject);
-
-
+    // -------------------------
+    // Video/Camera capture properties flags.
+    // -------------------------
     @:CvConst var CV_CAP_PROP_POS_MSEC;
     @:CvConst var CV_CAP_PROP_POS_FRAMES;
     @:CvConst var CV_CAP_PROP_POS_AVI_RATIO;
@@ -110,15 +71,56 @@ class HighGUI implements CvConsts implements CvProcs {
     @:CvConst var CV_CAP_PROP_FPS;
     @:CvConst var CV_CAP_PROP_FRAME_COUNT;
 
+    // -------------------------
+    // System interaction.
+    // -------------------------
+    @:CvProc function initSystem(args:Array<String>):Int return load("initSystem", 2)(args.length, args);
+    @:CvProc function waitKey(?delay:Int=0):Void;
 
-    @:CvProc function captureFromFile(filename:String):Null<Capture>
-        return Capture.generic(load("captureFromFile", 1)(filename));
-    @:CvProc function getCaptureProperty(capture:Capture, property_id:Int):Float
-        return load("getCaptureProperty", 2)(capture.nativeObject, property_id);
-    @:CvProc function grabFrame(capture:Capture):Int
-        return load("grabFrame", 1)(capture.nativeObject);
-    @:CvProc function retrieveFrame(capture:Capture):Null<Image>
-        return Image.cvt(load("retrieveFrame", 1)(capture.nativeObject));
-    @:CvProc function queryFrame(capture:Capture):Null<Image>
-        return Image.cvt(load("queryFrame", 1)(capture.nativeObject));
+    // -------------------------
+    // Window management.
+    // -------------------------
+    @:CvProc(flags=CV_WINDOW_AUTOSIZE|CV_WINDOW_KEEPRATIO|CV_GUI_EXPANDED)
+             function namedWindow(winname:String, ?flags:Null<Int>):Int;
+    @:CvProc function destroyWindow(name:String):Void;
+    @:CvProc function moveWindow   (name:String, x:Int, y:Int):Void;
+    @:CvProc function resizeWindow (name:String, w:Int, h:Int):Void;
+
+    @:CvProc function destroyAllWindows():Void;
+
+    // -------------------------
+    // Trackbar management.
+    // -------------------------
+    @:CvProc function createTrackbar(trackbarName:String, ?windowName:Null<String>, value:Int, count:Int, ?onChange:Null<Int->Void>):Int;
+    @:CvProc function getTrackbarPos(trackbarName:String, ?windowName:Null<String>):Int;
+    @:CvProc function setTrackbarPos(trackbarName:String, ?windowName:Null<String>, pos:Int):Void;
+
+    // -------------------------
+    // Mouse callbacks for windows.
+    // -------------------------
+    @:CvProc function setMouseCallback(windowName:String, onMouse:Int->Int->Int->Int->Void):Void;
+
+    // ------------------------
+    // Image rendering.
+    // ------------------------
+    @:CvProc function convertImage(src:Arr, dst:Arr, flags:Int=0);
+    @:CvProc function showImage   (windowName:String, image:Arr);
+
+    // -------------------------
+    // Image IO
+    // -------------------------
+    @:CvProc(iscolor=CV_LOAD_IMAGE_COLOR) function loadImage (filename:String, ?iscolor:Null<Int>):Null<Image>;
+    @:CvProc(iscolor=CV_LOAD_IMAGE_COLOR) function loadImageM(filename:String, ?iscolor:Null<Int>):Null<Mat>;
+    @:CvProc function saveImage(filename:String, image:Arr):Int;
+
+    // -------------------------
+    // Video/Camera capture IO.
+    // -------------------------
+    @:CvProc function captureFromFile(filename:String):Null<Capture>;
+
+    @:CvProc function grabFrame    (capture:Capture):Int;
+    @:CvProc function retrieveFrame(capture:Capture):Null<Image>;
+    @:CvProc function queryFrame   (capture:Capture):Null<Image>;
+
+    @:CvProc function getCaptureProperty(capture:Capture, property_id:Int):Float;
 }
