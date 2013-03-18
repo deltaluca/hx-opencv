@@ -1,0 +1,8 @@
+<project name="opencv" url="https://github.com/deltaluca/hx-opencv" license="MIT">
+	<depends name="hxcpp"/>
+
+	<user name="deltaluca"/>
+	<tag v="cpp"/>
+	<description>Hxcpp bindings to OpenCV 2.3.1.</description>
+	<version name="0.0.1">Early alpha, most of the API unimplemented.</version>
+</project>

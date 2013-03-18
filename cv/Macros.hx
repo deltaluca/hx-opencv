@@ -102,6 +102,7 @@ class CvProcsImpl {
         return switch(t) {
         case macro :Int: true;
         case macro :Float: true;
+        case macro :Bool: true;
         case TPath({name:"Null"}): true;
         default: false;
         }
@@ -117,6 +118,7 @@ class CvProcsImpl {
             for (x in xs) {
                 switch (x.expr) {
                 case EMeta({name:":CvCheck", params:params, pos:p}, y):
+                    if (!Context.defined("debug")) continue;
                     if (params.length > 1) {
                         for (n in params) {
                             skipped.set(switch (n.expr) {
@@ -143,18 +145,20 @@ class CvProcsImpl {
         }
 
         var checks = [];
-        for (arg in f.args) {
-            if (arg.type == null) Context.warning("@:CvProc should have arg types declared", field.pos);
-            if (arg.opt || skippedType(arg.type)) continue;
+        if (Context.defined("debug")) {
+            for (arg in f.args) {
+                if (arg.type == null) Context.warning("@:CvProc should have arg types declared", field.pos);
+                if (arg.opt || skippedType(arg.type)) continue;
 
-            if (skipped.get(arg.name)) continue;
+                if (skipped.get(arg.name)) continue;
 
-            var err = '${field.name} :: ${arg.name} cannot be null';
-            checks.push(macro
-                if ($i{arg.name} == null) throw $v{err}
-            );
+                var err = '${field.name} :: ${arg.name} cannot be null';
+                checks.push(macro
+                    if ($i{arg.name} == null) throw $v{err}
+                );
+            }
+            f.expr = macro { $b{checks}; $e{f.expr} };
         }
-        f.expr = macro { $b{checks}; $e{f.expr} };
         field.access.push(AStatic);
         field.access.push(APublic);
         field.access.push(AInline);
@@ -162,7 +166,6 @@ class CvProcsImpl {
 
     static function run() {
         var fields = Context.getBuildFields();
-        if (!Context.defined("debug")) return fields;
 
         for (f in fields) {
             if (!isProc(f.meta)) continue;

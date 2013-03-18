@@ -152,8 +152,8 @@ class Core implements CvConsts implements CvProcs {
         load("convertScaleAbs", 4)(src.nativeObject, dst.nativeObject, scale, shift);
     @:CvProc function copy(src:Arr, dst:Arr)
         load("copy", 2)(src.nativeObject, dst.nativeObject);
-    @:CvProc function countNonZero(arr:Arr)
-        load("countNonZero", 1)(arr.nativeObject);
+    @:CvProc function countNonZero(arr:Arr):Int
+        return load("countNonZero", 1)(arr.nativeObject);
     @:CvProc function createData(arr:Arr)
         load("createData", 1)(arr.nativeObject);
     @:CvProc function createImage(size:Size, depth:Int, channels:Int):Image
@@ -216,7 +216,7 @@ class Core implements CvConsts implements CvProcs {
         return new Rect(Core.load("Rect", 4)(x, y, width, height));
     @:CvProc function scalar(v0:Float=0, v1:Float=0, v2:Float=0, v3:Float=0):Scalar
         return new Scalar(Core.load("Scalar", 4)(v0, v1, v2, v3));
-    @:CvProc function scaleAll(v0123:Float):Scalar
+    @:CvProc function scalarAll(v0123:Float):Scalar
         return scalar(v0123, v0123, v0123, v0123);
     @:CvProc function size(width:Int=0, height:Int=0):Size
         return new Size(Core.load("Size", 2)(width, height));
@@ -250,6 +250,8 @@ class Core implements CvConsts implements CvProcs {
         var _color:Scalar_ = color;
         Core.load("rectangle", 7)(img.nativeObject, pt1.nativeObject, pt2.nativeObject, _color.nativeObject, thickness, lineType, shift);
     }
+    @:CvProc function gray(gray:Int=0):RGB
+        return scalar(gray, gray, gray);
     @:CvProc function rgb(r:Int=0, g:Int=0, b:Int=0):RGB
         return scalar(b, g, r);
     @:CvProc function createFont(fontFace:Int, hscale:Float=1, vscale:Float=1, shear:Float=0, thickness:Int=1, lineType:Int=8):Font

@@ -406,7 +406,7 @@ void hx_cv_core_absDiffS(value src, value dst, value _value) {
     cvAbsDiffS(val_data(src), val_data(dst), *(CvScalar*)val_data(_value));
 }
 void hx_cv_core_add(value src1, value src2, value dst, value mask) {
-    cvAdd(val_data(src1), val_data(src1), val_data(dst), val_data(mask));
+    cvAdd(val_data(src1), val_data(src2), val_data(dst), val_data(mask));
 }
 void hx_cv_core_addS(value src, value _value, value dst, value mask) {
     val_check_kind(_value, k_Scalar);
