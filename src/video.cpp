@@ -11,9 +11,20 @@
 
 
 //
+// CV_LKFLOW*
+//
+CONST(LKFLOW_PYR_A_READY);
+CONST(LKFLOW_PYR_B_READY);
+CONST(LKFLOW_INITIAL_GUESSES);
+CONST(LKFLOW_GET_MIN_EIGENVALS);
+
+
+
+//
 // cvCalcOpticalFlowBM
 // cvCalcOpticalFlowHS
 // cvCalcOpticalFlowLK
+// cvCalcOpticalFlowPyrLK
 //
 void hx_cv_video_calcOpticalFlowBM(value* args, int nargs) {
     if (nargs != 8) neko_error();
@@ -46,9 +57,63 @@ void hx_cv_video_calcOpticalFlowLK(value prev, value curr, value winSize, value 
     val_check_kind(winSize, k_Size);
     cvCalcOpticalFlowLK(val_data(prev), val_data(curr), *(CvSize*)val_data(winSize), val_data(velx), val_data(vely));
 }
+void hx_cv_video_calcOpticalFlowPyrLK(value* args, int nargs) {
+    if (nargs != 13) neko_error();
+    const CvArr* prev  = val_data(args[0]);
+    const CvArr* curr  = val_data(args[1]);
+    CvArr* prevPyr     = val_data(args[2]);
+    CvArr* currPyr     = val_data(args[3]);
+    value prevFeatures = args[4];
+    value currFeatures = args[5];
+    int count          = val_get<int>(args[6]);
+    value winSize      = args[7];
+    int level          = val_get<int>(args[8]);
+    value status       = args[9];
+    value track_error  = args[10];
+    value criteria     = args[11];
+    int flags          = val_get<int>(args[12]);
+
+    val_check(prevFeatures, array);
+    val_check(currFeatures, array);
+    val_check(status,       array);
+    CvPoint2D32f* _prev   = new CvPoint2D32f[count];
+    CvPoint2D32f* _curr   = new CvPoint2D32f[count];
+    char*         _status = new char[count];
+    float*        _error  = NULL;
+    for (int i = 0; i < count; i++) {
+        CvPoint2D32f* p = (CvPoint2D32f*)val_data(val_array_i(prevFeatures, i));
+        _prev[i].x = p->x;
+        _prev[i].y = p->y;
+    }
+    if (!val_is_null(track_error)) {
+        val_check(track_error, array);
+        _error = new float[count];
+    }
+    val_check_kind(winSize, k_Size);
+    val_check_kind(criteria, k_TermCriteria);
+
+    cvCalcOpticalFlowPyrLK(prev, curr, prevPyr, currPyr, _prev, _curr, count, *(CvSize*)val_data(winSize), level, _status, _error, *(CvTermCriteria*)val_data(criteria), flags);
+
+    for (int i = 0; i < count; i++) {
+        CvPoint2D32f* p = (CvPoint2D32f*)val_data(val_array_i(currFeatures, i));
+        p->x = _curr[i].x;
+        p->y = _curr[i].y;
+        val_array_set_i(status, i, alloc<bool>(_status[i]));
+        if (!val_is_null(track_error))
+            val_array_set_i(track_error, i, alloc<float>(_error[i]));
+    }
+
+    delete[] _prev;
+    delete[] _curr;
+    delete[] _status;
+    if (!val_is_null(track_error)) {
+        delete[] _error;
+    }
+}
 DEFINE_PRIM_MULT(hx_cv_video_calcOpticalFlowBM);
 DEFINE_PRIM_MULT(hx_cv_video_calcOpticalFlowHS);
 DEFINE_PRIM(hx_cv_video_calcOpticalFlowLK, 5);
+DEFINE_PRIM_MULT(hx_cv_video_calcOpticalFlowPyrLK);
 
 
 extern "C" void video_allocateKinds() {

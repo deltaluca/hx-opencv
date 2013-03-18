@@ -18,6 +18,8 @@ template <>
 inline value alloc(float x) { return alloc_float(x); }
 template <>
 inline value alloc(double x) { return alloc_float(x); }
+template <>
+inline value alloc(bool x) { return alloc_bool(x); }
 
 inline value alloc_double(float  x) { return alloc(x); }
 inline value alloc_double(double x) { return alloc(x); }

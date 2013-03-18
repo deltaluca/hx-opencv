@@ -12,3 +12,4 @@ main: Main.hx
 
 haxelib: lib
 	zip -r opencv src cv include Build.xml haxelib.xml
+	haxelib test opencv.zip

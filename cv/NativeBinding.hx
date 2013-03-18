@@ -18,4 +18,11 @@ class NativeBinding {
     static inline function native(object:Null<NativeBinding>):Null<Dynamic> {
         return if (object == null) null else object.nativeObject;
     }
+
+    @:allow(cv)
+    static inline function mapNative<T:NativeBinding>(objects:Array<Null<T>>):Array<Null<Dynamic>> {
+        var ret = [];
+        for (o in objects) ret.push(native(o));
+        return ret;
+    }
 }
