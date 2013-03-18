@@ -196,4 +196,14 @@ class ImgProc implements CvConsts implements CvProcs {
         load("runningAvg", 4)(image.nativeObject, acc.nativeObject, alpha, NativeBinding.native(mask));
     @:CvProc function squareAcc(image:Arr, sqsum:Arr, ?mask:Null<Arr>)
         load("squareAcc", 3)(image.nativeObject, sqsum.nativeObject, NativeBinding.native(mask));
+
+
+    @:CvConst var CV_THRESH_BINARY;
+    @:CvConst var CV_THRESH_BINARY_INV;
+    @:CvConst var CV_THRESH_TRUNC;
+    @:CvConst var CV_THRESH_TOZERO;
+    @:CvConst var CV_THRESH_TOZERO_INV;
+
+    @:CvProc function threshold(src:Arr, dst:Arr, threshold:Float, maxValue:Float, thresholdType:Int)
+        load("threshold", 5)(src.nativeObject, dst.nativeObject, threshold, maxValue, thresholdType);
 }

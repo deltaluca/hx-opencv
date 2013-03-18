@@ -327,6 +327,24 @@ DEFINE_PRIM(hx_cv_imgproc_squareAcc,   3);
 
 
 
+//
+// CV_THRESH_*
+//
+CONST(THRESH_BINARY);
+CONST(THRESH_BINARY_INV);
+CONST(THRESH_TRUNC);
+CONST(THRESH_TOZERO);
+CONST(THRESH_TOZERO_INV);
+
+//
+// cvThreshold
+//
+value hx_cv_imgproc_threshold(value src, value dst, value threshold, value maxValue, value thresholdType) {
+    return alloc<double>(cvThreshold(val_data(src), val_data(dst), val_get<double>(threshold), val_get<double>(maxValue), val_get<int>(thresholdType)));
+}
+DEFINE_PRIM(hx_cv_imgproc_threshold, 5);
+
+
 extern "C" void imgproc_allocateKinds() {
     k_ConvKernel = alloc_kind();
 }

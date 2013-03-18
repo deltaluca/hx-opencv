@@ -136,6 +136,8 @@ class Core implements CvConsts implements CvProcs {
         var _stdDev:Scalar_ = stdDev;
         load("avgSdv", 4)(arr.nativeObject, _mean.nativeObject, _stdDev.nativeObject, NativeBinding.native(mask));
     }
+    @:CvProc function cartToPolar(x:Arr, y:Arr, magnitude:Null<Arr>, angle:Null<Arr>, angleInDegrees:Bool=false)
+        load("cartToPolar", 5)(x.nativeObject, y.nativeObject, NativeBinding.native(magnitude), NativeBinding.native(angle), angleInDegrees ? 1 : 0);
     @:CvProc function cloneImage(image:Image):Image
         return new Image(Core.load("cloneImage", 1)(image.nativeObject));
     @:CvProc function cloneMat(mat:Mat):Mat
@@ -236,6 +238,16 @@ class Core implements CvConsts implements CvProcs {
         return Core.load("mGet", 3)(mat.nativeObject, i, j);
     @:CvProc function mSet(mat:Mat, i:Int, j:Int, value:Float):Float
         return Core.load("mSet", 4)(mat.nativeObject, i, j, value);
+    @:CvProc function mul(src1:Arr, src2:Arr, dst:Arr, scale:Float=1)
+        return Core.load("mul", 4)(src1.nativeObject, src2.nativeObject, dst.nativeObject, scale);
+    @:CvProc function scaleAdd(src1:Arr, scale:Scalar, src2:Arr, dst:Arr) {
+        var _scale:Scalar_ = scale;
+        Core.load("scaleAdd", 4)(src1.nativeObject, _scale.nativeObject, src2.nativeObject, dst.nativeObject);
+    }
+    @:CvProc function set(arr:Arr, value:Scalar, ?mask:Null<Arr>) {
+        var _value:Scalar_ = value;
+        Core.load("set", 3)(arr.nativeObject, _value.nativeObject, NativeBinding.native(mask));
+    }
 
 
     @:CvProc function circle(img:Arr, center:Point, radius:Int, color:RGB, thickness:Int=1, lineType:Int=8, shift:Int=0) {
@@ -250,9 +262,9 @@ class Core implements CvConsts implements CvProcs {
         var _color:Scalar_ = color;
         Core.load("rectangle", 7)(img.nativeObject, pt1.nativeObject, pt2.nativeObject, _color.nativeObject, thickness, lineType, shift);
     }
-    @:CvProc function gray(gray:Int=0):RGB
+    @:CvProc function gray(gray:Float=0):RGB
         return scalar(gray, gray, gray);
-    @:CvProc function rgb(r:Int=0, g:Int=0, b:Int=0):RGB
+    @:CvProc function rgb(r:Float=0, g:Float=0, b:Float=0):RGB
         return scalar(b, g, r);
     @:CvProc function createFont(fontFace:Int, hscale:Float=1, vscale:Float=1, shear:Float=0, thickness:Int=1, lineType:Int=8):Font
         return NativeBinding.generic(Core.load("createFont", 6)(fontFace, hscale, vscale, shear, thickness, lineType));

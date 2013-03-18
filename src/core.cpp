@@ -371,6 +371,7 @@ CONST(DXT_INVERSE_SCALE);
 // cvAndS
 // cvAvg
 // cvAvgSdv
+// cvCartToPolar
 // cvCmp
 // cvCmpS
 // cvConvertScale
@@ -397,6 +398,9 @@ CONST(DXT_INVERSE_SCALE);
 // cvGetRows
 // cvGetSize
 // cvGetSubRect
+// cvMul
+// cvScaleAdd
+// cvSet
 //
 void hx_cv_core_absDiff(value src1, value src2, value dst) {
     cvAbsDiff(val_data(src1), val_data(src2), val_data(dst));
@@ -437,6 +441,9 @@ void hx_cv_core_avgSdv(value arr, value mean, value stdDev, value mask) {
     val_check_kind(mean, k_Scalar);
     val_check_kind(stdDev, k_Scalar);
     cvAvgSdv(val_data(arr), (CvScalar*)val_data(mean), (CvScalar*)val_data(stdDev), val_data(mask));
+}
+void hx_cv_core_cartToPolar(value x, value y, value magnitude, value angle, value angleInDegrees) {
+    cvCartToPolar(val_data(x), val_data(y), val_data(magnitude), val_data(angle), val_get<int>(angleInDegrees));
 }
 void hx_cv_core_cmp(value src1, value src2, value dst, value cmpOp) {
     cvCmp(val_data(src1), val_data(src2), val_data(dst), val_get<int>(cmpOp));
@@ -539,6 +546,17 @@ value hx_cv_core_getSubRect(value arr, value submat, value rect) {
     val_check_kind(rect, k_Rect);
     return CONVERT_NOGC(core, Mat, cvGetSubRect(val_data(arr), (CvMat*)val_data(submat), *(CvRect*)val_data(rect)));
 }
+void hx_cv_core_mul(value src1, value src2, value dst, value scale) {
+    cvMul(val_data(src1), val_data(src2), val_data(dst), val_get<double>(scale));
+}
+void hx_cv_core_scaleAdd(value src1, value scale, value src2, value dst) {
+    val_check_kind(scale, k_Scalar);
+    cvScaleAdd(val_data(src1), *(CvScalar*)val_data(scale), val_data(src2), val_data(dst));
+}
+void hx_cv_core_set(value arr, value _value, value mask) {
+    val_check_kind(_value, k_Scalar);
+    cvSet(val_data(arr), *(CvScalar*)val_data(_value), val_data(mask));
+}
 DEFINE_PRIM(hx_cv_core_absDiff,         3);
 DEFINE_PRIM(hx_cv_core_absDiffS,        3);
 DEFINE_PRIM(hx_cv_core_add,             4);
@@ -548,6 +566,7 @@ DEFINE_PRIM(hx_cv_core_and,             4);
 DEFINE_PRIM(hx_cv_core_andS,            4);
 DEFINE_PRIM(hx_cv_core_avg,             2);
 DEFINE_PRIM(hx_cv_core_avgSdv,          4);
+DEFINE_PRIM(hx_cv_core_cartToPolar,     5);
 DEFINE_PRIM(hx_cv_core_cmp,             4);
 DEFINE_PRIM(hx_cv_core_cmpS,            4);
 DEFINE_PRIM(hx_cv_core_convertScale,    4);
@@ -574,6 +593,9 @@ DEFINE_PRIM(hx_cv_core_getRealND,       2);
 DEFINE_PRIM_MULT(hx_cv_core_getRows);
 DEFINE_PRIM(hx_cv_core_getSize,         1);
 DEFINE_PRIM(hx_cv_core_getSubRect,      3);
+DEFINE_PRIM(hx_cv_core_mul,             4);
+DEFINE_PRIM(hx_cv_core_scaleAdd,        4);
+DEFINE_PRIM(hx_cv_core_set,             3);
 
 
 
