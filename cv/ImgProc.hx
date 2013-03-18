@@ -206,4 +206,17 @@ class ImgProc implements CvConsts implements CvProcs {
 
     @:CvProc function threshold(src:Arr, dst:Arr, threshold:Float, maxValue:Float, thresholdType:Int)
         load("threshold", 5)(src.nativeObject, dst.nativeObject, threshold, maxValue, thresholdType);
+
+
+    // Differs from C-API with maxCorners parameter laying a cap on the number of corners to detect
+    // Corners are stored into the corners array (expanded as necessary) and this function
+    // returns the number of found corners (<= maxCorners)
+    @:CvProc function goodFeaturesToTrack(image:Arr, eigImage:Arr, tempImage:Arr, corners:Array<Point2D32f>, maxCorners:Int, qualityLevel:Float, minDistance:Float, ?mask:Null<Arr>, blockSize:Int=3, useHarris:Bool=false, k:Float=0.04):Int {
+        var corns = NativeBinding.mapNative(corners);
+        var ret = load("goodFeaturesToTrack", 11)(image.nativeObject, eigImage.nativeObject, tempImage.nativeObject, corns, maxCorners, qualityLevel, minDistance, NativeBinding.native(mask), blockSize, useHarris ? 1 : 0, k);
+        for (i in corners.length...ret)
+            corners[i] = new Point2D32f(corns[i]);
+        return ret;
+    }
+
 }

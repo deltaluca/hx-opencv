@@ -152,8 +152,8 @@ class Core implements CvConsts implements CvProcs {
         convertScale(src, dst);
     @:CvProc function convertScaleAbs(src:Arr, dst:Arr, scale:Float=1, shift:Float=0)
         load("convertScaleAbs", 4)(src.nativeObject, dst.nativeObject, scale, shift);
-    @:CvProc function copy(src:Arr, dst:Arr)
-        load("copy", 2)(src.nativeObject, dst.nativeObject);
+    @:CvProc function copy(src:Arr, dst:Arr, ?mask:Null<Arr>)
+        load("copy", 3)(src.nativeObject, dst.nativeObject, NativeBinding.native(mask));
     @:CvProc function countNonZero(arr:Arr):Int
         return load("countNonZero", 1)(arr.nativeObject);
     @:CvProc function createData(arr:Arr)

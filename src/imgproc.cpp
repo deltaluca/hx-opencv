@@ -352,19 +352,37 @@ DEFINE_PRIM(hx_cv_imgproc_threshold, 5);
 // cvGoodFeaturesToTrack
 //
 value hx_cv_imgproc_goodFeaturesToTrack(value* args, int nargs) {
-    if (nargs != 10) neko_error();
+    if (nargs != 11) neko_error();
     const CvArr* image     = val_data(args[0]);
-    const CvArr* eigImage  = val_data(args[1]);
-    const CvArr* tempImage = val_data(args[2]);
+          CvArr* eigImage  = val_data(args[1]);
+          CvArr* tempImage = val_data(args[2]);
     value corners          = args[3];
-    double qualityLevel    = val_get<double>(args[4]);
-    double minDistance     = val_get<double>(args[5]);
-    const CvArr* mask      = val_data(args[6]);
-    int blockSize          = val_get<int>(args[7]);
-    int useHarris          = val_get<int>(args[8]);
-    double k               = val_get<double>(args[9]);
-    return val_null;
+    int cornerCount        = val_get<int>(args[4]);
+    double qualityLevel    = val_get<double>(args[5]);
+    double minDistance     = val_get<double>(args[6]);
+    const CvArr* mask      = val_data(args[7]);
+    int blockSize          = val_get<int>(args[8]);
+    int useHarris          = val_get<int>(args[9]);
+    double k               = val_get<double>(args[10]);
+
+    val_check(corners, array);
+
+    CvPoint2D32f* corns = new CvPoint2D32f[cornerCount];
+    cvGoodFeaturesToTrack(image, eigImage, tempImage, corns, &cornerCount, qualityLevel, minDistance, mask, blockSize, useHarris, k);
+
+    for (int i = 0; i < cornerCount; i++) {
+        if (i == val_array_size(corners)) {
+            val_array_set_i(corners, i, CONVERT(core, Point2D32f, new CvPoint2D32f));
+        }
+        CvPoint2D32f* p = (CvPoint2D32f*)val_data(val_array_i(corners, i));
+        p->x = corns[i].x;
+        p->y = corns[i].y;
+    }
+
+    delete[] corns;
+    return alloc<int>(cornerCount);
 }
+DEFINE_PRIM_MULT(hx_cv_imgproc_goodFeaturesToTrack);
 
 
 
