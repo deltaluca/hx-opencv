@@ -7,6 +7,7 @@
 #define PROP(N, M, I) PPROP(video, N, M, I)
 
 #include "core.h"
+#include <core/core_c.h>
 
 
 
@@ -95,6 +96,9 @@ void hx_cv_video_calcOpticalFlowPyrLK(value* args, int nargs) {
     cvCalcOpticalFlowPyrLK(prev, curr, prevPyr, currPyr, _prev, _curr, count, *(CvSize*)val_data(winSize), level, _status, _error, *(CvTermCriteria*)val_data(criteria), flags);
 
     for (int i = 0; i < count; i++) {
+        if (val_array_size(currFeatures) == i) {
+            val_array_set_i(currFeatures, i, CONVERT(core, Point2D32f, new CvPoint2D32f));
+        }
         CvPoint2D32f* p = (CvPoint2D32f*)val_data(val_array_i(currFeatures, i));
         p->x = _curr[i].x;
         p->y = _curr[i].y;

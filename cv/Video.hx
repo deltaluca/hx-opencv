@@ -27,6 +27,11 @@ class Video implements CvConsts implements CvProcs {
         @:CvCheck if (winSize.height & (winSize.height + 1) != 0) throw "winSize.height must be power of 2, minus 1";
         load("calcOpticalFlowLK", 5)(prev.nativeObject, curr.nativeObject, winSize.nativeObject, velx.nativeObject, vely.nativeObject);
     }
-    @:CvProc function calcOpticalFlowPyrLK(prev:Arr, curr:Arr, prevPyr:Null<Arr>, currPyr:Null<Arr>, prevFeatures:Array<Point2D32f>, currFeatures:Array<Point2D32f>, winSize:Size, level:Int, status:Array<Bool>, error:Null<Array<Float>>, criteria:TermCriteria, flags:Int)
-        load("calcOpticalFlowPyrLK", 13)(prev.nativeObject, curr.nativeObject, NativeBinding.native(prevPyr), NativeBinding.native(currPyr), NativeBinding.mapNative(prevFeatures), NativeBinding.mapNative(currFeatures), prevFeatures.length, winSize.nativeObject, level, status, error, criteria.nativeObject, flags);
+    @:CvProc function calcOpticalFlowPyrLK(prev:Arr, curr:Arr, prevPyr:Null<Arr>, currPyr:Null<Arr>, prevFeatures:Array<Point2D32f>, currFeatures:Array<Point2D32f>, winSize:Size, level:Int, status:Array<Bool>, error:Null<Array<Float>>, criteria:TermCriteria, flags:Int) {
+        var currs = NativeBinding.mapNative(currFeatures);
+        load("calcOpticalFlowPyrLK", 13)(prev.nativeObject, curr.nativeObject, NativeBinding.native(prevPyr), NativeBinding.native(currPyr), NativeBinding.mapNative(prevFeatures), currs, prevFeatures.length, winSize.nativeObject, level, status, error, criteria.nativeObject, flags);
+        for (i in currFeatures.length...currs.length) {
+            currFeatures[i] = new Point2D32f(currs[i]);
+        }
+    }
 }

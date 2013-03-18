@@ -25,7 +25,8 @@
     } \
     DEFINE_PRIM(hx_cv_core_##N, 2); \
     PROP(N, x, F); \
-    PROP(N, y, F)
+    PROP(N, y, F); \
+    PDEFINE_CONVERT_GENERIC(core, N)
 INIT_POINT2D(Point,      int   );
 INIT_POINT2D(Point2D32f, double);
 INIT_POINT2D(Point2D64f, double);

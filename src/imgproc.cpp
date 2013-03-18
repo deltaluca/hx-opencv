@@ -336,6 +336,8 @@ CONST(THRESH_TRUNC);
 CONST(THRESH_TOZERO);
 CONST(THRESH_TOZERO_INV);
 
+
+
 //
 // cvThreshold
 //
@@ -343,6 +345,27 @@ value hx_cv_imgproc_threshold(value src, value dst, value threshold, value maxVa
     return alloc<double>(cvThreshold(val_data(src), val_data(dst), val_get<double>(threshold), val_get<double>(maxValue), val_get<int>(thresholdType)));
 }
 DEFINE_PRIM(hx_cv_imgproc_threshold, 5);
+
+
+
+//
+// cvGoodFeaturesToTrack
+//
+value hx_cv_imgproc_goodFeaturesToTrack(value* args, int nargs) {
+    if (nargs != 10) neko_error();
+    const CvArr* image     = val_data(args[0]);
+    const CvArr* eigImage  = val_data(args[1]);
+    const CvArr* tempImage = val_data(args[2]);
+    value corners          = args[3];
+    double qualityLevel    = val_get<double>(args[4]);
+    double minDistance     = val_get<double>(args[5]);
+    const CvArr* mask      = val_data(args[6]);
+    int blockSize          = val_get<int>(args[7]);
+    int useHarris          = val_get<int>(args[8]);
+    double k               = val_get<double>(args[9]);
+    return val_null;
+}
+
 
 
 extern "C" void imgproc_allocateKinds() {
