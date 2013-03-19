@@ -1,4 +1,5 @@
 #include <video/video.hpp>
+#include <legacy/legacy.hpp>
 
 #include "utils.h"
 #define CONST(N) PCONST(video, N)

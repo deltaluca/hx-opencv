@@ -1,4 +1,6 @@
-Haxe-c++ bindings for OpenCV (C API) version 2.3.1 (latest Debian testing version)
+Haxe-c++ bindings for OpenCV (C API)
+
+Built against OpenCV 2.4.4 (built from source) with QT 4.8.2 and OpenGL on Linux64.
 
 This is incredibly early alpha I suppose, I am not at this time intending myself to fully
 support the entirety of the C API, and the API that is supported will not have been

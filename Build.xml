@@ -18,7 +18,7 @@
 
     <files id="common">
         <compilerflag value="-Iinclude"/>
-        <compilerflag value="-I/usr/include/opencv2"/>
+        <compilerflag value="-I/usr/local/include/opencv2"/>
 
         <file name="src/main.cpp"/>
         <file name="src/highgui.cpp"/>
@@ -54,6 +54,7 @@
         <lib name="-lopencv_contrib"/>
         <lib name="-lopencv_legacy"/>
         <lib name="-lopencv_flann"/>
+        <lib name="-lopencv_nonfree"/>
 
     </target>
 
