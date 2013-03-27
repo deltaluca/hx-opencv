@@ -25,6 +25,8 @@
         <file name="src/core.cpp"/>
         <file name="src/video.cpp"/>
         <file name="src/imgproc.cpp"/>
+        <file name="src/nonfree.cpp"/>
+        <file name="src/features2d.cpp"/>
     </files>
 
     <!-- Generate the NDLL. -->
@@ -43,18 +45,20 @@
         <!-- Static libraries for OpenCV and its dependencies -->
         <!------------------------------------------------------>
 
+        <flag value="-L/usr/local/lib"/>
+
         <lib name="-lopencv_core"/>
         <lib name="-lopencv_imgproc"/>
         <lib name="-lopencv_highgui"/>
-        <lib name="-lopencv_ml"/>
         <lib name="-lopencv_video"/>
-        <lib name="-lopencv_features2d"/>
         <lib name="-lopencv_calib3d"/>
+        <lib name="-lopencv_features2d"/>
         <lib name="-lopencv_objdetect"/>
-        <lib name="-lopencv_contrib"/>
-        <lib name="-lopencv_legacy"/>
+        <lib name="-lopencv_ml"/>
         <lib name="-lopencv_flann"/>
         <lib name="-lopencv_nonfree"/>
+        <lib name="-lopencv_contrib"/>
+        <lib name="-lopencv_legacy"/>
 
     </target>
 

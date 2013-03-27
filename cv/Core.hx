@@ -138,7 +138,7 @@ class Core implements CvConsts implements CvProcs {
     @:CvProc function cmp (src1:Arr, src2:Arr,    dst:Arr, cmpOp:Int):Void;
     @:CvProc function cmpS(src :Arr, value:Float, dst:Arr, cmpOp:Int):Void;
 
-    @:CvProc function convert        (src:Arr, dst:Arr):Void;
+    @:CvProc function convert        (src:Arr, dst:Arr):Void convertScale(src, dst);
     @:CvProc function convertScale   (src:Arr, dst:Arr, scale:Float=1, shift:Float=0):Void;
     @:CvProc function convertScaleAbs(src:Arr, dst:Arr, scale:Float=1, shift:Float=0):Void;
 

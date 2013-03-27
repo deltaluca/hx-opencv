@@ -54,6 +54,9 @@ void finaliser(value v) {
 
 
 // Conversions between moduels
+#define CPPDECLARE_CONVERT(P, N) \
+    value hx_cv_##P##_to##N(cv::N* x); \
+    value hx_cv_##P##_to##N##_nogc(cv::N* x)
 #define GDECLARE_CONVERT(R, P, N) \
     value hx_cv_##P##_to##N(R##N* x); \
     value hx_cv_##P##_to##N##_nogc(R##N* x)
@@ -72,6 +75,19 @@ void finaliser(value v) {
     }
 #define PDEFINE_CONVERT(P, N, F) GDEFINE_CONVERT(Cv, P, N, F)
 #define PDEFINE_CONVERT_GENERIC(P, N) GDEFINE_CONVERT(Cv, P, N, finaliser<Cv##N>)
+#define CPPDEFINE_CONVERT(P, N, F) \
+    value hx_cv_##P##_to##N(cv::N* ptr) { \
+        if (ptr == NULL) return val_null; \
+        value v = alloc_abstract(k_##N, ptr); \
+        val_gc(v, F); \
+        return v; \
+    } \
+    value hx_cv_##P##_to##N##_nogc(cv::N* ptr) { \
+        if (ptr == NULL) return val_null; \
+        value v = alloc_abstract(k_##N, ptr); \
+        return v; \
+    }
+#define CPPDEFINE_CONVERT_GENERIC(P, N) CPPDEFINE_CONVERT(P, N, finaliser<cv::N>)
 
 #define CONVERT(P, N, x) hx_cv_##P##_to##N(x)
 #define CONVERT_NOGC(P, N, x) hx_cv_##P##_to##N##_nogc(x)
@@ -105,4 +121,25 @@ void finaliser(value v) {
 #define PPROP(P, N, M, I) \
     PGETPROP(P, N, M, I); \
     PSETPROP(P, N, M, I)
+
+// Same for cv:: object
+#define PPPGETPROP(P, N, M, I) \
+    value hx_cv_##P##_##N##_get_##M(value v) { \
+        val_check_kind(v, k_##N); \
+        cv::N* ptr = (cv::N*)val_data(v); \
+        return alloc<I>(ptr->M); \
+    } \
+    DEFINE_PRIM(hx_cv_##P##_##N##_get_##M, 1)
+#define PPPSETPROP(P, N, M, I) \
+    value hx_cv_##P##_##N##_set_##M(value v, value M) { \
+        val_check_kind(v, k_##N); \
+        cv::N* ptr = (cv::N*)val_data(v); \
+        return alloc<I>(ptr->M = val_get<I>(M)); \
+    } \
+    DEFINE_PRIM(hx_cv_##P##_##N##_set_##M, 2)
+#define PPPPROP(P, N, M, I) \
+    PPPGETPROP(P, N, M, I); \
+    PPPSETPROP(P, N, M, I)
+
+
 #endif

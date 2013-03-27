@@ -1,6 +1,6 @@
 all: lib main
 	cp ndll/Linux64/opencv.ndll bin/opencv.ndll && cd bin && ./Main-debug
-	cd bin && neko Main.n
+#	cd bin && neko Main.n
 
 .PHONY: lib
 lib:
