@@ -15,6 +15,7 @@ CONST(WINDOW_NORMAL);
 CONST(WINDOW_AUTOSIZE);
 CONST(WINDOW_FREERATIO);
 CONST(WINDOW_KEEPRATIO);
+CONST(WINDOW_OPENGL);
 CONST(GUI_NORMAL);
 CONST(GUI_EXPANDED);
 
@@ -154,6 +155,9 @@ DEFINE_PRIM(hx_cv_highgui_setTrackbarPos, 3);
 
 //
 // cvSetMouseCallback
+// cvSetOpenGlContext
+// cvSetOpenGLDrawCallback
+// cvUpdateWindow
 //
 void bound_onMouse(int event, int x, int y, int flags, void* onMouse) {
     if (onMouse == NULL) return;
@@ -164,7 +168,24 @@ void hx_cv_highgui_setMouseCallback(value windowName, value onMouse) {
     val_check_function(onMouse, 4);
     cvSetMouseCallback(val_get<string>(windowName), bound_onMouse, onMouse);
 }
-DEFINE_PRIM(hx_cv_highgui_setMouseCallback, 2);
+void bound_onDraw(void* onDraw) {
+    if (onDraw == NULL) return;
+    val_call0((value)onDraw);
+}
+void hx_cv_highgui_setOpenGlDrawCallback(value window, value onDraw) {
+    val_check_function(onDraw, 0);
+    cvSetOpenGlDrawCallback(val_get<string>(window), bound_onDraw, onDraw);
+}
+void hx_cv_highgui_setOpenGlContext(value window) {
+    cvSetOpenGlContext(val_get<string>(window));
+}
+void hx_cv_highgui_updateWindow(value window) {
+    cvUpdateWindow(val_get<string>(window));
+}
+DEFINE_PRIM(hx_cv_highgui_setMouseCallback,      2);
+DEFINE_PRIM(hx_cv_highgui_setOpenGlDrawCallback, 2);
+DEFINE_PRIM(hx_cv_highgui_setOpenGlContext,      1);
+DEFINE_PRIM(hx_cv_highgui_updateWindow,          1);
 
 
 

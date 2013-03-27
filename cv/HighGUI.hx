@@ -20,6 +20,7 @@ class HighGUI implements CvConsts implements CvProcs {
     @:CvConst var CV_WINDOW_AUTOSIZE;
     @:CvConst var CV_WINDOW_FREERATIO;
     @:CvConst var CV_WINDOW_KEEPRATIO;
+    @:CvConst var CV_WINDOW_OPENGL;
     @:CvConst var CV_GUI_NORMAL;
     @:CvConst var CV_GUI_EXPANDED;
 
@@ -105,8 +106,12 @@ class HighGUI implements CvConsts implements CvProcs {
 
     // -------------------------
     // Mouse callbacks for windows.
+    // OpenGL callbacks for windows.
     // -------------------------
     @:CvProc function setMouseCallback(windowName:String, onMouse:Int->Int->Int->Int->Void):Void;
+    @:CvProc function setOpenGlDrawCallback(windowName:String, onDraw:Void->Void):Void;
+    @:CvProc function setOpenGlContext(windowName:String):Void;
+    @:CvProc function updateWindow(windowName:String):Void;
 
     // -------------------------
     // QT Extra Functions
