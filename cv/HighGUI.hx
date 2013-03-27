@@ -72,6 +72,13 @@ class HighGUI implements CvConsts implements CvProcs {
     @:CvConst var CV_CAP_PROP_FRAME_COUNT;
 
     // -------------------------
+    // Button Types
+    // -------------------------
+    @:CvConst var CV_PUSH_BUTTON;
+    @:CvConst var CV_CHECKBOX;
+    @:CvConst var CV_RADIOBOX;
+
+    // -------------------------
     // System interaction.
     // -------------------------
     @:CvProc function initSystem(args:Array<String>):Int return load("initSystem", 2)(args.length, args);
@@ -89,9 +96,10 @@ class HighGUI implements CvConsts implements CvProcs {
     @:CvProc function destroyAllWindows():Void;
 
     // -------------------------
-    // Trackbar management.
+    // Trackbar/Button management.
     // -------------------------
     @:CvProc function createTrackbar(trackbarName:String, ?windowName:Null<String>, value:Int, count:Int, ?onChange:Null<Int->Void>):Int;
+    @:CvProc(buttonType=CV_PUSH_BUTTON) function createButton(buttonName:String, onChange:Int->Void, ?buttonType:Null<Int>, initialButtonState:Int=0):Int;
     @:CvProc function getTrackbarPos(trackbarName:String, ?windowName:Null<String>):Int;
     @:CvProc function setTrackbarPos(trackbarName:String, ?windowName:Null<String>, pos:Int):Void;
 
@@ -99,6 +107,13 @@ class HighGUI implements CvConsts implements CvProcs {
     // Mouse callbacks for windows.
     // -------------------------
     @:CvProc function setMouseCallback(windowName:String, onMouse:Int->Int->Int->Int->Void):Void;
+
+    // -------------------------
+    // QT Extra Functions
+    // -------------------------
+    @:CvProc function displayOverlay(windowName:String, text:String, delayms:Int=0):Void;
+    @:CvProc function displayStatusBar(windowName:String, text:String, delayms:Int=0):Void;
+
 
     // ------------------------
     // Image rendering.

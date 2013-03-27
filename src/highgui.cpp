@@ -100,7 +100,17 @@ DEFINE_PRIM(hx_cv_highgui_resizeWindow,      3);
 
 
 //
+// CV_*
+//
+CONST(PUSH_BUTTON);
+CONST(CHECKBOX);
+CONST(RADIOBOX);
+
+
+
+//
 // cvCreateTrackbar
+// cvCreateButton
 // cvGetTrackbarPos
 // cvSetTrackbarPos
 //
@@ -122,6 +132,13 @@ value hx_cv_highgui_createTrackbar(value trackbarName, value windowName, value _
         return alloc<int>(cvCreateTrackbar2(val_get<string>(trackbarName), safe_val_string(windowName), val, val_get<int>(count), bound_onChanged, onChange));
     }
 }
+void bound_onButtonChanged(int state, void* onChange) {
+    if (onChange == NULL) return;
+    val_call1((value)onChange, alloc<int>(state));
+}
+value hx_cv_highgui_createButton(value buttonName, value onChange, value buttonType, value initialState) {
+    return alloc<int>(cvCreateButton(val_get<string>(buttonName), bound_onButtonChanged, onChange, val_get<int>(buttonType), val_get<int>(initialState)));
+}
 value hx_cv_highgui_getTrackbarPos(value trackbarName, value windowName) {
     return alloc_int(cvGetTrackbarPos(val_get<string>(trackbarName), safe_val_string(windowName)));
 }
@@ -129,6 +146,7 @@ void hx_cv_highgui_setTrackbarPos(value trackbarName, value windowName, value po
     cvSetTrackbarPos(val_get<string>(trackbarName), safe_val_string(windowName), val_get<int>(pos));
 }
 DEFINE_PRIM(hx_cv_highgui_createTrackbar, 5);
+DEFINE_PRIM(hx_cv_highgui_createButton,   4);
 DEFINE_PRIM(hx_cv_highgui_getTrackbarPos, 2);
 DEFINE_PRIM(hx_cv_highgui_setTrackbarPos, 3);
 
@@ -147,6 +165,21 @@ void hx_cv_highgui_setMouseCallback(value windowName, value onMouse) {
     cvSetMouseCallback(val_get<string>(windowName), bound_onMouse, onMouse);
 }
 DEFINE_PRIM(hx_cv_highgui_setMouseCallback, 2);
+
+
+
+//
+// cvDisplayOverlay
+// cvDisplayStatusBar
+//
+void hx_cv_highgui_displayOverlay(value name, value text, value delayms) {
+    cvDisplayOverlay(val_get<string>(name), val_get<string>(text), val_get<int>(delayms));
+}
+void hx_cv_highgui_displayStatusBar(value name, value text, value delayms) {
+    cvDisplayStatusBar(val_get<string>(name), val_get<string>(text), val_get<int>(delayms));
+}
+DEFINE_PRIM(hx_cv_highgui_displayOverlay,   3);
+DEFINE_PRIM(hx_cv_highgui_displayStatusBar, 3);
 
 
 
