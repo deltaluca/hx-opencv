@@ -50,11 +50,13 @@ value hx_cv_nonfree_SIFT_detect(value* args, int nargs) {
         p->operator=(_keypoints[i]);
     }
 
-    val_array_set_size(descriptors, _descriptors.size().width*_descriptors.size().height);
-    double* dd = val_array_double(descriptors);
-    for (int i = 0; i < _descriptors.size().height; i++) {
-        for (int j = 0; j < _descriptors.size().width; j++) {
-            dd[i*_descriptors.size().width+j] = _descriptors.at<float>(i, j);
+    if (!val_is_null(descriptors)) {
+        val_array_set_size(descriptors, _descriptors.size().width*_descriptors.size().height);
+        double* dd = val_array_double(descriptors);
+        for (int i = 0; i < _descriptors.size().height; i++) {
+            for (int j = 0; j < _descriptors.size().width; j++) {
+                dd[i*_descriptors.size().width+j] = _descriptors.at<float>(i, j);
+            }
         }
     }
 
