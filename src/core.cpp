@@ -288,6 +288,14 @@ MATVAL(int,    i,   int   );
 MATVAL(float,  fl,  double);
 MATVAL(double, db,  double);
 
+// For ogl
+value hx_cv_core_Mat_get_raw(value image) {
+    val_check_kind(image, k_Mat);
+    CvMat* ptr = (CvMat*)val_data(image);
+    return (value)(ptr->data.ptr);
+}
+DEFINE_PRIM(hx_cv_core_Mat_get_raw, 1);
+
 
 
 //
@@ -339,6 +347,13 @@ GGETPROP(core, Ipl, Image, height,    int);
 GGETPROP(core, Ipl, Image, imageSize, int);
 GGETPROP(core, Ipl, Image, widthStep, int);
 
+// For ogl
+value hx_cv_core_Image_get_raw(value image) {
+    val_check_kind(image, k_Image);
+    IplImage* ptr = (IplImage*)val_data(image);
+    return (value)(ptr->imageData);
+}
+DEFINE_PRIM(hx_cv_core_Image_get_raw, 1);
 
 
 //

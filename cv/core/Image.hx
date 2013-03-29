@@ -12,6 +12,8 @@ class Image extends NativeBinding {
         return if (x == null) null else new Image(x);
     }
 
+    public var raw(get,never):Dynamic;
+    inline function get_raw():Dynamic { return Core.load("Image_get_raw", 1)(this.nativeObject); }
 
 
     public var nChannels(get,never):Int;
