@@ -5,6 +5,26 @@
 #include "utils.h"
 #define CONST(N) PCONST(highgui, N)
 
+#include <vector>
+#include <map>
+#include <string>
+
+typedef std::vector<AutoGCRoot*> WindowRoots;
+typedef std::map<std::string, WindowRoots> WindowCleanup;
+
+WindowCleanup cleanup;
+void cleanup_window(const std::string& wname) {
+    WindowRoots& roots = cleanup[wname];
+    while (!roots.empty()) {
+        delete roots.back();
+        roots.pop_back();
+    }
+}
+void add_cleanup(value wname, AutoGCRoot* root) {
+    if (val_is_null(wname)) cleanup["!!control_panel!!"].push_back(root);
+    else cleanup[val_get<string>(wname)].push_back(root);
+}
+
 
 
 //
@@ -82,9 +102,13 @@ value hx_cv_highgui_namedWindow(value winname, value flags) {
 }
 void hx_cv_highgui_destroyWindow(value name) {
     cvDestroyWindow(val_get<string>(name));
+    cleanup_window(val_get<string>(name));
 }
 void hx_cv_highgui_destroyAllWindows() {
     cvDestroyAllWindows();
+    for (WindowCleanup::iterator i = cleanup.begin(); i != cleanup.end(); i++) {
+        cleanup_window(i->first);
+    }
 }
 void hx_cv_highgui_moveWindow(value name, value x, value y) {
     cvMoveWindow(val_get<string>(name), val_get<int>(x), val_get<int>(y));
@@ -126,6 +150,8 @@ value hx_cv_highgui_createTrackbar(value trackbarName, value windowName, value _
     int* val = &hx_cv_highgui_trackbar_value;
     *val = val_get<int>(_value);
 
+    add_cleanup(windowName, new AutoGCRoot(onChange));
+
     if (val_is_null(onChange)) {
         return alloc<int>(cvCreateTrackbar(val_get<string>(trackbarName), safe_val_string(windowName), val, val_get<int>(count)));
     }
@@ -138,6 +164,7 @@ void bound_onButtonChanged(int state, void* onChange) {
     val_call1((value)onChange, alloc<int>(state));
 }
 value hx_cv_highgui_createButton(value buttonName, value onChange, value buttonType, value initialState) {
+    add_cleanup(val_null, new AutoGCRoot(onChange));
     return alloc<int>(cvCreateButton(val_get<string>(buttonName), bound_onButtonChanged, onChange, val_get<int>(buttonType), val_get<int>(initialState)));
 }
 value hx_cv_highgui_getTrackbarPos(value trackbarName, value windowName) {
@@ -166,6 +193,7 @@ void bound_onMouse(int event, int x, int y, int flags, void* onMouse) {
 }
 void hx_cv_highgui_setMouseCallback(value windowName, value onMouse) {
     val_check_function(onMouse, 4);
+    add_cleanup(windowName, new AutoGCRoot(onMouse));
     cvSetMouseCallback(val_get<string>(windowName), bound_onMouse, onMouse);
 }
 void bound_onDraw(void* onDraw) {
@@ -174,6 +202,7 @@ void bound_onDraw(void* onDraw) {
 }
 void hx_cv_highgui_setOpenGlDrawCallback(value window, value onDraw) {
     val_check_function(onDraw, 0);
+    add_cleanup(window, new AutoGCRoot(onDraw));
     cvSetOpenGlDrawCallback(val_get<string>(window), bound_onDraw, onDraw);
 }
 void hx_cv_highgui_setOpenGlContext(value window) {
