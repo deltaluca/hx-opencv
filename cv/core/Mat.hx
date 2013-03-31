@@ -10,8 +10,12 @@ class Mat extends NativeBinding {
         return if (x == null) null else new Mat(x);
     }
 
-    public var raw(get, never):Dynamic;
-    inline function get_raw():Dynamic { return Core.load("Mat_get_raw", 1)(this.nativeObject); }
+    public var raw(get, never):{ref:Dynamic, raw:Dynamic};
+    inline function get_raw():Dynamic
+        return {
+            ref: nativeObject,
+            raw: Core.load("Mat_get_raw", 1)(nativeObject)
+        };
 
 
     public inline function get_uchar (i:Int):Int   { return Core.load("mat_uchar_get",  2)(this.nativeObject, i); }
