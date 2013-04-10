@@ -1,6 +1,7 @@
 package cv.core;
 
 import cv.core.Size;
+import haxe.io.BytesData;
 
 class Image extends NativeBinding {
     @:allow(cv)
@@ -12,13 +13,8 @@ class Image extends NativeBinding {
         return if (x == null) null else new Image(x);
     }
 
-    public var raw(get, never):{ref:Dynamic, raw:Dynamic};
-    inline function get_raw():Dynamic
-        return {
-            ref: nativeObject,
-            raw: Core.load("Image_get_raw", 1)(nativeObject)
-        };
-
+    public var raw(get, never):BytesData;
+    inline function get_raw():BytesData return Core.load("Image_get_raw", 1)(nativeObject);
 
     public var nChannels(get,never):Int;
     public var depth    (get,never):Int;

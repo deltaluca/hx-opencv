@@ -7,10 +7,6 @@
 #define PROP(N, M, I) PPROP(core, N, M, I)
 
 
-DECLARE_KIND(k_rawpointer);
-DEFINE_KIND(k_rawpointer);
-
-
 //
 // CvPoint
 // CvPoint2D32f
@@ -295,8 +291,10 @@ MATVAL(double, db,  double);
 value hx_cv_core_Mat_get_raw(value image) {
     val_check_kind(image, k_Mat);
     CvMat* ptr = (CvMat*)val_data(image);
-    value v = alloc_abstract(k_rawpointer, ptr->data.ptr);
-    return v;
+    int size = ptr->rows*ptr->step;
+    buffer ret = alloc_buffer_len(size);
+    memcpy(buffer_data(ret), ptr->data.ptr, size);
+    return buffer_val(ret);
 }
 DEFINE_PRIM(hx_cv_core_Mat_get_raw, 1);
 
@@ -355,8 +353,10 @@ GGETPROP(core, Ipl, Image, widthStep, int);
 value hx_cv_core_Image_get_raw(value image) {
     val_check_kind(image, k_Image);
     IplImage* ptr = (IplImage*)val_data(image);
-    value v = alloc_abstract(k_rawpointer, ptr->imageData);
-    return v;
+    int size = ptr->imageSize;
+    buffer ret = alloc_buffer_len(size);
+    memcpy(buffer_data(ret), ptr->imageData, size);
+    return buffer_val(ret);
 }
 DEFINE_PRIM(hx_cv_core_Image_get_raw, 1);
 
@@ -733,6 +733,4 @@ extern "C" void core_allocateKinds() {
     k_Mat          = alloc_kind();
     k_Image        = alloc_kind();
     k_Font         = alloc_kind();
-
-    k_rawpointer   = alloc_kind();
 }

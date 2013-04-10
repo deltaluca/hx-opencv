@@ -1,5 +1,7 @@
 package cv.core;
 
+import haxe.io.BytesData;
+
 class Mat extends NativeBinding {
     @:allow(cv)
     function new(nativeObject:Dynamic) {
@@ -10,13 +12,8 @@ class Mat extends NativeBinding {
         return if (x == null) null else new Mat(x);
     }
 
-    public var raw(get, never):{ref:Dynamic, raw:Dynamic};
-    inline function get_raw():Dynamic
-        return {
-            ref: nativeObject,
-            raw: Core.load("Mat_get_raw", 1)(nativeObject)
-        };
-
+    public var raw(get, never):BytesData;
+    inline function get_raw():BytesData return Core.load("Mat_get_raw", 1)(nativeObject);
 
     public inline function get_uchar (i:Int):Int   { return Core.load("mat_uchar_get",  2)(this.nativeObject, i); }
     public inline function get_short (i:Int):Int   { return Core.load("mat_short_get",  2)(this.nativeObject, i); }
