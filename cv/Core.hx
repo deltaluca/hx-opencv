@@ -103,6 +103,15 @@ class Core implements CvConsts implements CvProcs {
     @:CvConst var CV_AA;
     @:CvConst var CV_FILLED;
 
+    @:CvConst var DCT_INVERSE;
+    @:CvConst var DCT_ROWS;
+
+    @:CvConst var DFT_INVERSE;
+    @:CvConst var DFT_SCALE;
+    @:CvConst var DFT_ROWS;
+    @:CvConst var DFT_COMPLEX_OUTPUT;
+    @:CvConst var DFT_REAL_OUTPUT;
+
     // -------------------------
     // Flags for supported font faces.
     // -------------------------
@@ -174,7 +183,18 @@ class Core implements CvConsts implements CvProcs {
     @:CvProc function getReal3D(arr:Arr, idx0:Int, idx1:Int, idx2:Int):Float;
     @:CvProc function getRealND(arr:Arr, idx:Array<Int>):Float;
 
+    @:CvProc function magnitude(x:Arr, y:Arr, mag:Arr):Void;
+    @:CvProc function merge(mv:Array<Arr>, dst:Arr):Void {
+        load("merge", 2)(NativeBinding.mapNative(mv), dst.nativeObject);
+    }
+
     @:CvProc function set(arr:Arr, value:Scalar, ?mask:Null<Arr>):Void;
+
+    @:CvProc function split(src:Arr, mv:Array<Arr>):Void {
+        load("split", 2)(src.nativeObject, NativeBinding.mapNative(mv));
+    }
+    @:CvProc function phase(x:Arr, y:Arr, angle:Arr, angleInDegrees:Bool=false):Void;
+    @:CvProc function polarToCart(angle:Arr, phase:Arr, x:Arr, y:Arr, angleInDegrees:Bool=false):Void;
 
     // -------------------------
     // Image specific functions.

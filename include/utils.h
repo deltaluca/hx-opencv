@@ -102,6 +102,9 @@ void finaliser(value v) {
     DEFINE_PRIM(hx_cv_##P##_##R##_##N, 0)
 #define PCONST(P, N) GCONST(P, CV, N)
 
+#define GPPCONST(P, R, N) \
+    value hx_cv_##P##_##R##_##N() { return alloc_int(cv::R##_##N); } \
+    DEFINE_PRIM(hx_cv_##P##_##R##_##N, 0)
 
 
 // Defining properties of a Cv# object.

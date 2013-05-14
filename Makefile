@@ -13,5 +13,5 @@ main: Main.hx
 .PHONY: haxelib
 haxelib: lib
 	rm -f opencv.zip
-	zip -r opencv src cv include ndll Build.xml haxelib.xml
-	haxelib test opencv.zip
+	zip -r opencv src cv include ndll Build.xml haxelib.json
+	haxelib local opencv.zip

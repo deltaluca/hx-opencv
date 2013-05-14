@@ -1,4 +1,5 @@
 #include <core/core_c.h>
+#include <core/core.hpp>
 
 #include "utils.h"
 #define CONST(N) PCONST(core, N)
@@ -287,6 +288,16 @@ MATVAL(int,    i,   int   );
 MATVAL(float,  fl,  double);
 MATVAL(double, db,  double);
 
+DECLARE_KIND(k_CArray);
+DEFINE_KIND(k_CArray);
+
+value hx_cv_core_Mat_get_ptr(value image) {
+    CvMat* ptr = (CvMat*)val_data(image);
+    value ret = alloc_abstract(k_CArray, ptr->data.ptr);
+    return ret;
+}
+DEFINE_PRIM(hx_cv_core_Mat_get_ptr, 1);
+
 // For ogl
 value hx_cv_core_Mat_get_raw(value image) {
     val_check_kind(image, k_Mat);
@@ -381,6 +392,15 @@ CONST(DXT_INVERSE);
 CONST(DXT_SCALE);
 CONST(DXT_ROWS);
 CONST(DXT_INVERSE_SCALE);
+
+GPPCONST(core, DCT, INVERSE);
+GPPCONST(core, DCT, ROWS);
+
+GPPCONST(core, DFT, INVERSE);
+GPPCONST(core, DFT, SCALE);
+GPPCONST(core, DFT, ROWS);
+GPPCONST(core, DFT, COMPLEX_OUTPUT);
+GPPCONST(core, DFT, REAL_OUTPUT);
 
 //
 // cvAbsDiff
@@ -567,8 +587,27 @@ value hx_cv_core_getSubRect(value arr, value submat, value rect) {
     val_check_kind(rect, k_Rect);
     return CONVERT_NOGC(core, Mat, cvGetSubRect(val_data(arr), (CvMat*)val_data(submat), *(CvRect*)val_data(rect)));
 }
+
+void hx_cv_core_magnitude(value x, value y, value mag) {
+    cv::magnitude(cv::cvarrToMat(val_data(x)), cv::cvarrToMat(y), cv::cvarrToMat(mag));
+}
+void hx_cv_core_merge(value mv, value dst) {
+    CvArr* d = val_data(dst);
+    int cnt = val_array_size(mv);
+    CvArr* x = 0 >= cnt ? NULL : val_data(val_array_i(mv, 0));
+    CvArr* y = 1 >= cnt ? NULL : val_data(val_array_i(mv, 1));
+    CvArr* z = 2 >= cnt ? NULL : val_data(val_array_i(mv, 2));
+    CvArr* w = 3 >= cnt ? NULL : val_data(val_array_i(mv, 3));
+    cvMerge(x, y, z, w, d);
+}
 void hx_cv_core_mul(value src1, value src2, value dst, value scale) {
     cvMul(val_data(src1), val_data(src2), val_data(dst), val_get<double>(scale));
+}
+void hx_cv_core_phase(value x, value y, value angle, value deg) {
+    cv::phase(cv::cvarrToMat(val_data(x)), cv::cvarrToMat(val_data(y)), cv::cvarrToMat(val_data(angle)), val_get<bool>(deg));
+}
+void hx_cv_core_polarToCart(value mag, value phase, value x, value y, value angleInDegrees) {
+    cvPolarToCart(val_data(mag), val_data(phase), val_data(x), val_data(y), val_get<bool>(angleInDegrees));
 }
 void hx_cv_core_scaleAdd(value src1, value scale, value src2, value dst) {
     val_check_kind(scale, k_Scalar);
@@ -577,6 +616,15 @@ void hx_cv_core_scaleAdd(value src1, value scale, value src2, value dst) {
 void hx_cv_core_set(value arr, value _value, value mask) {
     val_check_kind(_value, k_Scalar);
     cvSet(val_data(arr), *(CvScalar*)val_data(_value), val_data(mask));
+}
+void hx_cv_core_split(value src, value mv) {
+    CvArr* s = val_data(src);
+    int cnt = val_array_size(mv);
+    CvArr* x = 0 >= cnt ? NULL : val_data(val_array_i(mv, 0));
+    CvArr* y = 1 >= cnt ? NULL : val_data(val_array_i(mv, 1));
+    CvArr* z = 2 >= cnt ? NULL : val_data(val_array_i(mv, 2));
+    CvArr* w = 3 >= cnt ? NULL : val_data(val_array_i(mv, 3));
+    cvSplit(s, x, y, z, w);
 }
 DEFINE_PRIM(hx_cv_core_absDiff,         3);
 DEFINE_PRIM(hx_cv_core_absDiffS,        3);
@@ -614,9 +662,14 @@ DEFINE_PRIM(hx_cv_core_getRealND,       2);
 DEFINE_PRIM_MULT(hx_cv_core_getRows);
 DEFINE_PRIM(hx_cv_core_getSize,         1);
 DEFINE_PRIM(hx_cv_core_getSubRect,      3);
+DEFINE_PRIM(hx_cv_core_magnitude,       3);
+DEFINE_PRIM(hx_cv_core_merge,           2);
 DEFINE_PRIM(hx_cv_core_mul,             4);
+DEFINE_PRIM(hx_cv_core_phase,           4);
+DEFINE_PRIM(hx_cv_core_polarToCart,     5);
 DEFINE_PRIM(hx_cv_core_scaleAdd,        4);
 DEFINE_PRIM(hx_cv_core_set,             3);
+DEFINE_PRIM(hx_cv_core_split,           2);
 
 
 
@@ -733,4 +786,6 @@ extern "C" void core_allocateKinds() {
     k_Mat          = alloc_kind();
     k_Image        = alloc_kind();
     k_Font         = alloc_kind();
+
+    k_CArray = alloc_kind();
 }

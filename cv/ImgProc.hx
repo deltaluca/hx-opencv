@@ -237,8 +237,19 @@ class ImgProc implements CvConsts implements CvProcs {
     @:CvConst var CV_THRESH_TOZERO_INV;
 
     // -------------------------
+    // Border flags.
+    // -------------------------
+    @:CvConst var BORDER_TRANSPARENT;
+    @:CvConst var BORDER_ISOLATED;
+    @:CvConst var BORDER_CONSTANT;
+    @:CvConst var BORDER_WRAP;
+    @:CvConst var BORDER_REFLECT_101;
+    @:CvConst var BORDER_DEFAULT;
+
+    // -------------------------
     // Image processing methods.
     // -------------------------
+    @:CvProc function bilateralFilter(src:Arr, dst:Arr, d:Int, sigmaColor:Float, sigmaSpace:Float):Void;
     @:CvProc function createStructuringElementEx(cols:Int, rows:Int, anchorX:Int, anchorY:Int, shape:Int, ?values:Null<Array<Int>>):ConvKernel {
         @:CvCheck if (shape == CV_SHAPE_CUSTOM && values == null) throw "values cannot be null when using CV_SHAPE_CUSTOM";
         return NativeBinding.generic(load("createStructuringElementEx", 6)(cols, rows, anchorX, anchorY, shape, values));
@@ -246,10 +257,12 @@ class ImgProc implements CvConsts implements CvProcs {
 
     @:CvProc function dilate(src:Arr, dst:Arr, ?element:Null<ConvKernel>, iterations:Int=1):Void;
     @:CvProc function erode (src:Arr, dst:Arr, ?element:Null<ConvKernel>, iterations:Int=1):Void;
+    @:CvProc function equalizeHist(src:Arr, dst:Arr):Void;
+    @:CvProc function equalizeHistAdaptive(src:Mat, dst:Mat, windowRows:Int, windowCols:Int, limit:Float=1.0, cutoff:Float=1.0):Void;
     @:CvProc(anchor=Core.point(-1,-1)) function filter2D(src:Arr, dst:Arr, kernel:Mat, ?anchor:Null<Point>):Void;
-
+    @:CvProc(borderType=BORDER_DEFAULT) function gaussianBlur(src:Arr, dst:Arr, ksize:Size, sigmaX:Float, sigmaY:Float=0.0, ?borderType:Null<Int>):Void;
     @:CvProc function threshold(src:Arr, dst:Arr, threshold:Float, maxValue:Float, thresholdType:Int):Void;
-
+    @:CvProc function medianBlur(src:Arr, dst:Arr, ksize:Int):Void;
     @:CvProc function morphologyEx(src:Arr, dst:Arr, tmp:Null<Arr>, element:ConvKernel, operation:Int, iterations:Int=1) {
         @:CvCheck(tmp) if (tmp == null && (operation == CV_MOP_GRADIENT)) throw "tmp Arr required for MOP_GRADIENT";
         @:CvCheck(tmp) if (tmp == null && src == dst && (operation == CV_MOP_TOPHAT || operation == CV_MOP_BLACKHAT)) throw "tmp Arr required for in-place MOP_TOPHAT/BLACKHAT";

@@ -20,7 +20,7 @@ abstract Scalar(Scalar_) from Scalar_ to Scalar_ {
 
 
     public inline function toString() {
-        return '{Scalar [${get(this, 0)},${get(this, 1)},${get(this, 2)},${get(this, 3)}]}';
+        return '{Scalar [${get(0)},${get(1)},${get(2)},${get(3)}]}';
     }
 }
 
