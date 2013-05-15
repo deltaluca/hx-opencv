@@ -13,6 +13,8 @@ class SURF extends NativeBinding {
         return if (x == null) null else new SURF(x);
     }
 
+    public var extended:Bool;
+
 
     // change of api on return value.
     @:CvProc public inline function detect(img:Arr, mask:Null<Arr>, keypoints:Array<KeyPoint>, ?descriptors:Null<Array<Float>>, useProvidedKeypoints:Bool=false):Int {

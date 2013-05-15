@@ -17,6 +17,10 @@ class NonFree implements CvConsts implements CvProcs {
     // SURF/SIFT
     // -------------------------
     // Differs from C++-API with non-constructor being used.
-    @:CvProc(SURF) function surf(hessianThreshold:Float, nOctaves:Int=4, nOctaveLayers:Int=2, extened:Bool=true, upright:Bool=false):SURF;
+    @:CvProc(SURF) function surf(hessianThreshold:Float, nOctaves:Int=4, nOctaveLayers:Int=2, extended:Bool=true, upright:Bool=false):SURF {
+        var ret = SURF.cvt(load("SURF", 5)(hessianThreshold, nOctaves, nOctaveLayers, extended, upright));
+        ret.extended = extended;
+        return ret;
+    }
     @:CvProc(SIFT) function sift(nFeatures:Int=0, nOctaveLayers:Int=3, constrastThreshold:Float=0.04, edgeThreshold:Float=10, sigma:Float=1.6):SIFT;
 }

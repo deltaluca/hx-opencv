@@ -21,6 +21,10 @@ class KeyPoint extends NativeBinding {
     public var octave  (get,never):Int;
     public var class_id(get,never):Int;
 
+    public static inline function make(x:Float, y:Float, size:Float, angle:Float, response:Float, octave:Float, class_id:Int=-1):KeyPoint {
+        return KeyPoint.cvt(Features2D.load("KeyPoint_make", 7)(x, y, size, angle, response, octave, class_id));
+    }
+
     inline function get_pt() {
         if (_pt == null) _pt = new Point2D32f(Features2D.load("KeyPoint_get_pt", 1)(nativeObject));
         return _pt;

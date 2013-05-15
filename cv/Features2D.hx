@@ -17,4 +17,6 @@ class Features2D implements CvConsts implements CvProcs {
     // -------------------------
     // Differs from C++ API with non-constructor being used.
     @:CvProc(BRISK) function brisk(thresh:Int=30, octaves:Int=3, patternScale:Float=1.0):BRISK;
+
+    @:CvProc(GFFT) function gfft(maxCorners:Int, qualityLevel:Float, minDistance:Float, blockSize:Int=3, useHarris:Bool=false, k:Float=0.04):GFFT;
 }
