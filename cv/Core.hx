@@ -8,7 +8,7 @@ import cv.Macros;
 
 typedef Arr = NativeBinding; // Image|Mat|Seq?
 
-class Core implements CvConsts implements CvProcs {
+class Core implements CvProcs {
     @:allow(cv.core)
     static inline function load(n:String, p:Int=0):Dynamic
         return Lib.load("opencv", "hx_cv_core_"+n, p);
@@ -16,114 +16,120 @@ class Core implements CvConsts implements CvProcs {
     // -------------------------
     // Flags for initialisation of TermCriteria object.
     // -------------------------
-    @:CvConst var CV_TERMCRIT_ITER;
-    @:CvConst var CV_TERMCRIT_NUMBER;
-    @:CvConst var CV_TERMCRIT_EPS;
+    public static inline var TERMCRIT_ITER   = 1;
+    public static inline var TERMCRIT_NUMBER = TERMCRIT_ITER;
+    public static inline var TERMCRIT_EPS    = 2;
 
     // -------------------------
     // Type flags for initialisation of Mat object.
     // -------------------------
-    @:CvConst var CV_8U;
-        @:CvConst var CV_8UC1;
-        @:CvConst var CV_8UC2;
-        @:CvConst var CV_8UC3;
-        @:CvConst var CV_8UC4;
-    @:CvConst var CV_8S;
-        @:CvConst var CV_8SC1;
-        @:CvConst var CV_8SC2;
-        @:CvConst var CV_8SC3;
-        @:CvConst var CV_8SC4;
-    @:CvConst var CV_16U;
-        @:CvConst var CV_16UC1;
-        @:CvConst var CV_16UC2;
-        @:CvConst var CV_16UC3;
-        @:CvConst var CV_16UC4;
-    @:CvConst var CV_16S;
-        @:CvConst var CV_16SC1;
-        @:CvConst var CV_16SC2;
-        @:CvConst var CV_16SC3;
-        @:CvConst var CV_16SC4;
-    @:CvConst var CV_32S;
-        @:CvConst var CV_32SC1;
-        @:CvConst var CV_32SC2;
-        @:CvConst var CV_32SC3;
-        @:CvConst var CV_32SC4;
-    @:CvConst var CV_32F;
-        @:CvConst var CV_32FC1;
-        @:CvConst var CV_32FC2;
-        @:CvConst var CV_32FC3;
-        @:CvConst var CV_32FC4;
-    @:CvConst var CV_64F;
-        @:CvConst var CV_64FC1;
-        @:CvConst var CV_64FC2;
-        @:CvConst var CV_64FC3;
-        @:CvConst var CV_64FC4;
+    static inline function MAKETYPE(depth,cn) return (depth & 511) + ((cn-1) << 3);
+    public static inline var _8U = 0;
+        public static inline var _8UC1 = MAKETYPE(_8U,1);
+        public static inline var _8UC2 = MAKETYPE(_8U,2);
+        public static inline var _8UC3 = MAKETYPE(_8U,3);
+        public static inline var _8UC4 = MAKETYPE(_8U,4);
+    public static inline var _8S = 1;
+        public static inline var _8SC1 = MAKETYPE(_8S,1);
+        public static inline var _8SC2 = MAKETYPE(_8S,2);
+        public static inline var _8SC3 = MAKETYPE(_8S,3);
+        public static inline var _8SC4 = MAKETYPE(_8S,4);
+    public static inline var _16U = 2;
+        public static inline var _16UC1 = MAKETYPE(_16U,1);
+        public static inline var _16UC2 = MAKETYPE(_16U,2);
+        public static inline var _16UC3 = MAKETYPE(_16U,3);
+        public static inline var _16UC4 = MAKETYPE(_16U,4);
+    public static inline var _16S = 3;
+        public static inline var _16SC1 = MAKETYPE(_16S,1);
+        public static inline var _16SC2 = MAKETYPE(_16S,2);
+        public static inline var _16SC3 = MAKETYPE(_16S,3);
+        public static inline var _16SC4 = MAKETYPE(_16S,4);
+    public static inline var _32S = 4;
+        public static inline var _32SC1 = MAKETYPE(_32S,1);
+        public static inline var _32SC2 = MAKETYPE(_32S,2);
+        public static inline var _32SC3 = MAKETYPE(_32S,3);
+        public static inline var _32SC4 = MAKETYPE(_32S,4);
+    public static inline var _32F = 5;
+        public static inline var _32FC1 = MAKETYPE(_32F,1);
+        public static inline var _32FC2 = MAKETYPE(_32F,2);
+        public static inline var _32FC3 = MAKETYPE(_32F,3);
+        public static inline var _32FC4 = MAKETYPE(_32F,4);
+    public static inline var _64F = 6;
+        public static inline var _64FC1 = MAKETYPE(_64F,1);
+        public static inline var _64FC2 = MAKETYPE(_64F,2);
+        public static inline var _64FC3 = MAKETYPE(_64F,3);
+        public static inline var _64FC4 = MAKETYPE(_64F,4);
 
-    @:CvProc function CV_8UC (N:Int) return [CV_8UC1,  CV_8UC2,  CV_8UC3,  CV_8UC4 ][N-1];
-    @:CvProc function CV_8SC (N:Int) return [CV_8SC1,  CV_8SC2,  CV_8SC3,  CV_8SC4 ][N-1];
-    @:CvProc function CV_16UC(N:Int) return [CV_16UC1, CV_16UC2, CV_16UC3, CV_16UC4][N-1];
-    @:CvProc function CV_16SC(N:Int) return [CV_16SC1, CV_16SC2, CV_16SC3, CV_16SC4][N-1];
-    @:CvProc function CV_32SC(N:Int) return [CV_32SC1, CV_32SC2, CV_32SC3, CV_32SC4][N-1];
-    @:CvProc function CV_32FC(N:Int) return [CV_32FC1, CV_32FC2, CV_32FC3, CV_32FC4][N-1];
-    @:CvProc function CV_64FC(N:Int) return [CV_64FC1, CV_64FC2, CV_64FC3, CV_64FC4][N-1];
+    public static inline function _8UC (N:Int) return [_8UC1,  _8UC2,  _8UC3,  _8UC4 ][N-1];
+    public static inline function _8SC (N:Int) return [_8SC1,  _8SC2,  _8SC3,  _8SC4 ][N-1];
+    public static inline function _16UC(N:Int) return [_16UC1, _16UC2, _16UC3, _16UC4][N-1];
+    public static inline function _16SC(N:Int) return [_16SC1, _16SC2, _16SC3, _16SC4][N-1];
+    public static inline function _32SC(N:Int) return [_32SC1, _32SC2, _32SC3, _32SC4][N-1];
+    public static inline function _32FC(N:Int) return [_32FC1, _32FC2, _32FC3, _32FC4][N-1];
+    public static inline function _64FC(N:Int) return [_64FC1, _64FC2, _64FC3, _64FC4][N-1];
 
     // -------------------------
     // Type flags for initialised of Image object.
     // -------------------------
-    @:CvConst var IPL_DEPTH_8U;
-    @:CvConst var IPL_DEPTH_8S;
-    @:CvConst var IPL_DEPTH_16U;
-    @:CvConst var IPL_DEPTH_16S;
-    @:CvConst var IPL_DEPTH_32S;
-    @:CvConst var IPL_DEPTH_32F;
-    @:CvConst var IPL_DEPTH_64F;
+    public static inline var IPL_DEPTH_1U  = 1;
+    public static inline var IPL_DEPTH_8U  = 8;
+    public static inline var IPL_DEPTH_16U = 16;
+    public static inline var IPL_DEPTH_32F = 32;
+    public static inline var IPL_DEPTH_64F = 64;
+
+    inline static var IPL_DEPTH_SIGN = 0x80000000;
+    public static inline var IPL_DEPTH_8S  = IPL_DEPTH_SIGN | 8;
+    public static inline var IPL_DEPTH_16S = IPL_DEPTH_SIGN | 16;
+    public static inline var IPL_DEPTH_32S = IPL_DEPTH_SIGN | 32;
 
     // -------------------------
     // Operations supported by comparison methods.
     // -------------------------
-    @:CvConst var CV_CMP_EQ;
-    @:CvConst var CV_CMP_GT;
-    @:CvConst var CV_CMP_GE;
-    @:CvConst var CV_CMP_LT;
-    @:CvConst var CV_CMP_LE;
-    @:CvConst var CV_CMP_NE;
+    public static inline var CMP_EQ = 0;
+    public static inline var CMP_GT = 1;
+    public static inline var CMP_GE = 2;
+    public static inline var CMP_LT = 3;
+    public static inline var CMP_LE = 4;
+    public static inline var CMP_NE = 5;
 
     // -------------------------
     // Flags for discrete cosine/fourier transforms.
     // -------------------------
-    @:CvConst var CV_DXT_FORWARD;
-    @:CvConst var CV_DXT_INVERSE;
-    @:CvConst var CV_DXT_SCALE;
-    @:CvConst var CV_DXT_ROWS;
-    @:CvConst var CV_DXT_INVERSE_SCALE;
+    public static inline var DXT_FORWARD  = 0;
+    public static inline var DXT_INVERSE  = 1;
+    public static inline var DXT_SCALE    = 2;
+    public static inline var DXT_INV_SCALE = (DXT_INVERSE + DXT_SCALE);
+    public static inline var DXT_INVERSE_SCALE = DXT_INV_SCALE;
+    public static inline var DXT_ROWS     = 4;
+    public static inline var DXT_MUL_CONJ = 8;
+
+    public static inline var DCT_INVERSE = DFT_INVERSE;
+    public static inline var DCT_ROWS    = DFT_ROWS;
+
+    public static inline var DFT_INVERSE        = 1;
+    public static inline var DFT_SCALE          = 2;
+    public static inline var DFT_ROWS           = 4;
+    public static inline var DFT_COMPLEX_OUTPUT = 16;
+    public static inline var DFT_REAL_OUTPUT    = 32;
 
     // -------------------------
     // Flags for drawing operations.
     // -------------------------
-    @:CvConst var CV_AA;
-    @:CvConst var CV_FILLED;
-
-    @:CvConst var DCT_INVERSE;
-    @:CvConst var DCT_ROWS;
-
-    @:CvConst var DFT_INVERSE;
-    @:CvConst var DFT_SCALE;
-    @:CvConst var DFT_ROWS;
-    @:CvConst var DFT_COMPLEX_OUTPUT;
-    @:CvConst var DFT_REAL_OUTPUT;
+    public static inline var AA     = 16;
+    public static inline var FILLED = -1;
 
     // -------------------------
     // Flags for supported font faces.
     // -------------------------
-    @:CvConst var CV_FONT_HERSHEY_SIMPLEX;
-    @:CvConst var CV_FONT_HERSHEY_PLAIN;
-    @:CvConst var CV_FONT_HERSHEY_DUPLEX;
-    @:CvConst var CV_FONT_HERSHEY_COMPLEX;
-    @:CvConst var CV_FONT_HERSHEY_TRIPLEX;
-    @:CvConst var CV_FONT_HERSHEY_COMPLEX_SMALL;
-    @:CvConst var CV_FONT_HERSHEY_SCRIPT_SIMPLEX;
-    @:CvConst var CV_FONT_HERSHEY_SCRIPT_COMPLEX;
-    @:CvConst var CV_FONT_ITALIC;
+    public static inline var FONT_HERSHEY_SIMPLEX        = 0;
+    public static inline var FONT_HERSHEY_PLAIN          = 1;
+    public static inline var FONT_HERSHEY_DUPLEX         = 2;
+    public static inline var FONT_HERSHEY_COMPLEX        = 3;
+    public static inline var FONT_HERSHEY_TRIPLEX        = 4;
+    public static inline var FONT_HERSHEY_COMPLEX_SMALL  = 5;
+    public static inline var FONT_HERSHEY_SCRIPT_SIMPLEX = 6;
+    public static inline var FONT_HERSHEY_SCRIPT_COMPLEX = 7;
+    public static inline var FONT_ITALIC                 = 16;
 
     // -------------------------
     // Matrix/Image mixed functions.

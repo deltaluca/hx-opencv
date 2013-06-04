@@ -3,63 +3,6 @@ package cv;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 
-@:autoBuild(cv.CvConstsImpl.run())
-@:remove extern interface CvConsts {}
-
-//
-// @:CvConst var X;
-//
-// replaced by
-//
-// public static var X(get,never):Int;
-// static inline function get_X() return load("X", 0)();
-//
-class CvConstsImpl {
-#if macro
-    static function isConst(f:Metadata) {
-        for (m in f) {
-            if (m.name == ":CvConst") return true;
-        }
-        return false;
-    }
-
-    public static function run() {
-        var fields = Context.getBuildFields();
-        for (f in fields) {
-            if (!isConst(f.meta)) {
-                continue;
-            }
-
-            switch (f.kind) {
-            case FVar(_, _):
-                f.kind = FProp("get", "never", macro :Int, null);
-                f.access.push(AStatic);
-                f.access.push(APublic);
-
-                var kind = FFun({
-                    ret:    macro :Int,
-                    params: [],
-                    args:   [],
-                    expr:   macro return load($v{f.name}, 0)()
-                });
-                fields.push({
-                    pos:    f.pos,
-                    name:   "get_"+f.name,
-                    meta:   [],
-                    kind:   kind,
-                    doc:    null,
-                    access: [AStatic, AInline]
-                });
-            default:
-                Context.warning("@:CvConst used on non-field type", f.pos);
-            }
-        }
-
-        return fields;
-    }
-#end
-}
-
 
 @:autoBuild(cv.CvProcsImpl.run())
 @:remove extern interface CvProcs {}

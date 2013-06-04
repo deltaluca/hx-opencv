@@ -6,16 +6,16 @@ import cv.Core;
 
 import cv.Macros;
 
-class Video implements CvConsts implements CvProcs {
+class Video implements CvProcs {
     @:allow(cv.video)
     static inline function load(n:String, p:Int=0):Dynamic
         return Lib.load("opencv", "hx_cv_video_"+n, p);
 
 
-    @:CvConst var CV_LKFLOW_PYR_A_READY;
-    @:CvConst var CV_LKFLOW_PYR_B_READY;
-    @:CvConst var CV_LKFLOW_INITIAL_GUESSES;
-    @:CvConst var CV_LKFLOW_GET_MIN_EIGENVALS;
+    public static inline var LKFLOW_PYR_A_READY       = 1;
+    public static inline var LKFLOW_PYR_B_READY       = 2;
+    public static inline var LKFLOW_INITIAL_GUESSES   = 4;
+    public static inline var LKFLOW_GET_MIN_EIGENVALS = 8;
 
 
     @:CvProc function calcOpticalFlowBM(prev:Arr, curr:Arr, blockSize:Size, shiftSize:Size, max_range:Size, usePrevious:Bool, velx:Arr, vely:Arr)

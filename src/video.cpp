@@ -13,16 +13,6 @@
 
 
 //
-// CV_LKFLOW*
-//
-CONST(LKFLOW_PYR_A_READY);
-CONST(LKFLOW_PYR_B_READY);
-CONST(LKFLOW_INITIAL_GUESSES);
-CONST(LKFLOW_GET_MIN_EIGENVALS);
-
-
-
-//
 // cvCalcOpticalFlowBM
 // cvCalcOpticalFlowHS
 // cvCalcOpticalFlowLK

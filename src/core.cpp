@@ -2,7 +2,6 @@
 #include <core/core.hpp>
 
 #include "utils.h"
-#define CONST(N) PCONST(core, N)
 #define GETPROP(N, M, I) PGETPROP(core, N, M, I)
 #define SETPROP(N, M, I) PSETPROP(core, N, M, I)
 #define PROP(N, M, I) PPROP(core, N, M, I)
@@ -147,16 +146,6 @@ DEFINE_PRIM(hx_cv_core_Scalar_get_i, 2);
 DEFINE_PRIM(hx_cv_core_Scalar_set_i, 3);
 
 
-
-//
-// CV_TERMCRIT_*
-//
-CONST(TERMCRIT_ITER);
-CONST(TERMCRIT_NUMBER);
-CONST(TERMCRIT_EPS);
-
-
-
 //
 // CvTermCriteria
 // cvCheckTermCriteria
@@ -182,47 +171,6 @@ DEFINE_PRIM(hx_cv_core_checkTermCriteria, 3);
 PROP(TermCriteria, type, int);
 PROP(TermCriteria, max_iter, int);
 PROP(TermCriteria, epsilon, double);
-
-
-
-//
-// CV_*
-//
-CONST(8U);
-CONST(8S);
-CONST(16U);
-CONST(16S);
-CONST(32S);
-CONST(32F);
-CONST(64F);
-CONST(8UC1);
-CONST(8UC2);
-CONST(8UC3);
-CONST(8UC4);
-CONST(8SC1);
-CONST(8SC2);
-CONST(8SC3);
-CONST(8SC4);
-CONST(16UC1);
-CONST(16UC2);
-CONST(16UC3);
-CONST(16UC4);
-CONST(16SC1);
-CONST(16SC2);
-CONST(16SC3);
-CONST(16SC4);
-CONST(32SC1);
-CONST(32SC2);
-CONST(32SC3);
-CONST(32SC4);
-CONST(32FC1);
-CONST(32FC2);
-CONST(32FC3);
-CONST(32FC4);
-CONST(64FC1);
-CONST(64FC2);
-CONST(64FC3);
-CONST(64FC4);
 
 
 
@@ -312,19 +260,6 @@ DEFINE_PRIM(hx_cv_core_Mat_get_raw, 1);
 
 
 //
-// IPL_DEPTH_*
-//
-GCONST(core, IPL, DEPTH_8U);
-GCONST(core, IPL, DEPTH_8S);
-GCONST(core, IPL, DEPTH_16U);
-GCONST(core, IPL, DEPTH_16S);
-GCONST(core, IPL, DEPTH_32S);
-GCONST(core, IPL, DEPTH_32F);
-GCONST(core, IPL, DEPTH_64F);
-
-
-
-//
 // IplImage
 // cvCreateImage
 // cvCreateImageHeader
@@ -371,36 +306,6 @@ value hx_cv_core_Image_get_raw(value image) {
 }
 DEFINE_PRIM(hx_cv_core_Image_get_raw, 1);
 
-
-//
-// CV_CMP_*
-//
-CONST(CMP_EQ);
-CONST(CMP_GT);
-CONST(CMP_GE);
-CONST(CMP_LT);
-CONST(CMP_LE);
-CONST(CMP_NE);
-
-
-
-//
-// CV_DXT_*
-//
-CONST(DXT_FORWARD);
-CONST(DXT_INVERSE);
-CONST(DXT_SCALE);
-CONST(DXT_ROWS);
-CONST(DXT_INVERSE_SCALE);
-
-GPPCONST(core, DCT, INVERSE);
-GPPCONST(core, DCT, ROWS);
-
-GPPCONST(core, DFT, INVERSE);
-GPPCONST(core, DFT, SCALE);
-GPPCONST(core, DFT, ROWS);
-GPPCONST(core, DFT, COMPLEX_OUTPUT);
-GPPCONST(core, DFT, REAL_OUTPUT);
 
 //
 // cvAbsDiff
@@ -670,30 +575,6 @@ DEFINE_PRIM(hx_cv_core_polarToCart,     5);
 DEFINE_PRIM(hx_cv_core_scaleAdd,        4);
 DEFINE_PRIM(hx_cv_core_set,             3);
 DEFINE_PRIM(hx_cv_core_split,           2);
-
-
-
-//
-// CV_AA
-// CV_FILLED
-//
-CONST(AA);
-CONST(FILLED);
-
-
-
-//
-// CV_FONT_*
-//
-CONST(FONT_HERSHEY_SIMPLEX);
-CONST(FONT_HERSHEY_PLAIN);
-CONST(FONT_HERSHEY_DUPLEX);
-CONST(FONT_HERSHEY_COMPLEX);
-CONST(FONT_HERSHEY_TRIPLEX);
-CONST(FONT_HERSHEY_COMPLEX_SMALL);
-CONST(FONT_HERSHEY_SCRIPT_SIMPLEX);
-CONST(FONT_HERSHEY_SCRIPT_COMPLEX);
-CONST(FONT_ITALIC);
 
 
 

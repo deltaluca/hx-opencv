@@ -3,7 +3,6 @@
 #include "highgui.h"
 #include "core.h"
 #include "utils.h"
-#define CONST(N) PCONST(highgui, N)
 
 #include <vector>
 #include <map>
@@ -24,48 +23,6 @@ void add_cleanup(value wname, AutoGCRoot* root) {
     if (val_is_null(wname)) cleanup["!!control_panel!!"].push_back(root);
     else cleanup[val_get<string>(wname)].push_back(root);
 }
-
-
-
-//
-// CV_WINDOW_*
-// CV_GUI_*
-//
-CONST(WINDOW_NORMAL);
-CONST(WINDOW_AUTOSIZE);
-CONST(WINDOW_FREERATIO);
-CONST(WINDOW_KEEPRATIO);
-CONST(WINDOW_OPENGL);
-CONST(GUI_NORMAL);
-CONST(GUI_EXPANDED);
-
-
-
-//
-// CV_EVENT_*
-//
-CONST(EVENT_MOUSEMOVE);
-CONST(EVENT_LBUTTONDOWN);
-CONST(EVENT_RBUTTONDOWN);
-CONST(EVENT_MBUTTONDOWN);
-CONST(EVENT_LBUTTONUP);
-CONST(EVENT_RBUTTONUP);
-CONST(EVENT_MBUTTONUP);
-CONST(EVENT_LBUTTONDBLCLK);
-CONST(EVENT_RBUTTONDBLCLK);
-CONST(EVENT_MBUTTONDBLCLK);
-
-
-
-//
-// CV_EVENT_FLAG_*
-//
-CONST(EVENT_FLAG_LBUTTON);
-CONST(EVENT_FLAG_RBUTTON);
-CONST(EVENT_FLAG_MBUTTON);
-CONST(EVENT_FLAG_CTRLKEY);
-CONST(EVENT_FLAG_SHIFTKEY);
-CONST(EVENT_FLAG_ALTKEY);
 
 
 
@@ -121,15 +78,6 @@ DEFINE_PRIM(hx_cv_highgui_destroyWindow,     1);
 DEFINE_PRIM(hx_cv_highgui_destroyAllWindows, 0);
 DEFINE_PRIM(hx_cv_highgui_moveWindow,        3);
 DEFINE_PRIM(hx_cv_highgui_resizeWindow,      3);
-
-
-
-//
-// CV_*
-//
-CONST(PUSH_BUTTON);
-CONST(CHECKBOX);
-CONST(RADIOBOX);
 
 
 
@@ -234,14 +182,6 @@ DEFINE_PRIM(hx_cv_highgui_displayStatusBar, 3);
 
 
 //
-// CV_CVTIMG_*
-//
-CONST(CVTIMG_FLIP);
-CONST(CVTIMG_SWAP_RB);
-
-
-
-//
 // cvConvertImage
 // cvShowImage
 //
@@ -253,15 +193,6 @@ void hx_cv_highgui_showImage(value windowName, value image) {
 }
 DEFINE_PRIM(hx_cv_highgui_convertImage, 3);
 DEFINE_PRIM(hx_cv_highgui_showImage,    2);
-
-
-
-//
-// CV_LOAD_IMAGE_*
-//
-CONST(LOAD_IMAGE_COLOR);
-CONST(LOAD_IMAGE_GRAYSCALE);
-CONST(LOAD_IMAGE_UNCHANGED);
 
 
 
@@ -282,19 +213,6 @@ value hx_cv_highgui_saveImage(value filename, value image) {
 DEFINE_PRIM(hx_cv_highgui_loadImage,  2);
 DEFINE_PRIM(hx_cv_highgui_loadImageM, 2);
 DEFINE_PRIM(hx_cv_highgui_saveImage,  2);
-
-
-
-//
-// CV_CAP_PROP_*
-//
-CONST(CAP_PROP_POS_MSEC);
-CONST(CAP_PROP_POS_FRAMES);
-CONST(CAP_PROP_POS_AVI_RATIO);
-CONST(CAP_PROP_FRAME_WIDTH);
-CONST(CAP_PROP_FRAME_HEIGHT);
-CONST(CAP_PROP_FPS);
-CONST(CAP_PROP_FRAME_COUNT);
 
 
 

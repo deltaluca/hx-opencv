@@ -8,7 +8,7 @@ import cv.Macros;
 
 typedef ConvKernel = NativeBinding;
 
-class ImgProc implements CvConsts implements CvProcs {
+class ImgProc implements CvProcs {
     @:allow(cv.imgproc)
     static inline function load(n:String, p:Int=0):Dynamic
         return Lib.load("opencv", "hx_cv_imgproc_"+n, p);
@@ -16,242 +16,186 @@ class ImgProc implements CvConsts implements CvProcs {
     // -------------------------
     // Flags for kernel shapes.
     // -------------------------
-    @:CvConst var CV_SHAPE_RECT;
-    @:CvConst var CV_SHAPE_CROSS;
-    @:CvConst var CV_SHAPE_ELLIPSE;
-    @:CvConst var CV_SHAPE_CUSTOM;
+    public static inline var SHAPE_RECT    = 0;
+    public static inline var SHAPE_CROSS   = 1;
+    public static inline var SHAPE_ELLIPSE = 2;
+    public static inline var SHAPE_CUSTOM  = 100;
 
     // -------------------------
     // Morphological operator flags.
     // -------------------------
-    @:CvConst var CV_MOP_OPEN;
-    @:CvConst var CV_MOP_CLOSE;
-    @:CvConst var CV_MOP_GRADIENT;
-    @:CvConst var CV_MOP_TOPHAT;
-    @:CvConst var CV_MOP_BLACKHAT;
+    public static inline var MOP_ERODE    = 0;
+    public static inline var MOP_DILATE   = 1;
+    public static inline var MOP_OPEN     = 2;
+    public static inline var MOP_CLOSE    = 3;
+    public static inline var MOP_GRADIENT = 4;
+    public static inline var MOP_TOPHAT   = 5;
+    public static inline var MOP_BLACKHAT = 6;
 
     // -------------------------
     // Smoothening operators.
     // -------------------------
-    @:CvConst var CV_GAUSSIAN;
-    @:CvConst var CV_BLUR;
-    @:CvConst var CV_BLUR_NO_SCALE;
-    @:CvConst var CV_MEDIAN;
-    @:CvConst var CV_BILATERAL;
+    public static inline var BLUR_NO_SCALE = 0;
+    public static inline var BLUR          = 1;
+    public static inline var GAUSSIAN      = 2;
+    public static inline var MEDIAN        = 3;
+    public static inline var BILATERAL     = 4;
 
     // -------------------------
     // Color conversion flags.
     // -------------------------
-    @:CvConst var CV_BGR2BGRA;
-    @:CvConst var CV_RGB2RGBA;
-    @:CvConst var CV_BGRA2BGR;
-    @:CvConst var CV_RGBA2RGB;
-    @:CvConst var CV_BGR2RGBA;
-    @:CvConst var CV_RGB2BGRA;
-    @:CvConst var CV_RGBA2BGR;
-    @:CvConst var CV_BGRA2RGB;
-    @:CvConst var CV_BGR2RGB;
-    @:CvConst var CV_RGB2BGR;
-    @:CvConst var CV_BGRA2RGBA;
-    @:CvConst var CV_RGBA2BGRA;
-    @:CvConst var CV_BGR2GRAY;
-    @:CvConst var CV_RGB2GRAY;
-    @:CvConst var CV_GRAY2BGR;
-    @:CvConst var CV_GRAY2RGB;
-    @:CvConst var CV_GRAY2BGRA;
-    @:CvConst var CV_GRAY2RGBA;
-    @:CvConst var CV_BGRA2GRAY;
-    @:CvConst var CV_RGBA2GRAY;
-    @:CvConst var CV_BGR2BGR565;
-    @:CvConst var CV_RGB2BGR565;
-    @:CvConst var CV_BGR5652BGR;
-    @:CvConst var CV_BGR5652RGB;
-    @:CvConst var CV_BGRA2BGR565;
-    @:CvConst var CV_RGBA2BGR565;
-    @:CvConst var CV_BGR5652BGRA;
-    @:CvConst var CV_BGR5652RGBA;
-    @:CvConst var CV_GRAY2BGR565;
-    @:CvConst var CV_BGR5652GRAY;
-    @:CvConst var CV_BGR2BGR555;
-    @:CvConst var CV_RGB2BGR555;
-    @:CvConst var CV_BGR5552BGR;
-    @:CvConst var CV_BGR5552RGB;
-    @:CvConst var CV_BGRA2BGR555;
-    @:CvConst var CV_RGBA2BGR555;
-    @:CvConst var CV_BGR5552BGRA;
-    @:CvConst var CV_BGR5552RGBA;
-    @:CvConst var CV_GRAY2BGR555;
-    @:CvConst var CV_BGR5552GRAY;
-    @:CvConst var CV_BGR2XYZ;
-    @:CvConst var CV_RGB2XYZ;
-    @:CvConst var CV_XYZ2BGR;
-    @:CvConst var CV_XYZ2RGB;
-    @:CvConst var CV_BGR2YCrCb;
-    @:CvConst var CV_RGB2YCrCb;
-    @:CvConst var CV_YCrCb2BGR;
-    @:CvConst var CV_YCrCb2RGB;
-    @:CvConst var CV_BGR2HSV;
-    @:CvConst var CV_RGB2HSV;
-    @:CvConst var CV_BGR2Lab;
-    @:CvConst var CV_RGB2Lab;
-    @:CvConst var CV_BayerBG2BGR;
-    @:CvConst var CV_BayerGB2BGR;
-    @:CvConst var CV_BayerRG2BGR;
-    @:CvConst var CV_BayerGR2BGR;
-    @:CvConst var CV_BayerBG2RGB;
-    @:CvConst var CV_BayerGB2RGB;
-    @:CvConst var CV_BayerRG2RGB;
-    @:CvConst var CV_BayerGR2RGB;
-    @:CvConst var CV_BGR2Luv;
-    @:CvConst var CV_RGB2Luv;
-    @:CvConst var CV_BGR2HLS;
-    @:CvConst var CV_RGB2HLS;
-    @:CvConst var CV_HSV2BGR;
-    @:CvConst var CV_HSV2RGB;
-    @:CvConst var CV_Lab2BGR;
-    @:CvConst var CV_Lab2RGB;
-    @:CvConst var CV_Luv2BGR;
-    @:CvConst var CV_Luv2RGB;
-    @:CvConst var CV_HLS2BGR;
-    @:CvConst var CV_HLS2RGB;
-    @:CvConst var CV_BayerBG2BGR_VNG;
-    @:CvConst var CV_BayerGB2BGR_VNG;
-    @:CvConst var CV_BayerRG2BGR_VNG;
-    @:CvConst var CV_BayerGR2BGR_VNG;
-    @:CvConst var CV_BayerBG2RGB_VNG;
-    @:CvConst var CV_BayerGB2RGB_VNG;
-    @:CvConst var CV_BayerRG2RGB_VNG;
-    @:CvConst var CV_BayerGR2RGB_VNG;
-    @:CvConst var CV_BGR2HSV_FULL;
-    @:CvConst var CV_RGB2HSV_FULL;
-    @:CvConst var CV_BGR2HLS_FULL;
-    @:CvConst var CV_RGB2HLS_FULL;
-    @:CvConst var CV_HSV2BGR_FULL;
-    @:CvConst var CV_HSV2RGB_FULL;
-    @:CvConst var CV_HLS2BGR_FULL;
-    @:CvConst var CV_HLS2RGB_FULL;
-    @:CvConst var CV_LBGR2Lab;
-    @:CvConst var CV_LRGB2Lab;
-    @:CvConst var CV_LBGR2Luv;
-    @:CvConst var CV_LRGB2Luv;
-    @:CvConst var CV_Lab2LBGR;
-    @:CvConst var CV_Lab2LRGB;
-    @:CvConst var CV_Luv2LBGR;
-    @:CvConst var CV_Luv2LRGB;
-    @:CvConst var CV_BGR2YUV;
-    @:CvConst var CV_RGB2YUV;
-    @:CvConst var CV_YUV2BGR;
-    @:CvConst var CV_YUV2RGB;
-    @:CvConst var CV_BayerBG2GRAY;
-    @:CvConst var CV_BayerGB2GRAY;
-    @:CvConst var CV_BayerRG2GRAY;
-    @:CvConst var CV_BayerGR2GRAY;
-    @:CvConst var CV_YUV2RGB_NV12;
-    @:CvConst var CV_YUV2BGR_NV12;
-    @:CvConst var CV_YUV2RGB_NV21;
-    @:CvConst var CV_YUV2BGR_NV21;
-    @:CvConst var CV_YUV420sp2RGB;
-    @:CvConst var CV_YUV420sp2BGR;
-    @:CvConst var CV_YUV2RGBA_NV12;
-    @:CvConst var CV_YUV2BGRA_NV12;
-    @:CvConst var CV_YUV2RGBA_NV21;
-    @:CvConst var CV_YUV2BGRA_NV21;
-    @:CvConst var CV_YUV420sp2RGBA;
-    @:CvConst var CV_YUV420sp2BGRA;
-    @:CvConst var CV_YUV2RGB_YV12;
-    @:CvConst var CV_YUV2BGR_YV12;
-    @:CvConst var CV_YUV2RGB_IYUV;
-    @:CvConst var CV_YUV2BGR_IYUV;
-    @:CvConst var CV_YUV2RGB_I420;
-    @:CvConst var CV_YUV2BGR_I420;
-    @:CvConst var CV_YUV420p2RGB;
-    @:CvConst var CV_YUV420p2BGR;
-    @:CvConst var CV_YUV2RGBA_YV12;
-    @:CvConst var CV_YUV2BGRA_YV12;
-    @:CvConst var CV_YUV2RGBA_IYUV;
-    @:CvConst var CV_YUV2BGRA_IYUV;
-    @:CvConst var CV_YUV2RGBA_I420;
-    @:CvConst var CV_YUV2BGRA_I420;
-    @:CvConst var CV_YUV420p2RGBA;
-    @:CvConst var CV_YUV420p2BGRA;
-    @:CvConst var CV_YUV2GRAY_420;
-    @:CvConst var CV_YUV2GRAY_NV21;
-    @:CvConst var CV_YUV2GRAY_NV12;
-    @:CvConst var CV_YUV2GRAY_YV12;
-    @:CvConst var CV_YUV2GRAY_IYUV;
-    @:CvConst var CV_YUV2GRAY_I420;
-    @:CvConst var CV_YUV420sp2GRAY;
-    @:CvConst var CV_YUV420p2GRAY;
-    @:CvConst var CV_YUV2RGB_UYVY;
-    @:CvConst var CV_YUV2BGR_UYVY;
-    @:CvConst var CV_YUV2RGB_Y422;
-    @:CvConst var CV_YUV2BGR_Y422;
-    @:CvConst var CV_YUV2RGB_UYNV;
-    @:CvConst var CV_YUV2BGR_UYNV;
-    @:CvConst var CV_YUV2RGBA_UYVY;
-    @:CvConst var CV_YUV2BGRA_UYVY;
-    @:CvConst var CV_YUV2RGBA_Y422;
-    @:CvConst var CV_YUV2BGRA_Y422;
-    @:CvConst var CV_YUV2RGBA_UYNV;
-    @:CvConst var CV_YUV2BGRA_UYNV;
-    @:CvConst var CV_YUV2RGB_YUY2;
-    @:CvConst var CV_YUV2BGR_YUY2;
-    @:CvConst var CV_YUV2RGB_YVYU;
-    @:CvConst var CV_YUV2BGR_YVYU;
-    @:CvConst var CV_YUV2RGB_YUYV;
-    @:CvConst var CV_YUV2BGR_YUYV;
-    @:CvConst var CV_YUV2RGB_YUNV;
-    @:CvConst var CV_YUV2BGR_YUNV;
-    @:CvConst var CV_YUV2RGBA_YUY2;
-    @:CvConst var CV_YUV2BGRA_YUY2;
-    @:CvConst var CV_YUV2RGBA_YVYU;
-    @:CvConst var CV_YUV2BGRA_YVYU;
-    @:CvConst var CV_YUV2RGBA_YUYV;
-    @:CvConst var CV_YUV2BGRA_YUYV;
-    @:CvConst var CV_YUV2RGBA_YUNV;
-    @:CvConst var CV_YUV2BGRA_YUNV;
-    @:CvConst var CV_YUV2GRAY_UYVY;
-    @:CvConst var CV_YUV2GRAY_YUY2;
-    @:CvConst var CV_YUV2GRAY_Y422;
-    @:CvConst var CV_YUV2GRAY_UYNV;
-    @:CvConst var CV_YUV2GRAY_YVYU;
-    @:CvConst var CV_YUV2GRAY_YUYV;
-    @:CvConst var CV_YUV2GRAY_YUNV;
-    @:CvConst var CV_RGBA2mRGBA;
-    @:CvConst var CV_mRGBA2RGBA;
+    public static inline var BGR2BGRA        = 0;
+    public static inline var RGB2RGBA        = BGR2BGRA;
+    public static inline var BGRA2BGR        = 1;
+    public static inline var RGBA2RGB        = BGRA2BGR;
+    public static inline var BGR2RGBA        = 2;
+    public static inline var RGB2BGRA        = BGR2RGBA;
+    public static inline var RGBA2BGR        = 3;
+    public static inline var BGRA2RGB        = RGBA2BGR;
+    public static inline var BGR2RGB         = 4;
+    public static inline var RGB2BGR         = BGR2RGB;
+    public static inline var BGRA2RGBA       = 5;
+    public static inline var RGBA2BGRA       = BGRA2RGBA;
+    public static inline var BGR2GRAY        = 6;
+    public static inline var RGB2GRAY        = 7;
+    public static inline var GRAY2BGR        = 8;
+    public static inline var GRAY2RGB        = GRAY2BGR;
+    public static inline var GRAY2BGRA       = 9;
+    public static inline var GRAY2RGBA       = GRAY2BGRA;
+    public static inline var BGRA2GRAY       = 10;
+    public static inline var RGBA2GRAY       = 11;
+    public static inline var BGR2BGR565      = 12;
+    public static inline var RGB2BGR565      = 13;
+    public static inline var BGR5652BGR      = 14;
+    public static inline var BGR5652RGB      = 15;
+    public static inline var BGRA2BGR565     = 16;
+    public static inline var RGBA2BGR565     = 17;
+    public static inline var BGR5652BGRA     = 18;
+    public static inline var BGR5652RGBA     = 19;
+    public static inline var GRAY2BGR565     = 20;
+    public static inline var BGR5652GRAY     = 21;
+    public static inline var BGR2BGR555      = 22;
+    public static inline var RGB2BGR555      = 23;
+    public static inline var BGR5552BGR      = 24;
+    public static inline var BGR5552RGB      = 25;
+    public static inline var BGRA2BGR555     = 26;
+    public static inline var RGBA2BGR555     = 27;
+    public static inline var BGR5552BGRA     = 28;
+    public static inline var BGR5552RGBA     = 29;
+    public static inline var GRAY2BGR555     = 30;
+    public static inline var BGR5552GRAY     = 31;
+    public static inline var BGR2XYZ         = 32;
+    public static inline var RGB2XYZ         = 33;
+    public static inline var XYZ2BGR         = 34;
+    public static inline var XYZ2RGB         = 35;
+    public static inline var BGR2YCrCb       = 36;
+    public static inline var RGB2YCrCb       = 37;
+    public static inline var YCrCb2BGR       = 38;
+    public static inline var YCrCb2RGB       = 39;
+    public static inline var BGR2HSV         = 40;
+    public static inline var RGB2HSV         = 41;
+    public static inline var BGR2Lab         = 44;
+    public static inline var RGB2Lab         = 45;
+    public static inline var BayerBG2BGR     = 46;
+    public static inline var BayerGB2BGR     = 47;
+    public static inline var BayerRG2BGR     = 48;
+    public static inline var BayerGR2BGR     = 49;
+    public static inline var BayerBG2RGB     = BayerRG2BGR;
+    public static inline var BayerGB2RGB     = BayerGR2BGR;
+    public static inline var BayerRG2RGB     = BayerBG2BGR;
+    public static inline var BayerGR2RGB     = BayerGB2BGR;
+    public static inline var BGR2Luv         = 50;
+    public static inline var RGB2Luv         = 51;
+    public static inline var BGR2HLS         = 52;
+    public static inline var RGB2HLS         = 53;
+    public static inline var HSV2BGR         = 54;
+    public static inline var HSV2RGB         = 55;
+    public static inline var Lab2BGR         = 56;
+    public static inline var Lab2RGB         = 57;
+    public static inline var Luv2BGR         = 58;
+    public static inline var Luv2RGB         = 59;
+    public static inline var HLS2BGR         = 60;
+    public static inline var HLS2RGB         = 61;
+    public static inline var BayerBG2BGR_VNG = 62;
+    public static inline var BayerGB2BGR_VNG = 63;
+    public static inline var BayerRG2BGR_VNG = 64;
+    public static inline var BayerGR2BGR_VNG = 65;
+    public static inline var BayerBG2RGB_VNG = BayerRG2BGR_VNG;
+    public static inline var BayerGB2RGB_VNG = BayerGR2BGR_VNG;
+    public static inline var BayerRG2RGB_VNG = BayerBG2BGR_VNG;
+    public static inline var BayerGR2RGB_VNG = BayerGB2BGR_VNG;
+    public static inline var BGR2HSV_FULL    = 66;
+    public static inline var RGB2HSV_FULL    = 67;
+    public static inline var BGR2HLS_FULL    = 68;
+    public static inline var RGB2HLS_FULL    = 69;
+    public static inline var HSV2BGR_FULL    = 70;
+    public static inline var HSV2RGB_FULL    = 71;
+    public static inline var HLS2BGR_FULL    = 72;
+    public static inline var HLS2RGB_FULL    = 73;
+    public static inline var LBGR2Lab        = 74;
+    public static inline var LRGB2Lab        = 75;
+    public static inline var LBGR2Luv        = 76;
+    public static inline var LRGB2Luv        = 77;
+    public static inline var Lab2LBGR        = 78;
+    public static inline var Lab2LRGB        = 79;
+    public static inline var Luv2LBGR        = 80;
+    public static inline var Luv2LRGB        = 81;
+    public static inline var BGR2YUV         = 82;
+    public static inline var RGB2YUV         = 83;
+    public static inline var YUV2BGR         = 84;
+    public static inline var YUV2RGB         = 85;
+    public static inline var BayerBG2GRAY    = 86;
+    public static inline var BayerGB2GRAY    = 87;
+    public static inline var BayerRG2GRAY    = 88;
+    public static inline var BayerGR2GRAY    = 89;
+    public static inline var YUV420i2RGB     = 90;
+    public static inline var YUV420i2BGR     = 91;
+    public static inline var YUV420sp2RGB    = 92;
+    public static inline var YUV420sp2BGR    = 93;
 
     // -------------------------
     // Distance metric flags.
     // -------------------------
-    @:CvConst var CV_DIST_C;
-    @:CvConst var CV_DIST_L1;
-    @:CvConst var CV_DIST_L2;
+    public static inline var DIST_L1     = 1;
+    public static inline var DIST_L2     = 2;
+    public static inline var DIST_C      = 3;
+    public static inline var DIST_L12    = 4;
+    public static inline var DIST_FAIR   = 5;
+    public static inline var DIST_WELSCH = 6;
+    public static inline var DIST_HUBER  = 7;
 
     // -------------------------
     // Threshold operators flags.
     // -------------------------
-    @:CvConst var CV_THRESH_BINARY;
-    @:CvConst var CV_THRESH_BINARY_INV;
-    @:CvConst var CV_THRESH_TRUNC;
-    @:CvConst var CV_THRESH_TOZERO;
-    @:CvConst var CV_THRESH_TOZERO_INV;
+    public static inline var THRESH_BINARY     = 0;
+    public static inline var THRESH_BINARY_INV = 1;
+    public static inline var THRESH_TRUNC      = 2;
+    public static inline var THRESH_TOZERO     = 3;
+    public static inline var THRESH_TOZERO_INV = 4;
+    public static inline var THRESH_MASKU      = 7;
+    public static inline var THRESH_OTSUU      = 8;
+
+    public static inline var ADAPTIVE_THRESH_MEAN_C      = 0;
+    public static inline var ADAPTIVE_THRESH_GAUSSIAN_C  = 1;
 
     // -------------------------
     // Border flags.
     // -------------------------
-    @:CvConst var BORDER_TRANSPARENT;
-    @:CvConst var BORDER_ISOLATED;
-    @:CvConst var BORDER_CONSTANT;
-    @:CvConst var BORDER_WRAP;
-    @:CvConst var BORDER_REFLECT_101;
-    @:CvConst var BORDER_DEFAULT;
+    public static inline var BORDER_CONSTANT    = 0;
+    public static inline var BORDER_REPLICATE   = 1;
+    public static inline var BORDER_REFLECT     = 2;
+    public static inline var BORDER_WRAP        = 3;
+    public static inline var BORDER_REFLECT_101 = 4;
+    public static inline var BORDER_TRANSPARENT = 5;
+    public static inline var BORDER_ISOLATED    = 16;
+    public static inline var BORDER_DEFAULT     = BORDER_REFLECT_101;
 
     // -------------------------
     // Image processing methods.
     // -------------------------
     @:CvProc function bilateralFilter(src:Arr, dst:Arr, d:Int, sigmaColor:Float, sigmaSpace:Float):Void;
     @:CvProc function createStructuringElementEx(cols:Int, rows:Int, anchorX:Int, anchorY:Int, shape:Int, ?values:Null<Array<Int>>):ConvKernel {
-        @:CvCheck if (shape == CV_SHAPE_CUSTOM && values == null) throw "values cannot be null when using CV_SHAPE_CUSTOM";
+        @:CvCheck if (shape == SHAPE_CUSTOM && values == null) throw "values cannot be null when using SHAPE_CUSTOM";
         return NativeBinding.generic(load("createStructuringElementEx", 6)(cols, rows, anchorX, anchorY, shape, values));
     }
 
@@ -264,20 +208,20 @@ class ImgProc implements CvConsts implements CvProcs {
     @:CvProc function threshold(src:Arr, dst:Arr, threshold:Float, maxValue:Float, thresholdType:Int):Void;
     @:CvProc function medianBlur(src:Arr, dst:Arr, ksize:Int):Void;
     @:CvProc function morphologyEx(src:Arr, dst:Arr, tmp:Null<Arr>, element:ConvKernel, operation:Int, iterations:Int=1) {
-        @:CvCheck(tmp) if (tmp == null && (operation == CV_MOP_GRADIENT)) throw "tmp Arr required for MOP_GRADIENT";
-        @:CvCheck(tmp) if (tmp == null && src == dst && (operation == CV_MOP_TOPHAT || operation == CV_MOP_BLACKHAT)) throw "tmp Arr required for in-place MOP_TOPHAT/BLACKHAT";
+        @:CvCheck(tmp) if (tmp == null && (operation == MOP_GRADIENT)) throw "tmp Arr required for MOP_GRADIENT";
+        @:CvCheck(tmp) if (tmp == null && src == dst && (operation == MOP_TOPHAT || operation == MOP_BLACKHAT)) throw "tmp Arr required for in-place MOP_TOPHAT/BLACKHAT";
         load("morphologyEx", 6)(src.nativeObject, dst.nativeObject, NativeBinding.native(tmp), element.nativeObject, operation, iterations);
     }
 
     @:CvProc function pyrDown(src:Arr, dst:Arr):Void;
-    @:CvProc(smoothType=CV_GAUSSIAN) function smooth(src:Arr, dst:Arr, ?smoothType:Null<Int>, param1:Int=3, param2:Int=0, param3:Int=0, param4:Int=0):Void;
+    @:CvProc(smoothType=GAUSSIAN) function smooth(src:Arr, dst:Arr, ?smoothType:Null<Int>, param1:Int=3, param2:Int=0, param3:Int=0, param4:Int=0):Void;
 
     @:CvProc function laplace (src:Arr,   dst:Arr, apertureSize:Int=3):Void;
     @:CvProc function sobel   (src:Arr,   dst:Arr, xorder:Int, yorder:Int, apertureSize:Int=3):Void;
     @:CvProc function integral(image:Arr, sum:Arr, ?sqsum:Null<Arr>, ?tiltedSum:Null<Arr>):Void;
 
     @:CvProc function cvtColor(src:Arr, dst:Arr, code:Int):Void;
-    @:CvProc(distanceType=CV_DIST_L2) function distTransform(src:Arr, dst:Arr, ?distanceType:Null<Int>, maskSize:Int=3, ?mask:Null<Array<Float>>, ?labels:Null<Arr>):Void;
+    @:CvProc(distanceType=DIST_L2) function distTransform(src:Arr, dst:Arr, ?distanceType:Null<Int>, maskSize:Int=3, ?mask:Null<Array<Float>>, ?labels:Null<Arr>):Void;
 
     @:CvProc function acc        (image :Arr, sum   :Arr, ?mask:Null<Arr>):Void;
     @:CvProc function squareAcc  (image :Arr, sqsum :Arr, ?mask:Null<Arr>):Void;

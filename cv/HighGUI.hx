@@ -9,75 +9,143 @@ import #if cpp cpp #else neko #end.Lib;
 
 import cv.Macros;
 
-class HighGUI implements CvConsts implements CvProcs {
+class HighGUI implements CvProcs {
     static inline function load(n:String, p:Int=0):Dynamic
         return Lib.load("opencv", "hx_cv_highgui_"+n, p);
 
     // -------------------------
     // Flags for window creation.
     // -------------------------
-    @:CvConst var CV_WINDOW_NORMAL;
-    @:CvConst var CV_WINDOW_AUTOSIZE;
-    @:CvConst var CV_WINDOW_FREERATIO;
-    @:CvConst var CV_WINDOW_KEEPRATIO;
-    @:CvConst var CV_WINDOW_OPENGL;
-    @:CvConst var CV_GUI_NORMAL;
-    @:CvConst var CV_GUI_EXPANDED;
+    public static inline var WINDOW_NORMAL     = 0x000;
+    public static inline var WINDOW_AUTOSIZE   = 0x001;
+
+    public static inline var WINDOW_FULLSCREEN = 0x001;
+    public static inline var WINDOW_FREERATIO  = 0x100;
+    public static inline var WINDOW_KEEPRATIO  = 0x000;
+
+    public static inline var GUI_NORMAL        = 0x010;
+    public static inline var GUI_EXPANDED      = 0x000;
 
     // -------------------------
     // Event flags for mouse callbacks.
     // -------------------------
-    @:CvConst var CV_EVENT_MOUSEMOVE;
-    @:CvConst var CV_EVENT_LBUTTONDOWN;
-    @:CvConst var CV_EVENT_RBUTTONDOWN;
-    @:CvConst var CV_EVENT_MBUTTONDOWN;
-    @:CvConst var CV_EVENT_LBUTTONUP;
-    @:CvConst var CV_EVENT_RBUTTONUP;
-    @:CvConst var CV_EVENT_MBUTTONUP;
-    @:CvConst var CV_EVENT_LBUTTONDBLCLK;
-    @:CvConst var CV_EVENT_RBUTTONDBLCLK;
-    @:CvConst var CV_EVENT_MBUTTONDBLCLK;
+    public static inline var EVENT_MOUSEMOVE     = 0;
+    public static inline var EVENT_LBUTTONDOWN   = 1;
+    public static inline var EVENT_RBUTTONDOWN   = 2;
+    public static inline var EVENT_MBUTTONDOWN   = 3;
+    public static inline var EVENT_LBUTTONUP     = 4;
+    public static inline var EVENT_RBUTTONUP     = 5;
+    public static inline var EVENT_MBUTTONUP     = 6;
+    public static inline var EVENT_LBUTTONDBLCLK = 7;
+    public static inline var EVENT_RBUTTONDBLCLK = 8;
+    public static inline var EVENT_MBUTTONDBLCLK = 9;
 
     // -------------------------
     // Modifier flags for mouse callbacks.
     // -------------------------
-    @:CvConst var CV_EVENT_FLAG_LBUTTON;
-    @:CvConst var CV_EVENT_FLAG_RBUTTON;
-    @:CvConst var CV_EVENT_FLAG_MBUTTON;
-    @:CvConst var CV_EVENT_FLAG_CTRLKEY;
-    @:CvConst var CV_EVENT_FLAG_SHIFTKEY;
-    @:CvConst var CV_EVENT_FLAG_ALTKEY;
+    public static inline var EVENT_FLAG_LBUTTON  = 1;
+    public static inline var EVENT_FLAG_RBUTTON  = 2;
+    public static inline var EVENT_FLAG_MBUTTON  = 4;
+    public static inline var EVENT_FLAG_CTRLKEY  = 8;
+    public static inline var EVENT_FLAG_SHIFTKEY = 16;
+    public static inline var EVENT_FLAG_ALTKEY   = 32;
 
     // ------------------------
     // Flags for image conversions.
     // ------------------------
-    @:CvConst var CV_CVTIMG_FLIP;
-    @:CvConst var CV_CVTIMG_SWAP_RB;
+    public static inline var CVTIMG_FLIP    = 1;
+    public static inline var CVTIMG_SWAP_RB = 2;
 
     // ------------------------
     // Image IO flags.
     // ------------------------
-    @:CvConst var CV_LOAD_IMAGE_COLOR;
-    @:CvConst var CV_LOAD_IMAGE_GRAYSCALE;
-    @:CvConst var CV_LOAD_IMAGE_UNCHANGED;
+    public static inline var LOAD_IMAGE_UNCHANGED = -1;
+    public static inline var LOAD_IMAGE_GRAYSCALE = 0;
+    public static inline var LOAD_IMAGE_COLOR     = 1;
+    public static inline var LOAD_IMAGE_ANYDEPTH  = 2;
+    public static inline var LOAD_IMAGE_ANYCOLOR  = 4;
 
     // -------------------------
     // Video/Camera capture properties flags.
     // -------------------------
-    @:CvConst var CV_CAP_PROP_POS_MSEC;
-    @:CvConst var CV_CAP_PROP_POS_FRAMES;
-    @:CvConst var CV_CAP_PROP_POS_AVI_RATIO;
-    @:CvConst var CV_CAP_PROP_FRAME_WIDTH;
-    @:CvConst var CV_CAP_PROP_FRAME_HEIGHT;
-    @:CvConst var CV_CAP_PROP_FPS;
-    @:CvConst var CV_CAP_PROP_FRAME_COUNT;
+    public static inline var CAP_PROP_DC1394_OFF                = -4;
+    public static inline var CAP_PROP_DC1394_MODE_MANUAL        = -3;
+    public static inline var CAP_PROP_DC1394_MODE_AUTO          = -2;
+    public static inline var CAP_PROP_DC1394_MODE_ONE_PUSH_AUTO = -1;
+    public static inline var CAP_PROP_POS_MSEC                  = 0;
+    public static inline var CAP_PROP_POS_FRAMES                = 1;
+    public static inline var CAP_PROP_POS_AVI_RATIO             = 2;
+    public static inline var CAP_PROP_FRAME_WIDTH               = 3;
+    public static inline var CAP_PROP_FRAME_HEIGHT              = 4;
+    public static inline var CAP_PROP_FPS                       = 5;
+    public static inline var CAP_PROP_FOURCC                    = 6;
+    public static inline var CAP_PROP_FRAME_COUNT               = 7;
+    public static inline var CAP_PROP_FORMAT                    = 8;
+    public static inline var CAP_PROP_MODE                      = 9;
+    public static inline var CAP_PROP_BRIGHTNESS                = 10;
+    public static inline var CAP_PROP_CONTRAST                  = 11;
+    public static inline var CAP_PROP_SATURATION                = 12;
+    public static inline var CAP_PROP_HUE                       = 13;
+    public static inline var CAP_PROP_GAIN                      = 14;
+    public static inline var CAP_PROP_EXPOSURE                  = 15;
+    public static inline var CAP_PROP_CONVERT_RGB               = 16;
+    public static inline var CAP_PROP_WHITE_BALANCE_BLUE_U      = 17;
+    public static inline var CAP_PROP_RECTIFICATION             = 18;
+    public static inline var CAP_PROP_MONOCROME                 = 19;
+    public static inline var CAP_PROP_SHARPNESS                 = 20;
+    public static inline var CAP_PROP_AUTO_EXPOSURE             = 21;
+    public static inline var CAP_PROP_GAMMA                     = 22;
+    public static inline var CAP_PROP_TEMPERATURE               = 23;
+    public static inline var CAP_PROP_TRIGGER                   = 24;
+    public static inline var CAP_PROP_TRIGGER_DELAY             = 25;
+    public static inline var CAP_PROP_WHITE_BALANCE_RED_V       = 26;
+    public static inline var CAP_PROP_MAX_DC1394                = 27;
+    public static inline var CAP_PROP_AUTOGRAB                  = 1024;
+    public static inline var CAP_PROP_SUPPORTED_PREVIEW_SIZES_STRING = 1025;
+    public static inline var CAP_PROP_PREVIEW_FORMAT           = 1026;
+    public static inline var CAP_OPENNI_DEPTH_GENERATOR        = 0;
+    public static inline var CAP_OPENNI_IMAGE_GENERATOR        = 1 << 31;
+    public static inline var CAP_OPENNI_GENERATORS_MASK        = 1 << 31;
+    public static inline var CAP_PROP_OPENNI_OUTPUT_MODE       = 100;
+    public static inline var CAP_PROP_OPENNI_FRAME_MAX_DEPTH   = 101;
+    public static inline var CAP_PROP_OPENNI_BASELINE          = 102;
+    public static inline var CAP_PROP_OPENNI_FOCAL_LENGTH      = 103;
+    public static inline var CAP_PROP_OPENNI_REGISTRATION_ON   = 104;
+    public static inline var CAP_PROP_OPENNI_REGISTRATION      = CAP_PROP_OPENNI_REGISTRATION_ON;
+    public static inline var CAP_OPENNI_IMAGE_GENERATOR_OUTPUT_MODE = CAP_OPENNI_IMAGE_GENERATOR + CAP_PROP_OPENNI_OUTPUT_MODE;
+    public static inline var CAP_OPENNI_DEPTH_GENERATOR_BASELINE = CAP_OPENNI_DEPTH_GENERATOR + CAP_PROP_OPENNI_BASELINE;
+    public static inline var CAP_OPENNI_DEPTH_GENERATOR_FOCAL_LENGTH = CAP_OPENNI_DEPTH_GENERATOR + CAP_PROP_OPENNI_FOCAL_LENGTH;
+    public static inline var CAP_OPENNI_DEPTH_GENERATOR_REGISTRATION_ON = CAP_OPENNI_DEPTH_GENERATOR + CAP_PROP_OPENNI_REGISTRATION_ON;
+    public static inline var CAP_GSTREAMER_QUEUE_LENGTH   = 200;
+    public static inline var CAP_PROP_PVAPI_MULTICASTIP   = 300;
+    public static inline var CAP_PROP_XI_DOWNSAMPLING     = 400;
+    public static inline var CAP_PROP_XI_DATA_FORMAT      = 401;
+    public static inline var CAP_PROP_XI_OFFSET_X         = 402;
+    public static inline var CAP_PROP_XI_OFFSET_Y         = 403;
+    public static inline var CAP_PROP_XI_TRG_SOURCE       = 404;
+    public static inline var CAP_PROP_XI_TRG_SOFTWARE     = 405;
+    public static inline var CAP_PROP_XI_GPI_SELECTOR     = 406;
+    public static inline var CAP_PROP_XI_GPI_MODE         = 407;
+    public static inline var CAP_PROP_XI_GPI_LEVEL        = 408;
+    public static inline var CAP_PROP_XI_GPO_SELECTOR     = 409;
+    public static inline var CAP_PROP_XI_GPO_MODE         = 410;
+    public static inline var CAP_PROP_XI_LED_SELECTOR     = 411;
+    public static inline var CAP_PROP_XI_LED_MODE         = 412;
+    public static inline var CAP_PROP_XI_MANUAL_WB        = 413;
+    public static inline var CAP_PROP_XI_AUTO_WB          = 414;
+    public static inline var CAP_PROP_XI_AEAG             = 415;
+    public static inline var CAP_PROP_XI_EXP_PRIORITY     = 416;
+    public static inline var CAP_PROP_XI_AE_MAX_LIMIT     = 417;
+    public static inline var CAP_PROP_XI_AG_MAX_LIMIT     = 418;
+    public static inline var CAP_PROP_XI_AEAG_LEVEL       = 419;
+    public static inline var CAP_PROP_XI_TIMEOUT          = 420;
 
     // -------------------------
     // Button Types
     // -------------------------
-    @:CvConst var CV_PUSH_BUTTON;
-    @:CvConst var CV_CHECKBOX;
-    @:CvConst var CV_RADIOBOX;
+    public static inline var PUSH_BUTTON = 0;
+    public static inline var CHECKBOX    = 1;
+    public static inline var RADIOBOX    = 2;
 
     // -------------------------
     // System interaction.
@@ -88,7 +156,7 @@ class HighGUI implements CvConsts implements CvProcs {
     // -------------------------
     // Window management.
     // -------------------------
-    @:CvProc(flags=CV_WINDOW_AUTOSIZE|CV_WINDOW_KEEPRATIO|CV_GUI_EXPANDED)
+    @:CvProc(flags=WINDOW_AUTOSIZE|WINDOW_KEEPRATIO|GUI_EXPANDED)
              function namedWindow(winname:String, ?flags:Null<Int>):Int;
     @:CvProc function destroyWindow(name:String):Void;
     @:CvProc function moveWindow   (name:String, x:Int, y:Int):Void;
@@ -100,7 +168,7 @@ class HighGUI implements CvConsts implements CvProcs {
     // Trackbar/Button management.
     // -------------------------
     @:CvProc function createTrackbar(trackbarName:String, ?windowName:Null<String>, value:Int, count:Int, ?onChange:Null<Int->Void>):Int;
-    @:CvProc(buttonType=CV_PUSH_BUTTON) function createButton(buttonName:String, onChange:Int->Void, ?buttonType:Null<Int>, initialButtonState:Int=0):Int;
+    @:CvProc(buttonType=PUSH_BUTTON) function createButton(buttonName:String, onChange:Int->Void, ?buttonType:Null<Int>, initialButtonState:Int=0):Int;
     @:CvProc function getTrackbarPos(trackbarName:String, ?windowName:Null<String>):Int;
     @:CvProc function setTrackbarPos(trackbarName:String, ?windowName:Null<String>, pos:Int):Void;
 
@@ -129,8 +197,8 @@ class HighGUI implements CvConsts implements CvProcs {
     // -------------------------
     // Image IO
     // -------------------------
-    @:CvProc(iscolor=CV_LOAD_IMAGE_COLOR) function loadImage (filename:String, ?iscolor:Null<Int>):Null<Image>;
-    @:CvProc(iscolor=CV_LOAD_IMAGE_COLOR) function loadImageM(filename:String, ?iscolor:Null<Int>):Null<Mat>;
+    @:CvProc(iscolor=LOAD_IMAGE_COLOR) function loadImage (filename:String, ?iscolor:Null<Int>):Null<Image>;
+    @:CvProc(iscolor=LOAD_IMAGE_COLOR) function loadImageM(filename:String, ?iscolor:Null<Int>):Null<Mat>;
     @:CvProc function saveImage(filename:String, image:Arr):Int;
 
     // -------------------------

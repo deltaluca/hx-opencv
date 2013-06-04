@@ -4,8 +4,8 @@
     "license":      "MIT",
     "tags":         ["cpp"],
     "description":  "Hxcpp bindings to OpenCV 2.4.4 (using QT 4.8.2 and OpenGL)",
-    "version":      "0.0.1",
-    "releasenote":  "First release on new haxelib, largely untested and unimplemented.",
+    "version":      "0.0.2",
+    "releasenote":  "More methods implemented, bug fixes.",
     "contributors": ["deltaluca"],
     "dependencies": {
         "hxcpp": ""
