@@ -36,4 +36,6 @@ class Video implements CvProcs {
         for (i in currFeatures.length...currs.length)
             currFeatures[i] = new Point2D32f(currs[i]);
     }
+
+    @:CvProc function calcOpticalFlowFarneback(prev:Arr, curr:Arr, flow:Arr, pyrScale:Float, levels:Int, winSize:Int, iterations:Int, polyN:Int, polySigma:Int, flags:Int):Void;
 }

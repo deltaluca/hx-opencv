@@ -17,6 +17,7 @@
 // cvCalcOpticalFlowHS
 // cvCalcOpticalFlowLK
 // cvCalcOpticalFlowPyrLK
+// cvCalcOpticalFlowFarneback
 //
 void hx_cv_video_calcOpticalFlowBM(value* args, int nargs) {
     if (nargs != 8) neko_error();
@@ -105,11 +106,24 @@ void hx_cv_video_calcOpticalFlowPyrLK(value* args, int nargs) {
         delete[] _error;
     }
 }
+void hx_cv_video_calcOpticalFlowFarneback(value *args, int cnt) {
+    const cv::Mat& prev = cv::cvarrToMat(val_data(args[0]));
+    const cv::Mat& curr = cv::cvarrToMat(val_data(args[1]));
+    cv::Mat flow        = cv::cvarrToMat(val_data(args[2]));
+    double pyrScale     = val_get<double>(args[3]);
+    int    levels       = val_get<int>   (args[4]);
+    int    winSize      = val_get<int>   (args[5]);
+    int    iterations   = val_get<int>   (args[6]);
+    int    polyN        = val_get<int>   (args[7]);
+    double sigma        = val_get<double>(args[8]);
+    int    flags        = val_get<int>   (args[9]);
+    cv::calcOpticalFlowFarneback(prev, curr, flow, pyrScale, levels, winSize, iterations, polyN, sigma, flags);
+}
 DEFINE_PRIM_MULT(hx_cv_video_calcOpticalFlowBM);
 DEFINE_PRIM_MULT(hx_cv_video_calcOpticalFlowHS);
 DEFINE_PRIM(hx_cv_video_calcOpticalFlowLK, 5);
 DEFINE_PRIM_MULT(hx_cv_video_calcOpticalFlowPyrLK);
-
+DEFINE_PRIM_MULT(hx_cv_video_calcOpticalFlowFarneback);
 
 extern "C" void video_allocateKinds() {
 }
