@@ -1,6 +1,7 @@
 #pragma once
 #ifndef UTILS_H
 #define UTILS_H
+#define NEKO_COMPATIBLE
 #include <hx/CFFI.h>
 
 

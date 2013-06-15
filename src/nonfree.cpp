@@ -42,8 +42,10 @@ value hx_cv_nonfree_SIFT_detect(value* args, int nargs) {
 
     ((cv::SIFT*)val_data(thisp))->operator()(cv::cvarrToMat(val_data(img)), _mask, _keypoints, (val_is_null(descriptors) ? cv::noArray() : _descriptors), val_get<bool>(useProvided));
 
+    int nval = val_array_size(keypoints);
+    val_array_set_size(keypoints, _keypoints.size());
     for (int i = 0; i < _keypoints.size(); i++) {
-        if (i == val_array_size(keypoints)) {
+        if (i >= nval) {
             val_array_set_i(keypoints, i, CONVERT(features2d, KeyPoint, new cv::KeyPoint));
         }
         cv::KeyPoint* p = (cv::KeyPoint*)val_data(val_array_i(keypoints, i));
@@ -96,8 +98,10 @@ value hx_cv_nonfree_SURF_detect(value* args, int nargs) {
 
     ((cv::SURF*)val_data(thisp))->operator()(cv::cvarrToMat(val_data(img)), _mask, _keypoints, (val_is_null(descriptors) ? cv::noArray() : _descriptors), val_get<bool>(useProvided));
 
+    int newv = val_array_size(keypoints);
+    val_array_set_size(keypoints, _keypoints.size());
     for (int i = 0; i < _keypoints.size(); i++) {
-        if (i == val_array_size(keypoints)) {
+        if (i >= newv) {
             val_array_set_i(keypoints, i, CONVERT(features2d, KeyPoint, new cv::KeyPoint));
         }
         cv::KeyPoint* p = (cv::KeyPoint*)val_data(val_array_i(keypoints, i));
@@ -105,9 +109,8 @@ value hx_cv_nonfree_SURF_detect(value* args, int nargs) {
     }
 
     val_array_set_size(descriptors, _descriptors.size());
-    double* dd = val_array_double(descriptors);
     for (int i = 0; i < _descriptors.size(); i++)
-        dd[i] = _descriptors[i];
+        val_array_set_i(descriptors, i, alloc<double>(_descriptors[i]));
 
     return alloc<int>(_keypoints.size());
 }

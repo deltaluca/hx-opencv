@@ -9,8 +9,8 @@ import cv.Macros;
 
 class NonFree implements CvProcs {
     @:allow(cv.nonfree)
-    static inline function load(n:String, p:Int=0):Dynamic
-        return Lib.load("opencv", "hx_cv_nonfree_"+n, p);
+    static inline function load(n:String, p:Int=-1):Dynamic
+        return Lib.load("opencv", "hx_cv_nonfree_"+n, p > 5 ? -1 : p);
 
 
     // -------------------------

@@ -39,8 +39,9 @@ value hx_cv_highgui_initSystem(value argc, value argv) {
     delete[] _argv;
     return alloc<int>(ret);
 }
-void hx_cv_highgui_waitKey(value delay) {
+value hx_cv_highgui_waitKey(value delay) {
     cvWaitKey(val_get<int>(delay));
+    return val_null;
 }
 DEFINE_PRIM(hx_cv_highgui_initSystem, 2);
 DEFINE_PRIM(hx_cv_highgui_waitKey,    1);
@@ -57,21 +58,25 @@ DEFINE_PRIM(hx_cv_highgui_waitKey,    1);
 value hx_cv_highgui_namedWindow(value winname, value flags) {
     return alloc<int>(cvNamedWindow(val_get<string>(winname), val_get<int>(flags)));
 }
-void hx_cv_highgui_destroyWindow(value name) {
+value hx_cv_highgui_destroyWindow(value name) {
     cvDestroyWindow(val_get<string>(name));
     cleanup_window(val_get<string>(name));
+    return val_null;
 }
-void hx_cv_highgui_destroyAllWindows() {
+value hx_cv_highgui_destroyAllWindows() {
     cvDestroyAllWindows();
     for (WindowCleanup::iterator i = cleanup.begin(); i != cleanup.end(); i++) {
         cleanup_window(i->first);
     }
+    return val_null;
 }
-void hx_cv_highgui_moveWindow(value name, value x, value y) {
+value hx_cv_highgui_moveWindow(value name, value x, value y) {
     cvMoveWindow(val_get<string>(name), val_get<int>(x), val_get<int>(y));
+    return val_null;
 }
-void hx_cv_highgui_resizeWindow(value name, value width, value height) {
+value hx_cv_highgui_resizeWindow(value name, value width, value height) {
     cvResizeWindow(val_get<string>(name), val_get<int>(width), val_get<int>(height));
+    return val_null;
 }
 DEFINE_PRIM(hx_cv_highgui_namedWindow,       2);
 DEFINE_PRIM(hx_cv_highgui_destroyWindow,     1);
@@ -118,8 +123,9 @@ value hx_cv_highgui_createButton(value buttonName, value onChange, value buttonT
 value hx_cv_highgui_getTrackbarPos(value trackbarName, value windowName) {
     return alloc_int(cvGetTrackbarPos(val_get<string>(trackbarName), safe_val_string(windowName)));
 }
-void hx_cv_highgui_setTrackbarPos(value trackbarName, value windowName, value pos) {
+value hx_cv_highgui_setTrackbarPos(value trackbarName, value windowName, value pos) {
     cvSetTrackbarPos(val_get<string>(trackbarName), safe_val_string(windowName), val_get<int>(pos));
+    return val_null;
 }
 DEFINE_PRIM(hx_cv_highgui_createTrackbar, 5);
 DEFINE_PRIM(hx_cv_highgui_createButton,   4);
@@ -139,25 +145,29 @@ void bound_onMouse(int event, int x, int y, int flags, void* onMouse) {
     value args[4] = {alloc<int>(event), alloc<int>(x), alloc<int>(y), alloc<int>(flags)};
     val_callN((value)onMouse, args, 4);
 }
-void hx_cv_highgui_setMouseCallback(value windowName, value onMouse) {
+value hx_cv_highgui_setMouseCallback(value windowName, value onMouse) {
     val_check_function(onMouse, 4);
     add_cleanup(windowName, new AutoGCRoot(onMouse));
     cvSetMouseCallback(val_get<string>(windowName), bound_onMouse, onMouse);
+    return val_null;
 }
 void bound_onDraw(void* onDraw) {
     if (onDraw == NULL) return;
     val_call0((value)onDraw);
 }
-void hx_cv_highgui_setOpenGlDrawCallback(value window, value onDraw) {
+value hx_cv_highgui_setOpenGlDrawCallback(value window, value onDraw) {
     val_check_function(onDraw, 0);
     add_cleanup(window, new AutoGCRoot(onDraw));
     cvSetOpenGlDrawCallback(val_get<string>(window), bound_onDraw, onDraw);
+    return val_null;
 }
-void hx_cv_highgui_setOpenGlContext(value window) {
+value hx_cv_highgui_setOpenGlContext(value window) {
     cvSetOpenGlContext(val_get<string>(window));
+    return val_null;
 }
-void hx_cv_highgui_updateWindow(value window) {
+value hx_cv_highgui_updateWindow(value window) {
     cvUpdateWindow(val_get<string>(window));
+    return val_null;
 }
 DEFINE_PRIM(hx_cv_highgui_setMouseCallback,      2);
 DEFINE_PRIM(hx_cv_highgui_setOpenGlDrawCallback, 2);
@@ -170,11 +180,13 @@ DEFINE_PRIM(hx_cv_highgui_updateWindow,          1);
 // cvDisplayOverlay
 // cvDisplayStatusBar
 //
-void hx_cv_highgui_displayOverlay(value name, value text, value delayms) {
+value hx_cv_highgui_displayOverlay(value name, value text, value delayms) {
     cvDisplayOverlay(val_get<string>(name), val_get<string>(text), val_get<int>(delayms));
+    return val_null;
 }
-void hx_cv_highgui_displayStatusBar(value name, value text, value delayms) {
+value hx_cv_highgui_displayStatusBar(value name, value text, value delayms) {
     cvDisplayStatusBar(val_get<string>(name), val_get<string>(text), val_get<int>(delayms));
+    return val_null;
 }
 DEFINE_PRIM(hx_cv_highgui_displayOverlay,   3);
 DEFINE_PRIM(hx_cv_highgui_displayStatusBar, 3);
@@ -185,11 +197,13 @@ DEFINE_PRIM(hx_cv_highgui_displayStatusBar, 3);
 // cvConvertImage
 // cvShowImage
 //
-void hx_cv_highgui_convertImage(value src, value dst, value flags) {
+value hx_cv_highgui_convertImage(value src, value dst, value flags) {
     cvConvertImage(val_data(src), val_data(dst), val_get<int>(flags));
+    return val_null;
 }
-void hx_cv_highgui_showImage(value windowName, value image) {
+value hx_cv_highgui_showImage(value windowName, value image) {
     cvShowImage(val_get<string>(windowName), val_data(image));
+    return val_null;
 }
 DEFINE_PRIM(hx_cv_highgui_convertImage, 3);
 DEFINE_PRIM(hx_cv_highgui_showImage,    2);

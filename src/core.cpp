@@ -348,21 +348,25 @@ DEFINE_PRIM(hx_cv_core_Image_get_raw, 1);
 // cvScaleAdd
 // cvSet
 //
-void hx_cv_core_absDiff(value src1, value src2, value dst) {
+value hx_cv_core_absDiff(value src1, value src2, value dst) {
     cvAbsDiff(val_data(src1), val_data(src2), val_data(dst));
+    return val_null;
 }
-void hx_cv_core_absDiffS(value src, value dst, value _value) {
+value hx_cv_core_absDiffS(value src, value dst, value _value) {
     val_check_kind(_value, k_Scalar);
     cvAbsDiffS(val_data(src), val_data(dst), *(CvScalar*)val_data(_value));
+    return val_null;
 }
-void hx_cv_core_add(value src1, value src2, value dst, value mask) {
+value hx_cv_core_add(value src1, value src2, value dst, value mask) {
     cvAdd(val_data(src1), val_data(src2), val_data(dst), val_data(mask));
+    return val_null;
 }
-void hx_cv_core_addS(value src, value _value, value dst, value mask) {
+value hx_cv_core_addS(value src, value _value, value dst, value mask) {
     val_check_kind(_value, k_Scalar);
     cvAddS(val_data(src), *(CvScalar*)val_data(_value), val_data(dst), val_data(mask));
+    return val_null;
 }
-void hx_cv_core_addWeighted(value* args, int nargs) {
+value hx_cv_core_addWeighted(value* args, int nargs) {
     if (nargs != 6) neko_error();
     value src1  = args[0];
     value alpha = args[1];
@@ -372,57 +376,71 @@ void hx_cv_core_addWeighted(value* args, int nargs) {
     value dst   = args[5];
 
     cvAddWeighted(val_data(src1), val_get<double>(alpha), val_data(src2), val_get<double>(beta), val_get<double>(gamma), val_data(dst));
+    return val_null;
 }
-void hx_cv_core_and(value src1, value src2, value dst, value mask) {
+value hx_cv_core_and(value src1, value src2, value dst, value mask) {
     cvAnd(val_data(src1), val_data(src1), val_data(dst), val_data(mask));
+    return val_null;
 }
-void hx_cv_core_andS(value src, value _value, value dst, value mask) {
+value hx_cv_core_andS(value src, value _value, value dst, value mask) {
     val_check_kind(_value, k_Scalar);
     cvAndS(val_data(src), *(CvScalar*)val_data(_value), val_data(dst), val_data(mask));
+    return val_null;
 }
 value hx_cv_core_avg(value arr, value mask) {
     return cv_Scalar(cvAvg(val_data(arr), val_data(mask)));
 }
-void hx_cv_core_avgSdv(value arr, value mean, value stdDev, value mask) {
+value hx_cv_core_avgSdv(value arr, value mean, value stdDev, value mask) {
     val_check_kind(mean, k_Scalar);
     val_check_kind(stdDev, k_Scalar);
     cvAvgSdv(val_data(arr), (CvScalar*)val_data(mean), (CvScalar*)val_data(stdDev), val_data(mask));
+    return val_null;
 }
-void hx_cv_core_cartToPolar(value x, value y, value magnitude, value angle, value angleInDegrees) {
+value hx_cv_core_cartToPolar(value x, value y, value magnitude, value angle, value angleInDegrees) {
     cvCartToPolar(val_data(x), val_data(y), val_data(magnitude), val_data(angle), val_get<bool>(angleInDegrees));
+    return val_null;
 }
-void hx_cv_core_cmp(value src1, value src2, value dst, value cmpOp) {
+value hx_cv_core_cmp(value src1, value src2, value dst, value cmpOp) {
     cvCmp(val_data(src1), val_data(src2), val_data(dst), val_get<int>(cmpOp));
+    return val_null;
 }
-void hx_cv_core_cmpS(value src, value _value, value dst, value cmpOp) {
+value hx_cv_core_cmpS(value src, value _value, value dst, value cmpOp) {
     cvCmpS(val_data(src), val_get<double>(_value), val_data(dst), val_get<int>(cmpOp));
+    return val_null;
 }
-void hx_cv_core_convertScale(value src, value dst, value scale, value shift) {
+value hx_cv_core_convertScale(value src, value dst, value scale, value shift) {
     cvConvertScale(val_data(src), val_data(dst), val_get<double>(scale), val_get<double>(shift));
+    return val_null;
 }
-void hx_cv_core_convertScaleAbs(value src, value dst, value scale, value shift) {
+value hx_cv_core_convertScaleAbs(value src, value dst, value scale, value shift) {
     cvConvertScaleAbs(val_data(src), val_data(dst), val_get<double>(scale), val_get<double>(shift));
+    return val_null;
 }
-void hx_cv_core_copy(value src, value dst, value mask) {
+value hx_cv_core_copy(value src, value dst, value mask) {
     cvCopy(val_data(src), val_data(dst), val_data(mask));
+    return val_null;
 }
 value hx_cv_core_countNonZero(value arr) {
     return alloc<int>(cvCountNonZero(val_data(arr)));
 }
-void hx_cv_core_createData(value arr)  {
+value hx_cv_core_createData(value arr)  {
     cvCreateData(val_data(arr));
+    return val_null;
 }
-void hx_cv_core_DCT(value src, value dst, value flags) {
+value hx_cv_core_DCT(value src, value dst, value flags) {
     cvDCT(val_data(src), val_data(dst), val_get<int>(flags));
+    return val_null;
 }
-void hx_cv_core_DFT(value src, value dst, value flags, value nonzeroRows) {
+value hx_cv_core_DFT(value src, value dst, value flags, value nonzeroRows) {
     cvDFT(val_data(src), val_data(dst), val_get<int>(flags), val_get<int>(nonzeroRows));
+    return val_null;
 }
 value hx_cv_core_det(value mat) {
     return alloc<double>(cvDet(val_data(mat)));
 }
-void hx_cv_core_div(value src1, value src2, value dst, value scale) {
+value hx_cv_core_div(value src1, value src2, value dst, value scale) {
     cvDiv(val_data(src1), val_data(src1), val_data(dst), val_get<double>(scale));
+    return val_null;
 }
 value hx_cv_core_dotProduct(value src1, value src2) {
     return alloc<double>(cvDotProduct(val_data(src1), val_data(src2)));
@@ -493,10 +511,11 @@ value hx_cv_core_getSubRect(value arr, value submat, value rect) {
     return CONVERT_NOGC(core, Mat, cvGetSubRect(val_data(arr), (CvMat*)val_data(submat), *(CvRect*)val_data(rect)));
 }
 
-void hx_cv_core_magnitude(value x, value y, value mag) {
+value hx_cv_core_magnitude(value x, value y, value mag) {
     cv::magnitude(cv::cvarrToMat(val_data(x)), cv::cvarrToMat(y), cv::cvarrToMat(mag));
+    return val_null;
 }
-void hx_cv_core_merge(value mv, value dst) {
+value hx_cv_core_merge(value mv, value dst) {
     CvArr* d = val_data(dst);
     int cnt = val_array_size(mv);
     CvArr* x = 0 >= cnt ? NULL : val_data(val_array_i(mv, 0));
@@ -504,25 +523,31 @@ void hx_cv_core_merge(value mv, value dst) {
     CvArr* z = 2 >= cnt ? NULL : val_data(val_array_i(mv, 2));
     CvArr* w = 3 >= cnt ? NULL : val_data(val_array_i(mv, 3));
     cvMerge(x, y, z, w, d);
+    return val_null;
 }
-void hx_cv_core_mul(value src1, value src2, value dst, value scale) {
+value hx_cv_core_mul(value src1, value src2, value dst, value scale) {
     cvMul(val_data(src1), val_data(src2), val_data(dst), val_get<double>(scale));
+    return val_null;
 }
-void hx_cv_core_phase(value x, value y, value angle, value deg) {
+value hx_cv_core_phase(value x, value y, value angle, value deg) {
     cv::phase(cv::cvarrToMat(val_data(x)), cv::cvarrToMat(val_data(y)), cv::cvarrToMat(val_data(angle)), val_get<bool>(deg));
+    return val_null;
 }
-void hx_cv_core_polarToCart(value mag, value phase, value x, value y, value angleInDegrees) {
+value hx_cv_core_polarToCart(value mag, value phase, value x, value y, value angleInDegrees) {
     cvPolarToCart(val_data(mag), val_data(phase), val_data(x), val_data(y), val_get<bool>(angleInDegrees));
+    return val_null;
 }
-void hx_cv_core_scaleAdd(value src1, value scale, value src2, value dst) {
+value hx_cv_core_scaleAdd(value src1, value scale, value src2, value dst) {
     val_check_kind(scale, k_Scalar);
     cvScaleAdd(val_data(src1), *(CvScalar*)val_data(scale), val_data(src2), val_data(dst));
+    return val_null;
 }
-void hx_cv_core_set(value arr, value _value, value mask) {
+value hx_cv_core_set(value arr, value _value, value mask) {
     val_check_kind(_value, k_Scalar);
     cvSet(val_data(arr), *(CvScalar*)val_data(_value), val_data(mask));
+    return val_null;
 }
-void hx_cv_core_split(value src, value mv) {
+value hx_cv_core_split(value src, value mv) {
     CvArr* s = val_data(src);
     int cnt = val_array_size(mv);
     CvArr* x = 0 >= cnt ? NULL : val_data(val_array_i(mv, 0));
@@ -530,6 +555,7 @@ void hx_cv_core_split(value src, value mv) {
     CvArr* z = 2 >= cnt ? NULL : val_data(val_array_i(mv, 2));
     CvArr* w = 3 >= cnt ? NULL : val_data(val_array_i(mv, 3));
     cvSplit(s, x, y, z, w);
+    return val_null;
 }
 DEFINE_PRIM(hx_cv_core_absDiff,         3);
 DEFINE_PRIM(hx_cv_core_absDiffS,        3);
@@ -585,7 +611,7 @@ DEFINE_PRIM(hx_cv_core_split,           2);
 //
 DECLARE_KIND(k_Font);
 DEFINE_KIND(k_Font);
-void hx_cv_core_circle(value* args, int nargs) {
+value hx_cv_core_circle(value* args, int nargs) {
     if (nargs != 7) neko_error();
     value img       = args[0];
     value center    = args[1];
@@ -597,8 +623,9 @@ void hx_cv_core_circle(value* args, int nargs) {
     val_check_kind(center, k_Point);
     val_check_kind(color, k_Scalar);
     cvCircle(val_data(img), *(CvPoint*)val_data(center), val_get<int>(radius), *(CvScalar*)val_data(color), val_get<int>(thickness), val_get<int>(lineType), val_get<int>(shift));
+    return val_null;
 }
-void hx_cv_core_line(value* args, int nargs) {
+value hx_cv_core_line(value* args, int nargs) {
     if (nargs != 7) neko_error();
     value img       = args[0];
     value pt1       = args[1];
@@ -611,8 +638,9 @@ void hx_cv_core_line(value* args, int nargs) {
     val_check_kind(pt2, k_Point);
     val_check_kind(color, k_Scalar);
     cvLine(val_data(img), *(CvPoint*)val_data(pt1), *(CvPoint*)val_data(pt2), *(CvScalar*)val_data(color), val_get<int>(thickness), val_get<int>(lineType), val_get<int>(shift));
+    return val_null;
 }
-void hx_cv_core_rectangle(value* args, int nargs) {
+value hx_cv_core_rectangle(value* args, int nargs) {
     if (nargs != 7) neko_error();
     value img       = args[0];
     value pt1       = args[1];
@@ -625,6 +653,7 @@ void hx_cv_core_rectangle(value* args, int nargs) {
     val_check_kind(pt2, k_Point);
     val_check_kind(color, k_Scalar);
     cvRectangle(val_data(img), *(CvPoint*)val_data(pt1), *(CvPoint*)val_data(pt2), *(CvScalar*)val_data(color), val_get<int>(thickness), val_get<int>(lineType), val_get<int>(shift));
+    return val_null;
 }
 value hx_cv_core_createFont(value* args, int nargs) {
     if (nargs != 6) neko_error();

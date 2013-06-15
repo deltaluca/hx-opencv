@@ -10,8 +10,8 @@ typedef ConvKernel = NativeBinding;
 
 class ImgProc implements CvProcs {
     @:allow(cv.imgproc)
-    static inline function load(n:String, p:Int=0):Dynamic
-        return Lib.load("opencv", "hx_cv_imgproc_"+n, p);
+    static inline function load(n:String, p:Int=-1):Dynamic
+        return Lib.load("opencv", "hx_cv_imgproc_"+n, p > 5 ? -1 : p);
 
     // -------------------------
     // Flags for kernel shapes.

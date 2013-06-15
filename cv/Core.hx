@@ -10,8 +10,16 @@ typedef Arr = NativeBinding; // Image|Mat|Seq?
 
 class Core implements CvProcs {
     @:allow(cv.core)
-    static inline function load(n:String, p:Int=0):Dynamic
-        return Lib.load("opencv", "hx_cv_core_"+n, p);
+    static inline function load(n:String, p:Int=-1):Dynamic
+        return Lib.load("opencv", "hx_cv_core_"+n, p > 5 ? -1 : p);
+
+    public static inline function init() {
+        #if neko
+            var i = Lib.load("opencv","neko_init",5);
+            if (i != null)
+                i(function(s)return new String(s),function(len:Int){var r=[];if(len>0)r[len-1]=null;return r;},null,true,false);
+        #end
+    }
 
     // -------------------------
     // Flags for initialisation of TermCriteria object.

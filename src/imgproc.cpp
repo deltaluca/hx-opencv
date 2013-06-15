@@ -58,37 +58,45 @@ DEFINE_PRIM_MULT(hx_cv_imgproc_createStructuringElementEx);
 // cvSmooth
 // cvSobel
 //
-void hx_cv_imgproc_bilateralFilter(value src, value dst, value d, value color, value space) {
+value hx_cv_imgproc_bilateralFilter(value src, value dst, value d, value color, value space) {
     cv::bilateralFilter(cv::cvarrToMat(val_data(src)), cv::cvarrToMat(val_data(dst)), val_get<int>(d), val_get<double>(color), val_get<double>(space));
+    return val_null;
 }
-void hx_cv_imgproc_dilate(value src, value dst, value element, value iterations) {
+value hx_cv_imgproc_dilate(value src, value dst, value element, value iterations) {
     if (!val_is_null(element)) val_check_kind(element, k_ConvKernel);
     IplConvKernel* elm = (val_is_null(element) ? NULL : (IplConvKernel*)val_data(element));
     cvDilate(val_data(src), val_data(dst), elm, val_get<int>(iterations));
+    return val_null;
 }
-void hx_cv_imgproc_erode(value src, value dst, value element, value iterations) {
+value hx_cv_imgproc_erode(value src, value dst, value element, value iterations) {
     if (!val_is_null(element)) val_check_kind(element, k_ConvKernel);
     IplConvKernel* elm = (val_is_null(element) ? NULL : (IplConvKernel*)val_data(element));
     cvErode(val_data(src), val_data(dst), elm, val_get<int>(iterations));
+    return val_null;
 }
-void hx_cv_imgproc_equalizeHist(value src, value dst) {
+value hx_cv_imgproc_equalizeHist(value src, value dst) {
     cvEqualizeHist(val_data(src), val_data(dst));
+    return val_null;
 }
-void hx_cv_imgproc_filter2D(value src, value dst, value kernel, value anchor) {
+value hx_cv_imgproc_filter2D(value src, value dst, value kernel, value anchor) {
     val_check_kind(kernel, k_Mat);
     val_check_kind(anchor, k_Point);
     cvFilter2D(val_data(src), val_data(dst), (CvMat*)val_data(kernel), *(CvPoint*)val_data(anchor));
+    return val_null;
 }
-void hx_cv_imgproc_gaussianBlur(value* args, int nargs) {
+value hx_cv_imgproc_gaussianBlur(value* args, int nargs) {
     cv::GaussianBlur(cv::cvarrToMat(val_data(args[0])), cv::cvarrToMat(val_data(args[1])), *(CvSize*)val_data(args[2]), val_get<double>(args[3]), val_get<double>(args[4]), val_get<int>(args[5]));
+    return val_null;
 }
-void hx_cv_imgproc_laplace(value src, value dst, value apertureSize) {
+value hx_cv_imgproc_laplace(value src, value dst, value apertureSize) {
     cvLaplace(val_data(src), val_data(dst), val_get<int>(apertureSize));
+    return val_null;
 }
-void hx_cv_imgproc_medianBlur(value src, value dst, value ksize) {
+value hx_cv_imgproc_medianBlur(value src, value dst, value ksize) {
     cv::medianBlur(cv::cvarrToMat(val_data(src)), cv::cvarrToMat(val_data(dst)), val_get<int>(ksize));
+    return val_null;
 }
-void hx_cv_imgproc_morphologyEx(value* args, int nargs) {
+value hx_cv_imgproc_morphologyEx(value* args, int nargs) {
     if (nargs != 6) neko_error();
     value src        = args[0];
     value dst        = args[1];
@@ -98,11 +106,13 @@ void hx_cv_imgproc_morphologyEx(value* args, int nargs) {
     value iterations = args[5];
     val_check_kind(element, k_ConvKernel);
     cvMorphologyEx(val_data(src), val_data(dst), val_data(tmp), (IplConvKernel*)val_data(element), val_get<int>(operation), val_get<int>(iterations));
+    return val_null;
 }
-void hx_cv_imgproc_pyrDown(value src, value dst) { // CV_GAUSSIAN_5x5 is supported only.
+value hx_cv_imgproc_pyrDown(value src, value dst) { // CV_GAUSSIAN_5x5 is supported only.
     cvPyrDown(val_data(src), val_data(dst));
+    return val_null;
 }
-void hx_cv_imgproc_smooth(value* args, int nargs) {
+value hx_cv_imgproc_smooth(value* args, int nargs) {
     if (nargs != 7) neko_error();
     value src      = args[0];
     value dst      = args[1];
@@ -112,9 +122,11 @@ void hx_cv_imgproc_smooth(value* args, int nargs) {
     int param3     = val_get<int>(args[5]);
     int param4     = val_get<int>(args[6]);
     cvSmooth(val_data(src), val_data(dst), smoothType, param1, param2, param3, param4);
+    return val_null;
 }
-void hx_cv_imgproc_sobel(value src, value dst, value xorder, value yorder, value apertureSize) {
+value hx_cv_imgproc_sobel(value src, value dst, value xorder, value yorder, value apertureSize) {
     cvSobel(val_data(src), val_data(dst), val_get<int>(xorder), val_get<int>(yorder), val_get<int>(apertureSize));
+    return val_null;
 }
 DEFINE_PRIM(hx_cv_imgproc_bilateralFilter, 5);
 DEFINE_PRIM(hx_cv_imgproc_dilate,       4);
@@ -136,10 +148,11 @@ DEFINE_PRIM(hx_cv_imgproc_sobel,        5);
 // cvDistTransform
 // cvIntegral
 //
-void hx_cv_imgproc_cvtColor(value src, value dst, value code) {
+value hx_cv_imgproc_cvtColor(value src, value dst, value code) {
     cvCvtColor(val_data(src), val_data(dst), val_get<int>(code));
+    return val_null;
 }
-void hx_cv_imgproc_distTransform(value* args, int nargs) {
+value hx_cv_imgproc_distTransform(value* args, int nargs) {
     if (nargs != 6) neko_error();
     value src         = args[0];
     value dst         = args[1];
@@ -156,9 +169,11 @@ void hx_cv_imgproc_distTransform(value* args, int nargs) {
     }
     cvDistTransform(val_data(src), val_data(dst), distance_type, mask_size, _mask, val_data(labels));
     if (_mask != NULL) delete[] _mask;
+    return val_null;
 }
-void hx_cv_imgproc_integral(value image, value sum, value sqsum, value tiltedSum) {
+value hx_cv_imgproc_integral(value image, value sum, value sqsum, value tiltedSum) {
     cvIntegral(val_data(image), val_data(sum), val_data(sqsum), val_data(tiltedSum));
+    return val_null;
 }
 DEFINE_PRIM(hx_cv_imgproc_cvtColor, 3);
 DEFINE_PRIM_MULT(hx_cv_imgproc_distTransform);
@@ -172,17 +187,21 @@ DEFINE_PRIM(hx_cv_imgproc_integral, 4);
 // cvRunningAvg
 // cvSquareAcc
 //
-void hx_cv_imgproc_acc(value image, value sum, value mask) {
+value hx_cv_imgproc_acc(value image, value sum, value mask) {
     cvAcc(val_data(image), val_data(sum), val_data(mask));
+    return val_null;
 }
-void hx_cv_imgproc_multiplyAcc(value image1, value image2, value acc, value mask) {
+value hx_cv_imgproc_multiplyAcc(value image1, value image2, value acc, value mask) {
     cvMultiplyAcc(val_data(image1), val_data(image2), val_data(acc), val_data(mask));
+    return val_null;
 }
-void hx_cv_imgproc_runningAvg(value image, value acc, value alpha, value mask) {
+value hx_cv_imgproc_runningAvg(value image, value acc, value alpha, value mask) {
     cvRunningAvg(val_data(image), val_data(acc), val_get<double>(alpha), val_data(mask));
+    return val_null;
 }
-void hx_cv_imgproc_squareAcc(value image, value sqsum, value mask) {
+value hx_cv_imgproc_squareAcc(value image, value sqsum, value mask) {
     cvSquareAcc(val_data(image), val_data(sqsum), val_data(mask));
+    return val_null;
 }
 DEFINE_PRIM(hx_cv_imgproc_acc,         3);
 DEFINE_PRIM(hx_cv_imgproc_multiplyAcc, 4);
@@ -223,8 +242,10 @@ value hx_cv_imgproc_goodFeaturesToTrack(value* args, int nargs) {
     CvPoint2D32f* corns = new CvPoint2D32f[cornerCount];
     cvGoodFeaturesToTrack(image, eigImage, tempImage, corns, &cornerCount, qualityLevel, minDistance, mask, blockSize, useHarris, k);
 
+    int vnew = val_array_size(corners);
+    val_array_set_size(corners, cornerCount);
     for (int i = 0; i < cornerCount; i++) {
-        if (i == val_array_size(corners)) {
+        if (i >= vnew) {
             val_array_set_i(corners, i, CONVERT(core, Point2D32f, new CvPoint2D32f));
         }
         CvPoint2D32f* p = (CvPoint2D32f*)val_data(val_array_i(corners, i));
@@ -241,7 +262,7 @@ DEFINE_PRIM_MULT(hx_cv_imgproc_goodFeaturesToTrack);
 
 
 // NON_OPENCV_METHODS
-void hx_cv_imgproc_equalizeHistAdaptive(value* args, int narg) {
+value hx_cv_imgproc_equalizeHistAdaptive(value* args, int narg) {
     CvMat* src = (CvMat*)val_data(args[0]);
     CvMat* dst = (CvMat*)val_data(args[1]);
     unsigned char* srcp = src->data.ptr;
@@ -359,6 +380,7 @@ void hx_cv_imgproc_equalizeHistAdaptive(value* args, int narg) {
     }}
 
     delete[] hist;
+    return val_null;
 }
 DEFINE_PRIM_MULT(hx_cv_imgproc_equalizeHistAdaptive);
 
