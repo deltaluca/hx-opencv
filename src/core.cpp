@@ -246,14 +246,32 @@ value hx_cv_core_Mat_get_ptr(value image) {
 }
 DEFINE_PRIM(hx_cv_core_Mat_get_ptr, 1);
 
+
+struct Vector {
+    void* dat;
+    unsigned int size;
+};
+value hx_gl_vector_len(value b) {
+    Vector* v = (Vector*)val_data(b);
+    return alloc<int>(v->size);
+}
+DEFINE_PRIM(hx_gl_vector_len, 1)
+
+DECLARE_KIND(k_Vector);
+DEFINE_KIND(k_Vector);
+
+
+
 // For ogl
 value hx_cv_core_Mat_get_raw(value image) {
     val_check_kind(image, k_Mat);
     CvMat* ptr = (CvMat*)val_data(image);
     int size = ptr->rows*ptr->step;
-    buffer ret = alloc_buffer_len(size);
-    memcpy(buffer_data(ret), ptr->data.ptr, size);
-    return buffer_val(ret);
+    Vector* ret = new Vector;
+    ret->dat = ptr->data.ptr;
+    ret->size = size;
+    value v = alloc_abstract(k_Vector, ret);
+    return v;
 }
 DEFINE_PRIM(hx_cv_core_Mat_get_raw, 1);
 
@@ -300,9 +318,11 @@ value hx_cv_core_Image_get_raw(value image) {
     val_check_kind(image, k_Image);
     IplImage* ptr = (IplImage*)val_data(image);
     int size = ptr->imageSize;
-    buffer ret = alloc_buffer_len(size);
-    memcpy(buffer_data(ret), ptr->imageData, size);
-    return buffer_val(ret);
+    Vector* ret = new Vector;
+    ret->dat = ptr->imageData;
+    ret->size = size;
+    value v = alloc_abstract(k_Vector, ret);
+    return v;
 }
 DEFINE_PRIM(hx_cv_core_Image_get_raw, 1);
 
@@ -698,4 +718,5 @@ extern "C" void core_allocateKinds() {
     k_Font         = alloc_kind();
 
     k_CArray = alloc_kind();
+    k_Vector = alloc_kind();
 }

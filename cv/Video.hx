@@ -8,8 +8,8 @@ import cv.Macros;
 
 class Video implements CvProcs {
     @:allow(cv.video)
-    static inline function load(n:String, p:Int=0):Dynamic
-        return Lib.load("opencv", "hx_cv_video_"+n, p);
+    static inline function load(n:String, p:Int=-1):Dynamic
+        return Lib.load("opencv", "hx_cv_video_"+n, p > 5 ? -1 : p);
 
 
     public static inline var LKFLOW_PYR_A_READY       = 1;

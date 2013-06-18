@@ -43,7 +43,8 @@ value hx_cv_nonfree_SIFT_detect(value* args, int nargs) {
     ((cv::SIFT*)val_data(thisp))->operator()(cv::cvarrToMat(val_data(img)), _mask, _keypoints, (val_is_null(descriptors) ? cv::noArray() : _descriptors), val_get<bool>(useProvided));
 
     int nval = val_array_size(keypoints);
-    val_array_set_size(keypoints, _keypoints.size());
+    if (_keypoints.size() > nval)
+        val_array_set_size(keypoints, _keypoints.size());
     for (int i = 0; i < _keypoints.size(); i++) {
         if (i >= nval) {
             val_array_set_i(keypoints, i, CONVERT(features2d, KeyPoint, new cv::KeyPoint));
@@ -54,10 +55,9 @@ value hx_cv_nonfree_SIFT_detect(value* args, int nargs) {
 
     if (!val_is_null(descriptors)) {
         val_array_set_size(descriptors, _descriptors.size().width*_descriptors.size().height);
-        double* dd = val_array_double(descriptors);
         for (int i = 0; i < _descriptors.size().height; i++) {
             for (int j = 0; j < _descriptors.size().width; j++) {
-                dd[i*_descriptors.size().width+j] = _descriptors.at<float>(i, j);
+                val_array_set_i(descriptors, i*_descriptors.size().width+j, alloc<double>(_descriptors.at<float>(i, j)));
             }
         }
     }
@@ -99,7 +99,8 @@ value hx_cv_nonfree_SURF_detect(value* args, int nargs) {
     ((cv::SURF*)val_data(thisp))->operator()(cv::cvarrToMat(val_data(img)), _mask, _keypoints, (val_is_null(descriptors) ? cv::noArray() : _descriptors), val_get<bool>(useProvided));
 
     int newv = val_array_size(keypoints);
-    val_array_set_size(keypoints, _keypoints.size());
+    if (_keypoints.size() > newv)
+        val_array_set_size(keypoints, _keypoints.size());
     for (int i = 0; i < _keypoints.size(); i++) {
         if (i >= newv) {
             val_array_set_i(keypoints, i, CONVERT(features2d, KeyPoint, new cv::KeyPoint));
@@ -108,9 +109,11 @@ value hx_cv_nonfree_SURF_detect(value* args, int nargs) {
         p->operator=(_keypoints[i]);
     }
 
-    val_array_set_size(descriptors, _descriptors.size());
-    for (int i = 0; i < _descriptors.size(); i++)
-        val_array_set_i(descriptors, i, alloc<double>(_descriptors[i]));
+    if (!val_is_null(descriptors)) {
+        val_array_set_size(descriptors, _descriptors.size());
+        for (int i = 0; i < _descriptors.size(); i++)
+            val_array_set_i(descriptors, i, alloc<double>(_descriptors[i]));
+    }
 
     return alloc<int>(_keypoints.size());
 }

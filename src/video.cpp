@@ -19,7 +19,7 @@
 // cvCalcOpticalFlowPyrLK
 // cvCalcOpticalFlowFarneback
 //
-void hx_cv_video_calcOpticalFlowBM(value* args, int nargs) {
+value hx_cv_video_calcOpticalFlowBM(value* args, int nargs) {
     if (nargs != 8) neko_error();
     value prev        = args[0];
     value curr        = args[1];
@@ -33,8 +33,9 @@ void hx_cv_video_calcOpticalFlowBM(value* args, int nargs) {
     val_check_kind(shiftSize, k_Size);
     val_check_kind(max_range, k_Size);
     cvCalcOpticalFlowBM(val_data(prev), val_data(curr), *(CvSize*)val_data(blockSize), *(CvSize*)val_data(shiftSize), *(CvSize*)val_data(max_range), val_get<int>(usePrevious), val_data(velx), val_data(vely));
+    return val_null;
 }
-void hx_cv_video_calcOpticalFlowHS(value* args, int nargs) {
+value hx_cv_video_calcOpticalFlowHS(value* args, int nargs) {
     if (nargs != 7) neko_error();
     value prev        = args[0];
     value curr        = args[1];
@@ -45,12 +46,14 @@ void hx_cv_video_calcOpticalFlowHS(value* args, int nargs) {
     value criteria    = args[6];
     val_check_kind(criteria, k_TermCriteria);
     cvCalcOpticalFlowHS(val_data(prev), val_data(curr), val_get<int>(usePrevious), val_data(velx), val_data(vely), val_get<double>(lambda), *(CvTermCriteria*)val_data(criteria));
+    return val_null;
 }
-void hx_cv_video_calcOpticalFlowLK(value prev, value curr, value winSize, value velx, value vely) {
+value hx_cv_video_calcOpticalFlowLK(value prev, value curr, value winSize, value velx, value vely) {
     val_check_kind(winSize, k_Size);
     cvCalcOpticalFlowLK(val_data(prev), val_data(curr), *(CvSize*)val_data(winSize), val_data(velx), val_data(vely));
+    return val_null;
 }
-void hx_cv_video_calcOpticalFlowPyrLK(value* args, int nargs) {
+value hx_cv_video_calcOpticalFlowPyrLK(value* args, int nargs) {
     if (nargs != 13) neko_error();
     const CvArr* prev  = val_data(args[0]);
     const CvArr* curr  = val_data(args[1]);
@@ -78,6 +81,11 @@ void hx_cv_video_calcOpticalFlowPyrLK(value* args, int nargs) {
         _prev[i].x = p->x;
         _prev[i].y = p->y;
     }
+    for (int i = 0; i < val_array_size(currFeatures); i++) {
+        CvPoint2D32f* p = (CvPoint2D32f*)val_data(val_array_i(currFeatures, i));
+        _curr[i].x = p->x;
+        _curr[i].y = p->y;
+    }
     if (!val_is_null(track_error)) {
         val_check(track_error, array);
         _error = new float[count];
@@ -87,8 +95,17 @@ void hx_cv_video_calcOpticalFlowPyrLK(value* args, int nargs) {
 
     cvCalcOpticalFlowPyrLK(prev, curr, prevPyr, currPyr, _prev, _curr, count, *(CvSize*)val_data(winSize), level, _status, _error, *(CvTermCriteria*)val_data(criteria), flags);
 
+    int nval = val_array_size(currFeatures);
+    if (count > nval)
+        val_array_set_size(currFeatures, count);
+    if (count > val_array_size(status))
+        val_array_set_size(status, count);
+    if (!val_is_null(track_error)) {
+        if (count > val_array_size(track_error))
+            val_array_set_size(track_error, count);
+    }
     for (int i = 0; i < count; i++) {
-        if (val_array_size(currFeatures) == i) {
+        if (i >= nval) {
             val_array_set_i(currFeatures, i, CONVERT(core, Point2D32f, new CvPoint2D32f));
         }
         CvPoint2D32f* p = (CvPoint2D32f*)val_data(val_array_i(currFeatures, i));
@@ -105,8 +122,10 @@ void hx_cv_video_calcOpticalFlowPyrLK(value* args, int nargs) {
     if (!val_is_null(track_error)) {
         delete[] _error;
     }
+
+    return val_null;
 }
-void hx_cv_video_calcOpticalFlowFarneback(value *args, int cnt) {
+value hx_cv_video_calcOpticalFlowFarneback(value *args, int cnt) {
     const cv::Mat& prev = cv::cvarrToMat(val_data(args[0]));
     const cv::Mat& curr = cv::cvarrToMat(val_data(args[1]));
     cv::Mat flow        = cv::cvarrToMat(val_data(args[2]));
@@ -118,6 +137,7 @@ void hx_cv_video_calcOpticalFlowFarneback(value *args, int cnt) {
     double sigma        = val_get<double>(args[8]);
     int    flags        = val_get<int>   (args[9]);
     cv::calcOpticalFlowFarneback(prev, curr, flow, pyrScale, levels, winSize, iterations, polyN, sigma, flags);
+    return val_null;
 }
 DEFINE_PRIM_MULT(hx_cv_video_calcOpticalFlowBM);
 DEFINE_PRIM_MULT(hx_cv_video_calcOpticalFlowHS);

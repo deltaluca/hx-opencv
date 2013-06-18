@@ -67,8 +67,11 @@ value hx_cv_features2d_GFFT_detect(value thisp, value img, value mask, value key
 
     ((cv::GoodFeaturesToTrackDetector*)val_data(thisp))->detect(cv::cvarrToMat(val_data(img)), _keypoints, _mask);
 
+    int nval = val_array_size(keypoints);
+    if (_keypoints.size() > nval)
+        val_array_set_size(keypoints, _keypoints.size());
     for (int i = 0; i < _keypoints.size(); i++) {
-        if (i == val_array_size(keypoints)) {
+        if (i >= nval) {
             val_array_set_i(keypoints, i, CONVERT(features2d, KeyPoint, new cv::KeyPoint));
         }
         cv::KeyPoint* p = (cv::KeyPoint*)val_data(val_array_i(keypoints, i));
@@ -109,8 +112,11 @@ value hx_cv_features2d_BRISK_detect(value* args, int nargs) {
 
     ((cv::BRISK*)val_data(thisp))->operator()(cv::cvarrToMat(val_data(img)), _mask, _keypoints, _descriptors, val_get<bool>(useProvided));
 
+    int nval = val_array_size(keypoints);
+    if (_keypoints.size() > nval)
+        val_array_set_size(keypoints, _keypoints.size());
     for (int i = 0; i < _keypoints.size(); i++) {
-        if (i == val_array_size(keypoints)) {
+        if (i >= nval) {
             val_array_set_i(keypoints, i, CONVERT(features2d, KeyPoint, new cv::KeyPoint));
         }
         cv::KeyPoint* p = (cv::KeyPoint*)val_data(val_array_i(keypoints, i));
