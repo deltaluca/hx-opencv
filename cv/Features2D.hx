@@ -9,8 +9,8 @@ import cv.Macros;
 
 class Features2D implements CvProcs {
     @:allow(cv.features2d)
-    static inline function load(n:String, p:Int=0):Dynamic
-        return Lib.load("opencv", "hx_cv_features2d_"+n, p);
+    static inline function load(n:String, p:Int=-1):Dynamic
+        return Lib.load("opencv", "hx_cv_features2d_"+n, p > 5 ? -1 : p);
 
     // -------------------------
     // BRISK

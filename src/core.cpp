@@ -577,6 +577,10 @@ value hx_cv_core_split(value src, value mv) {
     cvSplit(s, x, y, z, w);
     return val_null;
 }
+value hx_cv_core_sub(value src1, value src2, value dst, value mask) {
+    cvSub(val_data(src1), val_data(src2), val_data(dst), val_data(mask));
+    return val_null;
+}
 DEFINE_PRIM(hx_cv_core_absDiff,         3);
 DEFINE_PRIM(hx_cv_core_absDiffS,        3);
 DEFINE_PRIM(hx_cv_core_add,             4);
@@ -621,6 +625,7 @@ DEFINE_PRIM(hx_cv_core_polarToCart,     5);
 DEFINE_PRIM(hx_cv_core_scaleAdd,        4);
 DEFINE_PRIM(hx_cv_core_set,             3);
 DEFINE_PRIM(hx_cv_core_split,           2);
+DEFINE_PRIM(hx_cv_core_sub,             4);
 
 
 

@@ -207,6 +207,7 @@ class Core implements CvProcs {
     @:CvProc function split(src:Arr, mv:Array<Arr>):Void {
         load("split", 2)(src.nativeObject, NativeBinding.mapNative(mv));
     }
+    @:CvProc function sub(src1:Arr, src2:Arr, dst:Arr, ?mask:Null<Arr>);
     @:CvProc function phase(x:Arr, y:Arr, angle:Arr, angleInDegrees:Bool=false):Void;
     @:CvProc function polarToCart(angle:Arr, phase:Arr, x:Arr, y:Arr, angleInDegrees:Bool=false):Void;
 
