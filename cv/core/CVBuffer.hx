@@ -1,3 +1,3 @@
 package cv.core;
 
-extern class CVBuffer {}
+abstract CVBuffer(Dynamic) from Dynamic to Dynamic {}
