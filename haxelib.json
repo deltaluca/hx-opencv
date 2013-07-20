@@ -2,10 +2,10 @@
     "name":         "opencv",
     "url":          "https://github.com/deltaluca/hx-opencv",
     "license":      "MIT",
-    "tags":         ["cpp"],
-    "description":  "Hxcpp bindings to OpenCV 2.4.4 (using QT 4.8.2 and OpenGL)",
-    "version":      "0.0.3",
-    "releasenote":  "Clean up making consts proper haxe consts and removing CV_ prefixes.",
+    "tags":         ["cpp","neko"],
+    "description":  "Bindings to OpenCV 2.4.5 (using QT 4.8.2 and OpenGL)",
+    "version":      "0.0.4",
+    "releasenote":  "tralala",
     "contributors": ["deltaluca"],
     "dependencies": {
         "hxcpp": ""
